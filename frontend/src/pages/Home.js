@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
-import { MapPin, Folder, Image, Search, Package, Shield, Users, Euro, ArrowRight, Briefcase, Home, Car, Shirt, Sofa, Gamepad, Dumbbell, Wrench, Star, Quote } from '../utils/icons';
+import { MapPin, Folder, Image, Search, Package, Shield, Users, Euro, ArrowRight, X, Briefcase, Home, Car, Shirt, Sofa, Gamepad, Dumbbell, Wrench, Star, Quote } from '../utils/icons';
 
 const categoriesList = [
   { name: 'Emploi', icon: Briefcase, color: '#3B82F6', bg: '#EFF6FF' },
@@ -16,23 +16,24 @@ const categoriesList = [
 ];
 
 const demoProducts = [
-  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop' },
-  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop' },
-  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', img: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=400&h=300&fit=crop' },
-  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop' },
-  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop' },
-  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop' },
-  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1594155898390-21c1e322cd7d?w=400&h=300&fit=crop' },
-  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400&h=300&fit=crop' },
-  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=400&h=300&fit=crop' },
-  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1506104489822-562e2510a297?w=400&h=300&fit=crop' },
-  { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', img: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&h=300&fit=crop' },
-  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400&h=300&fit=crop' },
+  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop', desc: 'iPhone 15 Pro Max 256 Go, couleur Titane naturel. Acheté il y a 3 mois, état impeccable. Livré avec chargeur et coque de protection.' },
+  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop', desc: 'Canapé d\'angle en cuir véritable, 5 places. Couleur gris foncé, état très bon. Dimensions: 280x200cm.' },
+  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', img: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=600&h=400&fit=crop', desc: 'Volkswagen Golf 8, 1.5 TSI 130ch, 25 000 km, finition Carat. Première main, entretien concessionnaire, garantie 2 ans.' },
+  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop', desc: 'Bel appartement 3 pièces de 65m², exposé sud. Cuisine équipée, balcon, cave. Proche tram et commerces.' },
+  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop', desc: 'MacBook Pro M3 14 pouces, 18Go RAM, 512Go SSD. Charge cycles: 45. Batterie à 98%. Sous AppleCare jusqu\'en 2027.' },
+  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=400&fit=crop', desc: 'Veste en cuir vintage, taille M. Marque indéterminée, cuir souple et patiné. Parfait état, doublure intacte.' },
+  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1594155898390-21c1e322cd7d?w=600&h=400&fit=crop', desc: 'Table de jardin en teck massif, 6 places (180x90cm). Utilisée 2 saisons, légèrement patinée. Très bel aspect.' },
+  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600&h=400&fit=crop', desc: 'VTT électrique 27.5", moteur Bosch Performance Line 250W, batterie 500Wh. Autonomie 80km. Révision récente.' },
+  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=600&h=400&fit=crop', desc: 'Nintendo Switch OLED modèle 2023, avec 4 jeux (Mario Kart, Zelda, Mario Odyssey, Smash Bros). Féctures et docks inclus.' },
+  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1506104489822-562e2510a297?w=600&h=400&fit=crop', desc: 'Lit superposé en bois massif, 2 places (90x190cm). Matelas inclus. Idéal pour chambre d\'enfant. Montage facile.' },
+  { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', img: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=600&h=400&fit=crop', desc: 'Cours de guitare particuliers en visio. Tous niveaux, tous styles. 25€/h. Premier cours offert. Diplômé conservatoire.' },
+  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&h=400&fit=crop', desc: 'Canapé-lit convertible, matelas 140x190. Mécanisme facile à déplier. Housse lavable. Idéal pour petit appartement.' },
 ];
 
 const Landing = () => {
   const [ads, setAds] = useState([]);
   const [searchInput, setSearchInput] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     api.get('/ads?limit=12&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
@@ -119,45 +120,15 @@ const Landing = () => {
           {allProducts.slice(0, 12).map((ad, i) => {
             const isReal = ad.id !== undefined;
             return (
-              <Link to={isReal ? '/ads/' + ad.id : '/browse?search=' + encodeURIComponent(ad.title.split(' ')[0])} key={i} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div className="ad-card">
-                  <div className="ad-card-image">
-                    {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
-                    {isReal && ad.images && ad.images.length > 0 ? (
-                      <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
-                    ) : !isReal && ad.img ? (
-                      <img src={ad.img} alt={ad.title} loading="lazy" />
-                    ) : (
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                        <Image size={40} style={{ color: '#A1A1AA' }} />
-                      </div>
-                    )}
-                  </div>
-                  <div className="ad-card-body">
-                    <h3 className="ad-card-title">{ad.title}</h3>
-                    <div className="ad-card-price">
-                      <Euro size={16} style={{ verticalAlign: 'text-bottom' }} /> {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}
-                    </div>
-                    <div className="ad-card-meta">
-                      {ad.location && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                          <MapPin size={14} /> {ad.location}
-                        </span>
-                      )}
-                      {ad.category && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                          <Folder size={14} /> {ad.category}
-                        </span>
-                      )}
-                      {ad.category_name && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                          <Folder size={14} /> {ad.category_name}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Link>
+              <div key={i} onClick={() => { if (!isReal) setSelectedProduct(ad); }} style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
+                {isReal ? (
+                  <Link to={'/ads/' + ad.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <CardContent ad={ad} isReal={true} />
+                  </Link>
+                ) : (
+                  <CardContent ad={ad} isReal={false} />
+                )}
+              </div>
             );
           })}
         </div>
@@ -260,8 +231,69 @@ const Landing = () => {
           </Link>
         </div>
       </section>
+
+      {selectedProduct && (
+        <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setSelectedProduct(null)}><X size={20} /></button>
+            <div className="modal-image">
+              <img src={selectedProduct.img} alt={selectedProduct.title} />
+            </div>
+            <div className="modal-body">
+              <div className="modal-category" style={{ color: '#7C3AED', fontSize: '0.82rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{selectedProduct.category}</div>
+              <h2 className="modal-title">{selectedProduct.title}</h2>
+              <div className="modal-price"><Euro size={18} /> {selectedProduct.price.toLocaleString('fr-FR')} €</div>
+              <div className="modal-location"><MapPin size={16} /> {selectedProduct.location}</div>
+              <p className="modal-desc">{selectedProduct.desc}</p>
+              <Link to={"/browse?search=" + encodeURIComponent(selectedProduct.title.split(' ')[0])} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }} onClick={() => setSelectedProduct(null)}>
+                Voir annonces similaires <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+const CardContent = ({ ad, isReal }) => (
+  <div className="ad-card">
+    <div className="ad-card-image">
+      {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
+      {isReal && ad.images && ad.images.length > 0 ? (
+        <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
+      ) : !isReal && ad.img ? (
+        <img src={ad.img} alt={ad.title} loading="lazy" />
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+          <Image size={40} style={{ color: '#A1A1AA' }} />
+        </div>
+      )}
+    </div>
+    <div className="ad-card-body">
+      <h3 className="ad-card-title">{ad.title}</h3>
+      <div className="ad-card-price">
+        <Euro size={16} style={{ verticalAlign: 'text-bottom' }} /> {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}
+      </div>
+      <div className="ad-card-meta">
+        {ad.location && (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <MapPin size={14} /> {ad.location}
+          </span>
+        )}
+        {ad.category && (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <Folder size={14} /> {ad.category}
+          </span>
+        )}
+        {ad.category_name && (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <Folder size={14} /> {ad.category_name}
+          </span>
+        )}
+      </div>
+    </div>
+  </div>
+);
 
 export default Landing;
