@@ -15,35 +15,41 @@ const categoriesList = [
   { name: 'Services', icon: Wrench, color: '#F97316', bg: '#FFF7ED' },
 ];
 
+const PICS = 'https://picsum.photos/seed';
 const demoProducts = [
-  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop', desc: 'iPhone 15 Pro Max 256 Go, couleur Titane naturel. Acheté il y a 3 mois, état impeccable. Livré avec chargeur et coque de protection.' },
-  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop', desc: 'Canapé d\'angle en cuir véritable, 5 places. Couleur gris foncé, état très bon. Dimensions: 280x200cm.' },
-  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', img: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=600&h=400&fit=crop', desc: 'Volkswagen Golf 8, 1.5 TSI 130ch, 25 000 km, finition Carat. Première main, entretien concessionnaire, garantie 2 ans.' },
-  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop', desc: 'Bel appartement 3 pièces de 65m², exposé sud. Cuisine équipée, balcon, cave. Proche tram et commerces.' },
-  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop', desc: 'MacBook Pro M3 14 pouces, 18Go RAM, 512Go SSD. Charge cycles: 45. Batterie à 98%. Sous AppleCare jusqu\'en 2027.' },
-  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=400&fit=crop', desc: 'Veste en cuir vintage, taille M. Marque indéterminée, cuir souple et patiné. Parfait état, doublure intacte.' },
-  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1594155898390-21c1e322cd7d?w=600&h=400&fit=crop', desc: 'Table de jardin en teck massif, 6 places (180x90cm). Utilisée 2 saisons, légèrement patinée. Très bel aspect.' },
-  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600&h=400&fit=crop', desc: 'VTT électrique 27.5", moteur Bosch Performance Line 250W, batterie 500Wh. Autonomie 80km. Révision récente.' },
-  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=600&h=400&fit=crop', desc: 'Nintendo Switch OLED modèle 2023, avec 4 jeux (Mario Kart, Zelda, Mario Odyssey, Smash Bros). Féctures et docks inclus.' },
-  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1506104489822-562e2510a297?w=600&h=400&fit=crop', desc: 'Lit superposé en bois massif, 2 places (90x190cm). Matelas inclus. Idéal pour chambre d\'enfant. Montage facile.' },
-  { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', img: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=600&h=400&fit=crop', desc: 'Cours de guitare particuliers en visio. Tous niveaux, tous styles. 25€/h. Premier cours offert. Diplômé conservatoire.' },
-  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&h=400&fit=crop', desc: 'Canapé-lit convertible, matelas 140x190. Mécanisme facile à déplier. Housse lavable. Idéal pour petit appartement.' },
-  { title: 'Bague en or blanc diamant', price: 590, location: 'Paris', category: 'Mode', img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&h=400&fit=crop', desc: 'Bague en or blanc 750, diamant central 0.5ct. Boîte et certificat d\'authenticité inclus. Offert pour noël jamais porté.' },
-  { title: 'PlayStation 5 + 3 manettes', price: 380, location: 'Montpellier', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&h=400&fit=crop', desc: 'PS5 édition standard, 825Go SSD. 3 manettes DualSense, 2 jeux (FIFA 25, Spider-Man 2). Très bon état, peu utilisée.' },
-  { title: 'Studio 25m² centre ville', price: 89000, location: 'Lyon', category: 'Immobilier', img: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop', desc: 'Studio 25m² rénové, centre ville de Lyon. Cuisine équipée, salle de douche, rangements. Idéal investissement locatif.' },
-  { title: 'Trottinette électrique Xiaomi', price: 280, location: 'Grenoble', category: 'Véhicules', img: 'https://images.unsplash.com/photo-1604663467291-413a1a3b1e11?w=600&h=400&fit=crop', desc: 'Trottinette électrique Xiaomi Pro 2, autonomie 45km. Utilisée 200km, état neuf. Chargeur et antivol inclus.' },
-  { title: 'Machine à laver hublot 7kg', price: 150, location: 'Tours', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=600&h=400&fit=crop', desc: 'Machine à laver hublot 7kg, classe A++. Très bon état, détartrée régulièrement. Livraison possible sur Tours.' },
-  { title: 'Cours de yoga en ligne', price: 15, location: 'En ligne', category: 'Services', img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop', desc: 'Cours de yoga en ligne, 15€/séance. Hatha, Vinyasa, Yin. Pour tous niveaux. Horaires flexibles, replay disponible.' },
-  { title: 'Drone DJI Mini 4 Pro', price: 720, location: 'Nice', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?w=600&h=400&fit=crop', desc: 'DJI Mini 4 Pro, 3 batteries, télécommande RC2. Volé 2h seulement. Filtres ND inclus, garantie 6 mois.' },
+  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', img: `${PICS}/iphone15/600/400`, desc: 'iPhone 15 Pro Max 256 Go, couleur Titane naturel. Acheté il y a 3 mois, état impeccable.' },
+  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', img: `${PICS}/canape/600/400`, desc: 'Canapé d\'angle en cuir véritable, 5 places. Couleur gris foncé, état très bon.' },
+  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', img: `${PICS}/golf8/600/400`, desc: 'Volkswagen Golf 8, 1.5 TSI 130ch, 25 000 km, finition Carat. Première main.' },
+  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', img: `${PICS}/appartement/600/400`, desc: 'Bel appartement 3 pièces de 65m², exposé sud. Cuisine équipée, balcon, cave.' },
+  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', img: `${PICS}/macbook/600/400`, desc: 'MacBook Pro M3 14 pouces, 18Go RAM, 512Go SSD. Charge cycles: 45, batterie 98%.' },
+  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', img: `${PICS}/veste-cuir/600/400`, desc: 'Veste en cuir vintage, taille M. Cuir souple et patiné. Parfait état, doublure intacte.' },
+  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', img: `${PICS}/table-jardin/600/400`, desc: 'Table de jardin en teck massif, 6 places (180x90cm). Utilisée 2 saisons.' },
+  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', img: `${PICS}/velo-electrique/600/400`, desc: 'VTT électrique 27.5", moteur Bosch 250W, batterie 500Wh. Autonomie 80km.' },
+  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', img: `${PICS}/switch-oled/600/400`, desc: 'Nintendo Switch OLED modèle 2023, avec 4 jeux (Mario Kart, Zelda, Odyssey, Smash).' },
+  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: `${PICS}/lit-superpose/600/400`, desc: 'Lit superposé en bois massif, 2 places (90x190cm). Matelas inclus.' },
+  { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', img: `${PICS}/guitare/600/400`, desc: 'Cours de guitare en visio. Tous niveaux. 25€/h. Premier cours offert.' },
+  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: `${PICS}/canape-lit/600/400`, desc: 'Canapé-lit convertible, matelas 140x190. Mécanisme facile, housse lavable.' },
+  { title: 'Bague en or blanc diamant', price: 590, location: 'Paris', category: 'Mode', img: `${PICS}/bague/600/400`, desc: 'Bague en or blanc 750, diamant 0.5ct. Certificat inclus. Jamais portée.' },
+  { title: 'PlayStation 5 + 3 manettes', price: 380, location: 'Montpellier', category: 'Multimédia', img: `${PICS}/ps5/600/400`, desc: 'PS5 standard, 825Go. 3 manettes, 2 jeux (FIFA 25, Spider-Man 2). Très bon état.' },
+  { title: 'Studio 25m² centre ville', price: 89000, location: 'Lyon', category: 'Immobilier', img: `${PICS}/studio-lyon/600/400`, desc: 'Studio 25m² rénové, centre Lyon. Cuisine équipée, salle de douche.' },
+  { title: 'Trottinette électrique Xiaomi', price: 280, location: 'Grenoble', category: 'Véhicules', img: `${PICS}/trottinette/600/400`, desc: 'Xiaomi Pro 2, autonomie 45km. 200km, état neuf. Chargeur + antivol inclus.' },
+  { title: 'Machine à laver hublot 7kg', price: 150, location: 'Tours', category: 'Maison & Jardin', img: `${PICS}/machine-a-laver/600/400`, desc: 'Machine à laver hublot 7kg, classe A++. Très bon état, détartrée.' },
+  { title: 'Cours de yoga en ligne', price: 15, location: 'En ligne', category: 'Services', img: `${PICS}/yoga/600/400`, desc: 'Yoga en ligne, 15€/séance. Hatha, Vinyasa, Yin. Tous niveaux.' },
+  { title: 'Drone DJI Mini 4 Pro', price: 720, location: 'Nice', category: 'Loisirs', img: `${PICS}/dji-drone/600/400`, desc: 'DJI Mini 4 Pro, 3 batteries, télécommande RC2. Volé 2h seulement.' },
+  { title: 'Appareil photo Sony A7III', price: 1400, location: 'Lille', category: 'Multimédia', img: `${PICS}/sony-a7/600/400`, desc: 'Sony A7III, 24MP, 15000 déclenchements. Objectif 28-70mm inclus. Très bon état.' },
+  { title: 'Pouf ottoman en velours', price: 65, location: 'Marseille', category: 'Maison & Jardin', img: `${PICS}/pouf/600/400`, desc: 'Pouf ottoman velours bleu canard. Diamètre 50cm. Parfait pour salon ou chambre.' },
+  { title: 'Tondeuse autoportée Husqvarna', price: 2200, location: 'Rennes', category: 'Jardin', img: `${PICS}/tondeuse/600/400`, desc: 'Husqvarna automotrice, 80cm de coupe. Révision récente, 150h d\'utilisation.' },
 ];
 
 const Landing = () => {
   const [ads, setAds] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [failedImages, setFailedImages] = useState({});
+  const [modalImgFailed, setModalImgFailed] = useState(false);
 
   useEffect(() => {
-    api.get('/ads?limit=20&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
+    api.get('/ads?limit=24&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
   }, []);
 
   const handleSearch = (e) => {
@@ -53,7 +59,7 @@ const Landing = () => {
     }
   };
 
-  const allProducts = [...ads, ...demoProducts].slice(0, 20);
+  const allProducts = [...ads, ...demoProducts].slice(0, 24);
 
   return (
     <div className="fade-in">
@@ -124,16 +130,16 @@ const Landing = () => {
           </Link>
         </div>
         <div className="ad-grid">
-          {allProducts.slice(0, 20).map((ad, i) => {
+          {allProducts.map((ad, i) => {
             const isReal = ad.id !== undefined;
             return (
               <div key={i} onClick={() => { if (!isReal) setSelectedProduct(ad); }} style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
                 {isReal ? (
                   <Link to={'/ads/' + ad.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <CardContent ad={ad} isReal={true} />
+                    <AdCard ad={ad} isReal={true} />
                   </Link>
                 ) : (
-                  <CardContent ad={ad} isReal={false} />
+                  <AdCard ad={ad} isReal={false} imgFailed={failedImages[ad.title]} onImgError={() => setFailedImages(prev => ({...prev, [ad.title]: true}))} />
                 )}
               </div>
             );
@@ -240,11 +246,15 @@ const Landing = () => {
       </section>
 
       {selectedProduct && (
-        <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
+        <div className="modal-overlay" onClick={() => { setSelectedProduct(null); setModalImgFailed(false); }}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setSelectedProduct(null)}><X size={20} /></button>
-            <div className="modal-image">
-              <img src={selectedProduct.img} alt={selectedProduct.title} />
+            <button className="modal-close" onClick={() => { setSelectedProduct(null); setModalImgFailed(false); }}><X size={20} /></button>
+            <div className="modal-image" style={modalImgFailed ? { background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}}>
+              {modalImgFailed ? (
+                <span style={{ fontSize: '4rem', color: 'white', fontWeight: 700 }}>{selectedProduct.title.charAt(0)}</span>
+              ) : (
+                <img src={selectedProduct.img} alt={selectedProduct.title} onError={() => setModalImgFailed(true)} />
+              )}
             </div>
             <div className="modal-body">
               <div className="modal-category" style={{ color: '#7C3AED', fontSize: '0.82rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{selectedProduct.category}</div>
@@ -252,7 +262,7 @@ const Landing = () => {
               <div className="modal-price"><Euro size={18} /> {selectedProduct.price.toLocaleString('fr-FR')} €</div>
               <div className="modal-location"><MapPin size={16} /> {selectedProduct.location}</div>
               <p className="modal-desc">{selectedProduct.desc}</p>
-              <Link to={"/browse?search=" + encodeURIComponent(selectedProduct.title.split(' ')[0])} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }} onClick={() => setSelectedProduct(null)}>
+              <Link to={"/browse?search=" + encodeURIComponent(selectedProduct.title.split(' ')[0])} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }} onClick={() => { setSelectedProduct(null); setModalImgFailed(false); }}>
                 Voir annonces similaires <ArrowRight size={16} />
               </Link>
             </div>
@@ -263,17 +273,17 @@ const Landing = () => {
   );
 };
 
-const CardContent = ({ ad, isReal }) => (
+const AdCard = ({ ad, isReal, imgFailed, onImgError }) => (
   <div className="ad-card">
     <div className="ad-card-image">
       {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
       {isReal && ad.images && ad.images.length > 0 ? (
         <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
-      ) : !isReal && ad.img ? (
-        <img src={ad.img} alt={ad.title} loading="lazy" />
+      ) : !isReal && ad.img && !imgFailed ? (
+        <img src={ad.img} alt={ad.title} loading="lazy" onError={onImgError} />
       ) : (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-          <Image size={40} style={{ color: '#A1A1AA' }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', color: 'white', fontSize: '2.5rem', fontWeight: 700 }}>
+          {ad.title.charAt(0)}
         </div>
       )}
     </div>
