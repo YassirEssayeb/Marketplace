@@ -16,18 +16,18 @@ const categoriesList = [
 ];
 
 const demoProducts = [
-  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', catColor: '#EF4444', bg: 'linear-gradient(135deg, #1E1B4B, #312E81)', emoji: '📱' },
-  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', catColor: '#8B5CF6', bg: 'linear-gradient(135deg, #1C1917, #292524)', emoji: '🛋️' },
-  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', catColor: '#F59E0B', bg: 'linear-gradient(135deg, #1E3A5F, #0F172A)', emoji: '🚗' },
-  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', catColor: '#10B981', bg: 'linear-gradient(135deg, #0F172A, #1E293B)', emoji: '🏠' },
-  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', catColor: '#EF4444', bg: 'linear-gradient(135deg, #1E1B4B, #2E1065)', emoji: '💻' },
-  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', catColor: '#EC4899', bg: 'linear-gradient(135deg, #1C1917, #3F1D2B)', emoji: '🧥' },
-  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', catColor: '#8B5CF6', bg: 'linear-gradient(135deg, #0A1628, #1E293B)', emoji: '🪑' },
-  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', catColor: '#14B8A6', bg: 'linear-gradient(135deg, #0F172A, #1E3A5F)', emoji: '🚲' },
-  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', catColor: '#14B8A6', bg: 'linear-gradient(135deg, #1E1B4B, #5B21B6)', emoji: '🎮' },
-  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', catColor: '#8B5CF6', bg: 'linear-gradient(135deg, #1C1917, #292524)', emoji: '🛏️' },
-  { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', catColor: '#F97316', bg: 'linear-gradient(135deg, #1E1B4B, #312E81)', emoji: '🎸' },
-  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', catColor: '#8B5CF6', bg: 'linear-gradient(135deg, #0F172A, #1E293B)', emoji: '🛋️' },
+  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop' },
+  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop' },
+  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', img: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=400&h=300&fit=crop' },
+  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop' },
+  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop' },
+  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop' },
+  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1594155898390-21c1e322cd7d?w=400&h=300&fit=crop' },
+  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400&h=300&fit=crop' },
+  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=400&h=300&fit=crop' },
+  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1506104489822-562e2510a297?w=400&h=300&fit=crop' },
+  { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', img: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&h=300&fit=crop' },
+  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400&h=300&fit=crop' },
 ];
 
 const Landing = () => {
@@ -121,18 +121,16 @@ const Landing = () => {
             return (
               <Link to={isReal ? '/ads/' + ad.id : '/browse?search=' + encodeURIComponent(ad.title.split(' ')[0])} key={i} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="ad-card">
-                  <div className="ad-card-image" style={!isReal ? { background: ad.bg } : {}}>
-                    {isReal ? (
-                      <>
-                        {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
-                        {ad.images && ad.images.length > 0 ? (
-                          <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
-                        ) : (
-                          <Image size={40} style={{ color: '#A1A1AA' }} />
-                        )}
-                      </>
+                  <div className="ad-card-image">
+                    {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
+                    {isReal && ad.images && ad.images.length > 0 ? (
+                      <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
+                    ) : !isReal && ad.img ? (
+                      <img src={ad.img} alt={ad.title} loading="lazy" />
                     ) : (
-                      <span style={{ fontSize: '3rem', filter: 'brightness(1) saturate(1.2)' }}>{ad.emoji}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                        <Image size={40} style={{ color: '#A1A1AA' }} />
+                      </div>
                     )}
                   </div>
                   <div className="ad-card-body">
