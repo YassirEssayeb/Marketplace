@@ -15,6 +15,21 @@ const categoriesList = [
   { name: 'Services', icon: Wrench, color: '#F97316', bg: '#FFF7ED' },
 ];
 
+const demoProducts = [
+  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', catColor: '#EF4444', bg: 'linear-gradient(135deg, #1E1B4B, #312E81)', emoji: '📱' },
+  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', catColor: '#8B5CF6', bg: 'linear-gradient(135deg, #1C1917, #292524)', emoji: '🛋️' },
+  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', catColor: '#F59E0B', bg: 'linear-gradient(135deg, #1E3A5F, #0F172A)', emoji: '🚗' },
+  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', catColor: '#10B981', bg: 'linear-gradient(135deg, #0F172A, #1E293B)', emoji: '🏠' },
+  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', catColor: '#EF4444', bg: 'linear-gradient(135deg, #1E1B4B, #2E1065)', emoji: '💻' },
+  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', catColor: '#EC4899', bg: 'linear-gradient(135deg, #1C1917, #3F1D2B)', emoji: '🧥' },
+  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', catColor: '#8B5CF6', bg: 'linear-gradient(135deg, #0A1628, #1E293B)', emoji: '🪑' },
+  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', catColor: '#14B8A6', bg: 'linear-gradient(135deg, #0F172A, #1E3A5F)', emoji: '🚲' },
+  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', catColor: '#14B8A6', bg: 'linear-gradient(135deg, #1E1B4B, #5B21B6)', emoji: '🎮' },
+  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', catColor: '#8B5CF6', bg: 'linear-gradient(135deg, #1C1917, #292524)', emoji: '🛏️' },
+  { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', catColor: '#F97316', bg: 'linear-gradient(135deg, #1E1B4B, #312E81)', emoji: '🎸' },
+  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', catColor: '#8B5CF6', bg: 'linear-gradient(135deg, #0F172A, #1E293B)', emoji: '🛋️' },
+];
+
 const Landing = () => {
   const [ads, setAds] = useState([]);
   const [searchInput, setSearchInput] = useState('');
@@ -29,6 +44,8 @@ const Landing = () => {
       window.location.href = '/browse?search=' + encodeURIComponent(searchInput);
     }
   };
+
+  const allProducts = ads.length > 0 ? ads : demoProducts;
 
   return (
     <div className="fade-in">
@@ -76,7 +93,6 @@ const Landing = () => {
             const Icon = cat.icon;
             return (
               <Link to={'/browse?category=' + (i + 1)} key={i} className="category-card"
-                style={{ '--cat-color': cat.color }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = cat.color; e.currentTarget.style.boxShadow = '0 8px 25px ' + cat.color + '20'; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.boxShadow = ''; }}
               >
@@ -92,22 +108,31 @@ const Landing = () => {
 
       <section className="page-container" style={{ paddingTop: '1rem' }}>
         <div className="section-header">
-          <h2 className="section-title">Annonces récentes</h2>
+          <h2 className="section-title">
+            {ads.length > 0 ? 'Annonces récentes' : 'Ce que vendent nos membres'}
+          </h2>
           <Link to="/browse" className="section-link">
             Voir tout <ArrowRight size={16} />
           </Link>
         </div>
-        {ads.length > 0 ? (
-          <div className="ad-grid">
-            {ads.map(ad => (
-              <Link to={'/ads/' + ad.id} key={ad.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <div className="ad-grid">
+          {allProducts.slice(0, 12).map((ad, i) => {
+            const isReal = ad.id !== undefined;
+            return (
+              <Link to={isReal ? '/ads/' + ad.id : '/browse?search=' + encodeURIComponent(ad.title.split(' ')[0])} key={i} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="ad-card">
-                  <div className="ad-card-image">
-                    {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
-                    {ad.images && ad.images.length > 0 ? (
-                      <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
+                  <div className="ad-card-image" style={!isReal ? { background: ad.bg } : {}}>
+                    {isReal ? (
+                      <>
+                        {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
+                        {ad.images && ad.images.length > 0 ? (
+                          <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
+                        ) : (
+                          <Image size={40} style={{ color: '#A1A1AA' }} />
+                        )}
+                      </>
                     ) : (
-                      <Image size={40} style={{ color: '#A1A1AA' }} />
+                      <span style={{ fontSize: '3rem', filter: 'brightness(1) saturate(1.2)' }}>{ad.emoji}</span>
                     )}
                   </div>
                   <div className="ad-card-body">
@@ -116,9 +141,16 @@ const Landing = () => {
                       <Euro size={16} style={{ verticalAlign: 'text-bottom' }} /> {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}
                     </div>
                     <div className="ad-card-meta">
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <MapPin size={14} /> {ad.location || 'N/A'}
-                      </span>
+                      {ad.location && (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <MapPin size={14} /> {ad.location}
+                        </span>
+                      )}
+                      {ad.category && (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <Folder size={14} /> {ad.category}
+                        </span>
+                      )}
                       {ad.category_name && (
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                           <Folder size={14} /> {ad.category_name}
@@ -128,18 +160,9 @@ const Landing = () => {
                   </div>
                 </div>
               </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="empty-state" style={{ padding: '3rem 0' }}>
-            <Package size={48} />
-            <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Aucune annonce pour le moment</p>
-            <p style={{ marginTop: '0.375rem', marginBottom: '1.5rem' }}>Soyez le premier à publier une annonce !</p>
-            <Link to="/ads/new" className="btn btn-primary btn-lg">
-              Déposer une annonce
-            </Link>
-          </div>
-        )}
+            );
+          })}
+        </div>
       </section>
 
       <section className="page-container" style={{ paddingTop: '3rem', paddingBottom: '2rem' }}>
