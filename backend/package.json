@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "marketplace-annonces-api",
   "version": "1.0.0",
   "description": "API REST pour Marketplace de petites annonces",
@@ -9,13 +9,14 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.41.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "express-rate-limit": "^8.5.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
-    "mysql2": "^3.11.0",
-    "cloudinary": "^1.41.0",
-    "multer-storage-cloudinary": "^4.0.0"
+    "multer-storage-cloudinary": "^4.0.0",
+    "mysql2": "^3.11.0"
   }
 }

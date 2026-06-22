@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import { User, Package, Flag, MessageCircle, Folder, Plus, Trash2, CheckCircle, AlertCircle } from '../utils/icons';
 
 const TABS = ['stats', 'users', 'ads', 'reports', 'categories'];
+const TAB_LABELS = { stats: 'Statistiques', users: 'Utilisateurs', ads: 'Annonces', reports: 'Signalements', categories: 'Catégories' };
 
 const Admin = () => {
   const { user } = useAuth();
@@ -15,6 +17,7 @@ const Admin = () => {
   const [reports, setReports] = useState([]);
   const [categories, setCategories] = useState([]);
   const [newCat, setNewCat] = useState('');
+  const [editCat, setEditCat] = useState(null);
 
   useEffect(() => {
     if (!user) return navigate('/login');
@@ -47,6 +50,12 @@ const Admin = () => {
     loadCategories();
   };
 
+  const renameCategory = async (id, name) => {
+    await api.put('/admin/categories/' + id, { name });
+    setEditCat(null);
+    loadCategories();
+  };
+
   const deleteCategory = async (id) => {
     if (!window.confirm('Supprimer cette catégorie ?')) return;
     await api.delete('/admin/categories/' + id);
@@ -61,7 +70,7 @@ const Admin = () => {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {TABS.map(t => (
           <button key={t} onClick={() => setTab(t)} className={`btn ${tab === t ? 'btn-primary' : 'btn-outline'}`}>
-            {t === 'stats' ? 'Statistiques' : t.charAt(0).toUpperCase() + t.slice(1)}
+            {TAB_LABELS[t]}
           </button>
         ))}
       </div>
@@ -69,14 +78,14 @@ const Admin = () => {
       {tab === 'stats' && stats && (
         <div className="stats-grid fade-in">
           {[
-            { label: 'Utilisateurs', value: stats.users, color: 'var(--primary)' },
-            { label: 'Annonces', value: stats.ads, color: 'var(--success)' },
-            { label: 'Annonces actives', value: stats.active, color: '#2ecc71' },
-            { label: 'Signalements', value: stats.reports, color: 'var(--warning)' },
-            { label: 'Messages', value: stats.messages, color: '#9b59b6' },
+            { label: 'Utilisateurs', value: stats.users },
+            { label: 'Annonces', value: stats.ads },
+            { label: 'Annonces actives', value: stats.active },
+            { label: 'Signalements', value: stats.reports },
+            { label: 'Messages', value: stats.messages },
           ].map(s => (
             <div key={s.label} className="stat-card">
-              <div className="stat-value" style={{ color: s.color }}>{s.value}</div>
+              <div className="stat-value">{s.value}</div>
               <div className="stat-label">{s.label}</div>
             </div>
           ))}
@@ -158,8 +167,20 @@ const Admin = () => {
               <tbody>
                 {categories.map(c => (
                   <tr key={c.id}>
-                    <td>{c.id}</td><td style={{ fontWeight: 600 }}>{c.name}</td>
-                    <td><button onClick={() => deleteCategory(c.id)} className="btn btn-sm btn-danger">Supprimer</button></td>
+                    <td>{c.id}</td>
+                    <td style={{ fontWeight: 600 }}>
+                      {editCat === c.id ? (
+                        <form onSubmit={e => { e.preventDefault(); renameCategory(c.id, e.target.name.value); }} style={{ display: 'flex', gap: '0.5rem' }}>
+                          <input name="name" defaultValue={c.name} className="form-input" style={{ padding: '0.4rem', fontSize: '0.85rem' }} autoFocus />
+                          <button type="submit" className="btn btn-sm btn-success">OK</button>
+                          <button type="button" onClick={() => setEditCat(null)} className="btn btn-sm btn-outline">Annuler</button>
+                        </form>
+                      ) : c.name}
+                    </td>
+                    <td>
+                      <button onClick={() => setEditCat(c.id)} className="btn btn-sm btn-outline" style={{ marginRight: '0.375rem' }}>Renommer</button>
+                      <button onClick={() => deleteCategory(c.id)} className="btn btn-sm btn-danger">Supprimer</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

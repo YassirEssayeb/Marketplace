@@ -2,6 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import { Plus, Pencil, Trash2, Package, CheckCircle } from '../utils/icons';
 
 const MyAds = () => {
   const { user } = useAuth();
@@ -35,14 +36,16 @@ const MyAds = () => {
     <div className="page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Mes annonces</h2>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Mes annonces</h2>
           <p style={{ color: 'var(--gray-500)', fontSize: '0.9rem' }}>{ads.length} annonce{ads.length > 1 ? 's' : ''}</p>
         </div>
-        <Link to="/ads/new" className="btn btn-success">+ Nouvelle annonce</Link>
+        <Link to="/ads/new" className="btn btn-success" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+          <Plus size={18} /> Nouvelle annonce
+        </Link>
       </div>
       {ads.length === 0 ? (
         <div className="card-lg" style={{ textAlign: 'center', padding: '4rem' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📭</div>
+          <Package size={48} style={{ color: 'var(--gray-300)', marginBottom: '1rem' }} />
           <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.5rem' }}>Aucune annonce</p>
           <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem' }}>Publiez votre première annonce dès maintenant.</p>
           <Link to="/ads/new" className="btn btn-primary">Publier une annonce</Link>
@@ -63,9 +66,17 @@ const MyAds = () => {
                   <td><span className={statusClass(ad.status)}>{statusLabel(ad.status)}</span></td>
                   <td style={{ color: 'var(--gray-500)' }}>{new Date(ad.created_at).toLocaleDateString('fr-FR')}</td>
                   <td>
-                    {ad.status === 'active' && <button onClick={() => markAsSold(ad.id)} className="btn btn-success btn-sm" style={{ marginRight: '0.375rem' }}>Vendu</button>}
-                    <Link to={'/ads/' + ad.id + '/edit'} className="btn btn-warning btn-sm" style={{ marginRight: '0.375rem', color: 'white' }}>Modifier</Link>
-                    <button onClick={() => deleteAd(ad.id)} className="btn btn-danger btn-sm">Supprimer</button>
+                    {ad.status === 'active' && (
+                      <button onClick={() => markAsSold(ad.id)} className="btn btn-success btn-sm" style={{ marginRight: '0.375rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                        <CheckCircle size={14} /> Vendu
+                      </button>
+                    )}
+                    <Link to={'/ads/' + ad.id + '/edit'} className="btn btn-warning btn-sm" style={{ marginRight: '0.375rem', color: 'white', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <Pencil size={14} /> Modifier
+                    </Link>
+                    <button onClick={() => deleteAd(ad.id)} className="btn btn-danger btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <Trash2 size={14} /> Supprimer
+                    </button>
                   </td>
                 </tr>
               ))}

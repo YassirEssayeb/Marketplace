@@ -3,7 +3,7 @@ const pool = require('../config/db');
 exports.getConversations = async (req, res) => {
   try {
     const [rows] = await pool.query(
-      'SELECT DISTINCT u.id, u.name, u.email FROM messages m JOIN users u ON (CASE WHEN m.sender_id = ? THEN m.receiver_id ELSE m.sender_id) = u.id WHERE m.sender_id = ? OR m.receiver_id = ?',
+      'SELECT DISTINCT u.id, u.name, u.email FROM messages m JOIN users u ON (CASE WHEN m.sender_id = ? THEN m.receiver_id ELSE m.sender_id END) = u.id WHERE m.sender_id = ? OR m.receiver_id = ?',
       [req.user.id, req.user.id, req.user.id]
     );
     const conversations = await Promise.all(rows.map(async (user) => {

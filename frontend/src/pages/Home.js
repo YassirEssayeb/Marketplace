@@ -1,8 +1,8 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
-import { MapPin, Folder, Image, Search, Package, Shield, Users, Euro, ArrowRight, X, Briefcase, Home, Car, Shirt, Sofa, Gamepad, Dumbbell, Wrench, Star, Quote } from '../utils/icons';
+import { MapPin, Folder, Image, Search, Package, Shield, Users, Euro, ArrowRight, X, Briefcase, Home, Car, Shirt, Sofa, Gamepad, Dumbbell, Wrench, Star, Quote, Clock } from '../utils/icons';
 
 const categoriesList = [
   { name: 'Emploi', icon: Briefcase, color: '#3B82F6', bg: '#EFF6FF' },
@@ -15,30 +15,40 @@ const categoriesList = [
   { name: 'Services', icon: Wrench, color: '#F97316', bg: '#FFF7ED' },
 ];
 
+const timeAgo = (hours) => {
+  if (hours < 1) return "À l'instant";
+  if (hours < 2) return 'Il y a 1h';
+  if (hours < 24) return `Il y a ${hours}h`;
+  const days = Math.round(hours / 24);
+  if (days < 2) return 'Il y a 1 jour';
+  if (days < 30) return `Il y a ${days} jours`;
+  const months = Math.round(days / 30);
+  if (months < 2) return 'Il y a 1 mois';
+  return `Il y a ${months} mois`;
+};
+
 const PXL = (id) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&h=350`;
 const demoProducts = [
-  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', img: PXL(29020349), desc: 'iPhone 15 Pro Max 256 Go, couleur Titane naturel. Acheté il y a 3 mois, état impeccable.' },
-  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', img: PXL(4740494), desc: 'Canapé d\'angle en cuir véritable, 5 places. Couleur gris foncé, état très bon.' },
-  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', img: PXL(12433114), desc: 'Volkswagen Golf 8, 1.5 TSI 130ch, 25 000 km, finition Carat. Première main.' },
-  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', img: PXL(7546648), desc: 'Bel appartement 3 pièces de 65m², exposé sud. Cuisine équipée, balcon, cave.' },
-  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', img: PXL(8068269), desc: 'MacBook Pro M3 14 pouces, 18Go RAM, 512Go SSD. Charge cycles: 45, batterie 98%.' },
-  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', img: PXL(12345554), desc: 'Veste en cuir vintage, taille M. Cuir souple et patiné. Parfait état, doublure intacte.' },
-  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', img: PXL(32076746), desc: 'Table de jardin en teck massif, 6 places (180x90cm). Utilisée 2 saisons.' },
-  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', img: PXL(34259660), desc: 'VTT électrique 27.5", moteur Bosch 250W, batterie 500Wh. Autonomie 80km.' },
-  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', img: PXL(34482313), desc: 'Nintendo Switch OLED modèle 2023, avec 4 jeux (Mario Kart, Zelda, Odyssey, Smash).' },
-  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: PXL(4221413), desc: 'Lit superposé en bois massif, 2 places (90x190cm). Matelas inclus.' },
-  { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', img: PXL(10354611), desc: 'Cours de guitare en visio. Tous niveaux. 25€/h. Premier cours offert.' },
-  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: PXL(7166930), desc: 'Canapé-lit convertible, matelas 140x190. Mécanisme facile, housse lavable.' },
-  { title: 'Bague en or blanc diamant', price: 590, location: 'Paris', category: 'Mode', img: PXL(2849742), desc: 'Bague en or blanc 750, diamant 0.5ct. Certificat inclus. Jamais portée.' },
-  { title: 'PlayStation 5 + 3 manettes', price: 380, location: 'Montpellier', category: 'Multimédia', img: PXL(13189290), desc: 'PS5 standard, 825Go. 3 manettes, 2 jeux (FIFA 25, Spider-Man 2). Très bon état.' },
-  { title: 'Studio 25m² centre ville', price: 89000, location: 'Lyon', category: 'Immobilier', img: PXL(6447384), desc: 'Studio 25m² rénové, centre Lyon. Cuisine équipée, salle de douche.' },
-  { title: 'Trottinette électrique Xiaomi', price: 280, location: 'Grenoble', category: 'Véhicules', img: PXL(9168370), desc: 'Xiaomi Pro 2, autonomie 45km. 200km, état neuf. Chargeur + antivol inclus.' },
-  { title: 'Machine à laver hublot 7kg', price: 150, location: 'Tours', category: 'Maison & Jardin', img: PXL(9669475), desc: 'Machine à laver hublot 7kg, classe A++. Très bon état, détartrée.' },
-  { title: 'Cours de yoga en ligne', price: 15, location: 'En ligne', category: 'Services', img: PXL(34395958), desc: 'Yoga en ligne, 15€/séance. Hatha, Vinyasa, Yin. Tous niveaux.' },
-  { title: 'Drone DJI Mini 4 Pro', price: 720, location: 'Nice', category: 'Loisirs', img: PXL(5555813), desc: 'DJI Mini 4 Pro, 3 batteries, télécommande RC2. Volé 2h seulement.' },
-  { title: 'Appareil photo Sony A7III', price: 1400, location: 'Lille', category: 'Multimédia', img: PXL(19826563), desc: 'Sony A7III, 24MP, 15000 déclenchements. Objectif 28-70mm inclus. Très bon état.' },
-  { title: 'Pouf ottoman en velours', price: 65, location: 'Marseille', category: 'Maison & Jardin', img: PXL(10964021), desc: 'Pouf ottoman velours bleu canard. Diamètre 50cm. Parfait pour salon ou chambre.' },
-  { title: 'Tondeuse autoportée Husqvarna', price: 2200, location: 'Rennes', category: 'Loisirs', img: PXL(5163431), desc: 'Husqvarna automotrice, 80cm de coupe. Révision récente, 150h d\'utilisation.' },
+  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', img: PXL(29020349), desc: 'iPhone 15 Pro Max 256 Go, couleur Titane naturel. Acheté il y a 3 mois, état impeccable.', badge: 'nouveau', hours: 1, seller: 'Sophie M.', views: 142 },
+  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', img: PXL(4740494), desc: 'Canapé d\'angle en cuir véritable, 5 places. Couleur gris foncé, état très bon.', badge: 'urgent', hours: 3, seller: 'Pierre L.', views: 89 },
+  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', img: PXL(12433114), desc: 'Volkswagen Golf 8, 1.5 TSI 130ch, 25 000 km, finition Carat. Première main.', hours: 5, seller: 'Marc D.', views: 325 },
+  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', img: PXL(7546648), desc: 'Bel appartement 3 pièces de 65m², exposé sud. Cuisine équipée, balcon, cave.', badge: 'top', hours: 8, seller: 'Julie R.', views: 567 },
+  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', img: PXL(8068269), desc: 'MacBook Pro M3 14 pouces, 18Go RAM, 512Go SSD. Charge cycles: 45, batterie 98%.', badge: 'nouveau', hours: 12, seller: 'Thomas B.', views: 234 },
+  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', img: PXL(12345554), desc: 'Veste en cuir vintage, taille M. Cuir souple et patiné. Parfait état, doublure intacte.', hours: 18, seller: 'Emma P.', views: 56 },
+  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', img: PXL(32076746), desc: 'Table de jardin en teck massif, 6 places (180x90cm). Utilisée 2 saisons.', hours: 24, seller: 'Lucas H.', views: 78 },
+  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', img: PXL(34259660), desc: 'VTT électrique 27.5", moteur Bosch 250W, batterie 500Wh. Autonomie 80km.', badge: 'urgent', hours: 36, seller: 'Sarah K.', views: 198 },
+  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', img: PXL(34482313), desc: 'Nintendo Switch OLED modèle 2023, avec 4 jeux (Mario Kart, Zelda, Odyssey, Smash).', hours: 48, seller: 'Alexandre V.', views: 412 },
+  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: PXL(4221413), desc: 'Lit superposé en bois massif, 2 places (90x190cm). Matelas inclus.', hours: 72, seller: 'Camille T.', views: 34 },
+  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: PXL(7166930), desc: 'Canapé-lit convertible, matelas 140x190. Mécanisme facile, housse lavable.', hours: 120, seller: 'Sophie M.', views: 145 },
+  { title: 'Bague en or blanc diamant', price: 590, location: 'Paris', category: 'Mode', img: PXL(2849742), desc: 'Bague en or blanc 750, diamant 0.5ct. Certificat inclus. Jamais portée.', hours: 168, seller: 'Claire D.', views: 234 },
+  { title: 'PlayStation 5 + 3 manettes', price: 380, location: 'Montpellier', category: 'Multimédia', img: PXL(13189290), desc: 'PS5 standard, 825Go. 3 manettes, 2 jeux (FIFA 25, Spider-Man 2). Très bon état.', badge: 'urgent', hours: 240, seller: 'Julien M.', views: 876 },
+  { title: 'Studio 25m² centre ville', price: 89000, location: 'Lyon', category: 'Immobilier', img: PXL(6447384), desc: 'Studio 25m² rénové, centre Lyon. Cuisine équipée, salle de douche.', hours: 360, seller: 'Marie L.', views: 543 },
+  { title: 'Trottinette électrique Xiaomi', price: 280, location: 'Grenoble', category: 'Véhicules', img: PXL(9168370), desc: 'Xiaomi Pro 2, autonomie 45km. 200km, état neuf. Chargeur + antivol inclus.', hours: 480, seller: 'Antoine R.', views: 156 },
+  { title: 'Machine à laver hublot 7kg', price: 150, location: 'Tours', category: 'Maison & Jardin', img: PXL(9669475), desc: 'Machine à laver hublot 7kg, classe A++. Très bon état, détartrée.', hours: 720, seller: 'Isabelle P.', views: 89 },
+  { title: 'Drone DJI Mini 4 Pro', price: 720, location: 'Nice', category: 'Loisirs', img: PXL(5555813), desc: 'DJI Mini 4 Pro, 3 batteries, télécommande RC2. Volé 2h seulement.', badge: 'nouveau', hours: 1440, seller: 'Romain G.', views: 321 },
+  { title: 'Appareil photo Sony A7III', price: 1400, location: 'Lille', category: 'Multimédia', img: PXL(19826563), desc: 'Sony A7III, 24MP, 15000 déclenchements. Objectif 28-70mm inclus. Très bon état.', hours: 2160, seller: 'David C.', views: 267 },
+  { title: 'Pouf ottoman en velours', price: 65, location: 'Marseille', category: 'Maison & Jardin', img: PXL(10964021), desc: 'Pouf ottoman velours bleu canard. Diamètre 50cm. Parfait pour salon ou chambre.', hours: 2880, seller: 'Laura S.', views: 34 },
+  { title: 'Tondeuse autoportée Husqvarna', price: 2200, location: 'Rennes', category: 'Loisirs', img: PXL(5163431), desc: 'Husqvarna automotrice, 80cm de coupe. Révision récente, 150h d\'utilisation.', hours: 4320, seller: 'Philippe M.', views: 123 },
 ];
 
 const Landing = () => {
@@ -65,12 +75,12 @@ const Landing = () => {
     <div className="fade-in">
       <section className="hero-section" style={{ margin: '1.5rem 1.5rem 2.5rem' }}>
         <div className="hero-pattern" />
-        <div className="hero-content" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+        <div className="hero-content" style={{ maxWidth: '720px', margin: '0 auto', textAlign: 'center' }}>
           <h1 className="hero-title">
-            Trouvez tout ce que vous cherchez,<br />près de chez vous
+            Trouvez tout près de chez vous
           </h1>
-          <p className="hero-subtitle" style={{ marginLeft: 'auto', marginRight: 'auto', marginBottom: '2rem' }}>
-            Des milliers de petites annonces dans toute la France. Meubles, électroménager, vêtements, voitures et bien plus.
+          <p className="hero-subtitle" style={{ marginLeft: 'auto', marginRight: 'auto', marginBottom: '1.75rem' }}>
+            Des milliers de petites annances partout en France. Meubles, mode, immobilier, v&eacute;hicules et bien plus.
           </p>
           <form onSubmit={handleSearch}>
             <div className="hero-search" style={{ margin: '0 auto' }}>
@@ -88,9 +98,9 @@ const Landing = () => {
             </div>
           </form>
           <div className="hero-stats" style={{ justifyContent: 'center' }}>
-            <div className="hero-stat"><Package size={18} /> +10 000 annonces</div>
-            <div className="hero-stat"><Users size={18} /> 5 000 utilisateurs</div>
-            <div className="hero-stat"><Shield size={18} /> Paiement sécurisé</div>
+            <div className="hero-stat"><Package size={16} /> +10 000 annonces</div>
+            <div className="hero-stat"><Users size={16} /> 5 000 utilisateurs</div>
+            <div className="hero-stat"><Shield size={16} /> Paiement sécurisé</div>
           </div>
         </div>
       </section>
@@ -257,14 +267,16 @@ const Landing = () => {
               )}
             </div>
             <div className="modal-body">
-              <div className="modal-category" style={{ color: '#7C3AED', fontSize: '0.82rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{selectedProduct.category}</div>
+              <div className="modal-category">{selectedProduct.category}</div>
               <h2 className="modal-title">{selectedProduct.title}</h2>
-              <div className="modal-price"><Euro size={18} /> {selectedProduct.price.toLocaleString('fr-FR')} €</div>
-              <div className="modal-location"><MapPin size={16} /> {selectedProduct.location}</div>
+              <div className="modal-price">{selectedProduct.price.toLocaleString('fr-FR')} €</div>
+              <div className="modal-location"><MapPin size={14} /> {selectedProduct.location}</div>
               <p className="modal-desc">{selectedProduct.desc}</p>
-              <Link to={"/browse?search=" + encodeURIComponent(selectedProduct.title.split(' ')[0])} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }} onClick={() => { setSelectedProduct(null); setModalImgFailed(false); }}>
-                Voir annonces similaires <ArrowRight size={16} />
-              </Link>
+              <div className="modal-footer">
+                <Link to={"/browse?search=" + encodeURIComponent(selectedProduct.title.split(' ')[0])} className="btn btn-primary" onClick={() => { setSelectedProduct(null); setModalImgFailed(false); }}>
+                  Voir annonces similaires <ArrowRight size={16} />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -277,6 +289,19 @@ const AdCard = ({ ad, isReal, imgFailed, onImgError }) => (
   <div className="ad-card">
     <div className="ad-card-image">
       {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
+      {ad.badge === 'nouveau' && <div className="ad-card-badge ad-card-badge-new">Nouveau</div>}
+      {ad.badge === 'urgent' && <div className="ad-card-badge ad-card-badge-urgent">Urgent</div>}
+      {ad.badge === 'top' && <div className="ad-card-badge ad-card-badge-top">Top</div>}
+      {!isReal && ad.hours != null && (
+        <div className="ad-card-time">
+          <Clock size={10} /> {timeAgo(ad.hours)}
+        </div>
+      )}
+      {isReal && ad.created_at && (
+        <div className="ad-card-time">
+          <Clock size={10} /> {new Date(ad.created_at).toLocaleDateString('fr-FR')}
+        </div>
+      )}
       {isReal && ad.images && ad.images.length > 0 ? (
         <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
       ) : !isReal && ad.img && !imgFailed ? (
@@ -290,26 +315,34 @@ const AdCard = ({ ad, isReal, imgFailed, onImgError }) => (
     <div className="ad-card-body">
       <h3 className="ad-card-title">{ad.title}</h3>
       <div className="ad-card-price">
-        <Euro size={16} style={{ verticalAlign: 'text-bottom' }} /> {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}
+        {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}
       </div>
       <div className="ad-card-meta">
         {ad.location && (
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-            <MapPin size={14} /> {ad.location}
-          </span>
-        )}
-        {ad.category && (
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-            <Folder size={14} /> {ad.category}
+          <span className="ad-card-meta-item">
+            <MapPin size={12} /> {ad.location}
           </span>
         )}
         {ad.category_name && (
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-            <Folder size={14} /> {ad.category_name}
+          <span className="ad-card-meta-item">
+            <Folder size={12} /> {ad.category_name}
+          </span>
+        )}
+        {ad.category && !ad.category_name && (
+          <span className="ad-card-meta-item">
+            <Folder size={12} /> {ad.category}
           </span>
         )}
       </div>
     </div>
+    {!isReal && ad.seller && (
+      <div className="ad-card-seller">
+        <div className="ad-card-seller-avatar">
+          {ad.seller.split(' ').map(n => n[0]).join('')}
+        </div>
+        <span className="ad-card-seller-name">{ad.seller}</span>
+      </div>
+    )}
   </div>
 );
 

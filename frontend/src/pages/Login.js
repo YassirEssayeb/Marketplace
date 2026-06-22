@@ -1,6 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { LogIn } from '../utils/icons';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -22,7 +23,7 @@ const Login = () => {
   return (
     <div className="page-container" style={{ maxWidth: '440px' }}>
       <div className="card-lg" style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>Connexion</h2>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>Connexion</h2>
         <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>Connectez-vous à votre compte.</p>
         {error && <div className="toast toast-error" style={{ marginBottom: '1rem', animation: 'none' }}>{error}</div>}
         <form onSubmit={handleSubmit}>
@@ -34,7 +35,12 @@ const Login = () => {
             <label className="form-label">Mot de passe</label>
             <input type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="form-input" />
           </div>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem' }}>Se connecter</button>
+          <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
+            <Link to="/forgot-password" style={{ fontSize: '0.85rem', color: 'var(--gray-500)' }}>Mot de passe oublié ?</Link>
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            <LogIn size={18} /> Se connecter
+          </button>
         </form>
         <p style={{ marginTop: '1.5rem', textAlign: 'center', color: 'var(--gray-500)', fontSize: '0.9rem' }}>
           Pas de compte ? <Link to="/register" style={{ fontWeight: 600 }}>Inscrivez-vous</Link>

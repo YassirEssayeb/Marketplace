@@ -1,7 +1,8 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import { Send, MessageCircle } from '../utils/icons';
 
 const Messaging = () => {
   const { user } = useAuth();
@@ -10,6 +11,15 @@ const Messaging = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState('');
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     if (!user) return navigate('/login');
@@ -36,8 +46,9 @@ const Messaging = () => {
   return (
     <div className="chat-layout">
       <div className="chat-sidebar">
-        <div style={{ padding: '1rem', borderBottom: '1px solid var(--gray-200)' }}>
-          <h3 style={{ fontWeight: 700, fontSize: '1.1rem' }}>Conversations</h3>
+        <div style={{ padding: '1rem', borderBottom: '1px solid var(--gray-200)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <MessageCircle size={18} />
+          <h3 style={{ fontWeight: 600, fontSize: '1.1rem' }}>Conversations</h3>
         </div>
         {conversations.map(c => (
           <div key={c.user.id} onClick={() => loadMessages(c.user.id)}
@@ -60,8 +71,8 @@ const Messaging = () => {
       <div className="chat-main">
         {selectedUser ? (
           <>
-            <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--gray-200)', fontWeight: 700 }}>
-              {otherUser ? otherUser.user.name : 'Chargement...'}
+            <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--gray-200)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <UserIcon size={18} /> {otherUser ? otherUser.user.name : 'Chargement...'}
             </div>
             <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {messages.map(m => (
@@ -80,16 +91,19 @@ const Messaging = () => {
                   </small>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
             <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--gray-200)', display: 'flex', gap: '0.75rem' }}>
               <input value={newMsg} onChange={e => setNewMsg(e.target.value)} placeholder="Votre message..." className="form-input"
                 onKeyDown={e => e.key === 'Enter' && sendMessage()} />
-              <button onClick={sendMessage} className="btn btn-primary">Envoyer</button>
+              <button onClick={sendMessage} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Send size={16} /> Envoyer
+              </button>
             </div>
           </>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--gray-400)' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>💬</div>
+            <MessageCircle size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
             <p style={{ fontSize: '1.1rem' }}>Sélectionnez une conversation</p>
           </div>
         )}
@@ -97,5 +111,11 @@ const Messaging = () => {
     </div>
   );
 };
+
+const UserIcon = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+  </svg>
+);
 
 export default Messaging;

@@ -9,6 +9,7 @@ const messageRoutes = require('./routes/messages');
 const favoriteRoutes = require('./routes/favorites');
 const uploadRoutes = require('./routes/upload');
 const adminRoutes = require('./routes/admin');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +24,7 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.get('/api', (req, res) => {
   res.json({ message: 'API Marketplace de petites annonces' });

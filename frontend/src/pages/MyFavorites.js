@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
+import { Heart, Image, Trash2 } from '../utils/icons';
 
 const MyFavorites = () => {
   const { user } = useAuth();
@@ -23,11 +24,11 @@ const MyFavorites = () => {
 
   return (
     <div className="page-container">
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>Mes favoris</h2>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>Mes favoris</h2>
       <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>{ads.length} annonce{ads.length > 1 ? 's' : ''} sauvegardée{ads.length > 1 ? 's' : ''}.</p>
       {ads.length === 0 ? (
         <div className="card-lg" style={{ textAlign: 'center', padding: '4rem' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🤍</div>
+          <Heart size={48} style={{ color: 'var(--gray-300)', marginBottom: '1rem' }} />
           <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.5rem' }}>Aucun favori</p>
           <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem' }}>Parcourez les annonces pour ajouter des favoris.</p>
           <Link to="/" className="btn btn-primary">Parcourir les annonces</Link>
@@ -41,7 +42,7 @@ const MyFavorites = () => {
                   {ad.images && ad.images.length > 0 ? (
                     <img src={getImageUrl(ad.images[0])} alt={ad.title} />
                   ) : (
-                    <span style={{ color: 'var(--gray-400)', fontSize: '2rem' }}>📷</span>
+                    <Image size={40} style={{ color: 'var(--gray-400)' }} />
                   )}
                 </div>
                 <div className="ad-card-body">
@@ -50,7 +51,9 @@ const MyFavorites = () => {
                 </div>
               </Link>
               <div style={{ padding: '0 1.25rem 1.25rem' }}>
-                <button onClick={() => removeFavorite(ad.id)} className="btn btn-danger btn-sm" style={{ width: '100%' }}>Retirer des favoris</button>
+                <button onClick={() => removeFavorite(ad.id)} className="btn btn-danger btn-sm" style={{ width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>
+                  <Trash2 size={14} /> Retirer des favoris
+                </button>
               </div>
             </div>
           ))}

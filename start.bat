@@ -1,5 +1,5 @@
 @echo off
-cd /d "C:\xampp\htdocs\Marketplace de petites annonces"
+cd /d "%~dp0"
 
 echo Demarrage de l'API backend...
 start "Backend" cmd /c "cd /d backend && npm start"

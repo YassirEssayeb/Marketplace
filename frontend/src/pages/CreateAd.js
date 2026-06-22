@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import { Camera, Euro, Loader } from '../utils/icons';
 
 const CreateAd = () => {
   const { user } = useAuth();
@@ -50,7 +51,7 @@ const CreateAd = () => {
   return (
     <div className="page-container" style={{ maxWidth: '640px' }}>
       <div className="card-lg" style={{ marginTop: '1rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>Déposer une annonce</h2>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>Déposer une annonce</h2>
         <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>Publiez votre annonce en quelques clics.</p>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -80,13 +81,10 @@ const CreateAd = () => {
           </div>
           <div className="form-group">
             <label className="form-label">Images (max 10, 5Mo chacune)</label>
-            <div onClick={() => document.getElementById('file-input-create').click()}
-              style={{ border: '2px dashed var(--gray-300)', borderRadius: 'var(--radius-md)', padding: '2rem', textAlign: 'center', cursor: 'pointer', background: 'var(--gray-50)', transition: 'border-color 0.2s' }}
-              onMouseOver={e => e.currentTarget.style.borderColor = 'var(--primary)'}
-              onMouseOut={e => e.currentTarget.style.borderColor = 'var(--gray-300)'}>
-              <p style={{ fontSize: '2rem', margin: 0, color: 'var(--gray-400)' }}>📷</p>
-              <p style={{ fontWeight: 600, color: 'var(--gray-600)', margin: '0.5rem 0 0.25rem' }}>Cliquez pour ajouter des images</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--gray-400)', margin: 0 }}>Formats: JPG, PNG, GIF, WebP, AVIF, HEIC — jusqu'à 10 fichiers</p>
+            <div onClick={() => document.getElementById('file-input-create').click()} className="upload-zone">
+              <Camera size={32} style={{ color: 'var(--gray-400)', marginBottom: '0.5rem' }} />
+              <p style={{ fontWeight: 600, color: 'var(--gray-600)', marginBottom: '0.25rem' }}>Cliquez pour ajouter des images</p>
+              <p style={{ fontSize: '0.85rem', color: 'var(--gray-400)', margin: 0 }}>JPG, PNG, GIF, WebP, AVIF, HEIC — jusqu'à 10 fichiers</p>
             </div>
             <input id="file-input-create" type="file" accept="image/*" multiple onChange={handleFiles} style={{ display: 'none' }} />
             {previews.length > 0 && (
@@ -98,7 +96,7 @@ const CreateAd = () => {
             )}
           </div>
           <button type="submit" disabled={uploading} className="btn btn-success" style={{ width: '100%', padding: '0.75rem', opacity: uploading ? 0.7 : 1 }}>
-            {uploading ? '⏳ Publication en cours...' : "🚀 Publier l'annonce"}
+            {uploading ? <><Loader size={16} /> Publication en cours...</> : "Publier l'annonce"}
           </button>
         </form>
       </div>
