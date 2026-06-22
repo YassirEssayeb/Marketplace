@@ -28,6 +28,13 @@ const demoProducts = [
   { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1506104489822-562e2510a297?w=600&h=400&fit=crop', desc: 'Lit superposé en bois massif, 2 places (90x190cm). Matelas inclus. Idéal pour chambre d\'enfant. Montage facile.' },
   { title: 'Cours de guitare particulier', price: 25, location: 'En ligne', category: 'Services', img: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=600&h=400&fit=crop', desc: 'Cours de guitare particuliers en visio. Tous niveaux, tous styles. 25€/h. Premier cours offert. Diplômé conservatoire.' },
   { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&h=400&fit=crop', desc: 'Canapé-lit convertible, matelas 140x190. Mécanisme facile à déplier. Housse lavable. Idéal pour petit appartement.' },
+  { title: 'Bague en or blanc diamant', price: 590, location: 'Paris', category: 'Mode', img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&h=400&fit=crop', desc: 'Bague en or blanc 750, diamant central 0.5ct. Boîte et certificat d\'authenticité inclus. Offert pour noël jamais porté.' },
+  { title: 'PlayStation 5 + 3 manettes', price: 380, location: 'Montpellier', category: 'Multimédia', img: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&h=400&fit=crop', desc: 'PS5 édition standard, 825Go SSD. 3 manettes DualSense, 2 jeux (FIFA 25, Spider-Man 2). Très bon état, peu utilisée.' },
+  { title: 'Studio 25m² centre ville', price: 89000, location: 'Lyon', category: 'Immobilier', img: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop', desc: 'Studio 25m² rénové, centre ville de Lyon. Cuisine équipée, salle de douche, rangements. Idéal investissement locatif.' },
+  { title: 'Trottinette électrique Xiaomi', price: 280, location: 'Grenoble', category: 'Véhicules', img: 'https://images.unsplash.com/photo-1604663467291-413a1a3b1e11?w=600&h=400&fit=crop', desc: 'Trottinette électrique Xiaomi Pro 2, autonomie 45km. Utilisée 200km, état neuf. Chargeur et antivol inclus.' },
+  { title: 'Machine à laver hublot 7kg', price: 150, location: 'Tours', category: 'Maison & Jardin', img: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=600&h=400&fit=crop', desc: 'Machine à laver hublot 7kg, classe A++. Très bon état, détartrée régulièrement. Livraison possible sur Tours.' },
+  { title: 'Cours de yoga en ligne', price: 15, location: 'En ligne', category: 'Services', img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop', desc: 'Cours de yoga en ligne, 15€/séance. Hatha, Vinyasa, Yin. Pour tous niveaux. Horaires flexibles, replay disponible.' },
+  { title: 'Drone DJI Mini 4 Pro', price: 720, location: 'Nice', category: 'Loisirs', img: 'https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?w=600&h=400&fit=crop', desc: 'DJI Mini 4 Pro, 3 batteries, télécommande RC2. Volé 2h seulement. Filtres ND inclus, garantie 6 mois.' },
 ];
 
 const Landing = () => {
@@ -36,7 +43,7 @@ const Landing = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
-    api.get('/ads?limit=12&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
+    api.get('/ads?limit=20&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
   }, []);
 
   const handleSearch = (e) => {
@@ -46,7 +53,7 @@ const Landing = () => {
     }
   };
 
-  const allProducts = [...ads, ...demoProducts].slice(0, 12);
+  const allProducts = [...ads, ...demoProducts].slice(0, 20);
 
   return (
     <div className="fade-in">
@@ -117,7 +124,7 @@ const Landing = () => {
           </Link>
         </div>
         <div className="ad-grid">
-          {allProducts.slice(0, 12).map((ad, i) => {
+          {allProducts.slice(0, 20).map((ad, i) => {
             const isReal = ad.id !== undefined;
             return (
               <div key={i} onClick={() => { if (!isReal) setSelectedProduct(ad); }} style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
