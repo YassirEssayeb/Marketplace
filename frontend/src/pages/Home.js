@@ -2,121 +2,188 @@
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
+import { MapPin, Folder, Image, Search, Package, Shield, Users, Euro, ArrowRight, Briefcase, Home, Car, Shirt, Sofa, Gamepad, Dumbbell, Wrench } from '../utils/icons';
 
-const Home = () => {
+const categoriesList = [
+  { name: 'Emploi', icon: Briefcase, color: '#3B82F6', bg: '#EFF6FF' },
+  { name: 'Immobilier', icon: Home, color: '#10B981', bg: '#ECFDF5' },
+  { name: 'Véhicules', icon: Car, color: '#F59E0B', bg: '#FFFBEB' },
+  { name: 'Mode', icon: Shirt, color: '#EC4899', bg: '#FDF2F8' },
+  { name: 'Maison & Jardin', icon: Sofa, color: '#8B5CF6', bg: '#F5F3FF' },
+  { name: 'Multimédia', icon: Gamepad, color: '#EF4444', bg: '#FEF2F2' },
+  { name: 'Loisirs', icon: Dumbbell, color: '#14B8A6', bg: '#F0FDFA' },
+  { name: 'Services', icon: Wrench, color: '#F97316', bg: '#FFF7ED' },
+];
+
+const Landing = () => {
   const [ads, setAds] = useState([]);
-  const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
-  const [categories, setCategories] = useState([]);
-  const [filters, setFilters] = useState({ search: '', category: '', minPrice: '', maxPrice: '', location: '', sort: 'date_desc' });
-  const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState('');
 
-  useEffect(() => { api.get('/ads/categories').then(r => setCategories(r.data)).catch(() => {}); }, []);
-
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setFilters(prev => ({ ...prev, search: searchInput }));
-      setPagination(prev => ({ ...prev, page: 1 }));
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [searchInput]);
+    api.get('/ads?limit=8&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
+  }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    Object.entries(filters).forEach(([k, v]) => { if (v) params.append(k, v); });
-    params.append('page', pagination.page);
-    api.get('/ads?' + params.toString()).then(r => {
-      setAds(r.data.ads);
-      setPagination(r.data.pagination);
-    }).catch(() => {}).finally(() => setLoading(false));
-  }, [filters, pagination.page]);
-
-  const handleFilter = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-    setPagination(prev => ({ ...prev, page: 1 }));
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchInput.trim()) {
+      window.location.href = '/browse?search=' + encodeURIComponent(searchInput);
+    }
   };
 
   return (
-    <div className="page-container">
-      <div className="hero-section fade-in">
-        <h1 className="hero-title">Trouvez tout ce que vous cherchez</h1>
-        <p className="hero-subtitle">Des milliers de petites annonces près de chez vous. Meubles, électroménager, vêtements, voitures et bien plus.</p>
-      </div>
-
-      <div className="filters-bar">
-        <input className="filter-input" placeholder="Rechercher..." value={searchInput} onChange={e => setSearchInput(e.target.value)} />
-        <select className="filter-input" value={filters.category} onChange={e => handleFilter('category', e.target.value)}>
-          <option value="">Toutes catégories</option>
-          {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>
-        <input className="filter-input" type="number" placeholder="Prix min" value={filters.minPrice} onChange={e => handleFilter('minPrice', e.target.value)} style={{ minWidth: '100px' }} />
-        <input className="filter-input" type="number" placeholder="Prix max" value={filters.maxPrice} onChange={e => handleFilter('maxPrice', e.target.value)} style={{ minWidth: '100px' }} />
-        <input className="filter-input" placeholder="Localisation" value={filters.location} onChange={e => handleFilter('location', e.target.value)} />
-        <select className="filter-input" value={filters.sort} onChange={e => handleFilter('sort', e.target.value)} style={{ minWidth: '160px' }}>
-          <option value="date_desc">Plus récentes</option>
-          <option value="date_asc">Plus anciennes</option>
-          <option value="price_asc">Prix croissant</option>
-          <option value="price_desc">Prix décroissant</option>
-        </select>
-      </div>
-
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--gray-400)' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⏳</div>
-          Chargement des annonces...
-        </div>
-      ) : (
-        <>
-          <p style={{ marginBottom: '1.25rem', color: 'var(--gray-500)', fontSize: '0.9rem' }}>
-            {pagination.total} annonce{pagination.total > 1 ? 's' : ''} trouvée{pagination.total > 1 ? 's' : ''}
+    <div className="fade-in">
+      <section className="hero-section" style={{ margin: '1.5rem 1.5rem 2.5rem' }}>
+        <div className="hero-pattern" />
+        <div className="hero-content" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <h1 className="hero-title">
+            Trouvez tout ce que vous cherchez,<br />près de chez vous
+          </h1>
+          <p className="hero-subtitle" style={{ marginLeft: 'auto', marginRight: 'auto', marginBottom: '2rem' }}>
+            Des milliers de petites annonces dans toute la France. Meubles, électroménager, vêtements, voitures et bien plus.
           </p>
-          {ads.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--gray-400)' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
-              <p style={{ fontSize: '1.1rem' }}>Aucune annonce trouvée</p>
-              <p style={{ marginTop: '0.5rem' }}>Essayez de modifier vos filtres.</p>
+          <form onSubmit={handleSearch}>
+            <div className="hero-search" style={{ margin: '0 auto' }}>
+              <div className="hero-search-input">
+                <Search size={20} style={{ color: '#A1A1AA', flexShrink: 0 }} />
+                <input
+                  value={searchInput}
+                  onChange={e => setSearchInput(e.target.value)}
+                  placeholder="Que cherchez-vous ? (ex: iPhone, canapé, appartement...)"
+                />
+              </div>
+              <button type="submit" className="hero-search-btn">
+                Rechercher
+              </button>
             </div>
-          ) : (
-            <div className="ad-grid fade-in">
-              {ads.map(ad => (
-                <Link to={'/ads/' + ad.id} key={ad.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div className="ad-card">
-                    <div className="ad-card-image">
-                      {ad.images && ad.images.length > 0 ? (
-                        <img src={getImageUrl(ad.images[0])} alt={ad.title} />
-                      ) : (
-                        <span style={{ color: 'var(--gray-400)', fontSize: '2rem' }}>📷</span>
+          </form>
+          <div className="hero-stats" style={{ justifyContent: 'center' }}>
+            <div className="hero-stat"><Package size={18} /> +10 000 annonces</div>
+            <div className="hero-stat"><Users size={18} /> 5 000 utilisateurs</div>
+            <div className="hero-stat"><Shield size={18} /> Paiement sécurisé</div>
+          </div>
+        </div>
+      </section>
+
+      <section className="page-container" style={{ paddingTop: '0.5rem', paddingBottom: '1rem' }}>
+        <div className="section-header">
+          <h2 className="section-title">Catégories</h2>
+          <Link to="/browse" className="section-link">
+            Tout voir <ArrowRight size={16} />
+          </Link>
+        </div>
+        <div className="categories-grid">
+          {categoriesList.map((cat, i) => {
+            const Icon = cat.icon;
+            return (
+              <Link to={'/browse?category=' + (i + 1)} key={i} className="category-card"
+                style={{ '--cat-color': cat.color }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = cat.color; e.currentTarget.style.boxShadow = '0 8px 25px ' + cat.color + '20'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.boxShadow = ''; }}
+              >
+                <div className="category-icon" style={{ background: cat.bg, color: cat.color }}>
+                  <Icon size={22} />
+                </div>
+                <p className="category-name" style={{ color: cat.color }}>{cat.name}</p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="page-container" style={{ paddingTop: '1rem' }}>
+        <div className="section-header">
+          <h2 className="section-title">Annonces récentes</h2>
+          <Link to="/browse" className="section-link">
+            Voir tout <ArrowRight size={16} />
+          </Link>
+        </div>
+        {ads.length === 0 ? (
+          <div className="empty-state">
+            <Package size={48} />
+            <p>Aucune annonce pour le moment. Soyez le premier à publier !</p>
+          </div>
+        ) : (
+          <div className="ad-grid">
+            {ads.map(ad => (
+              <Link to={'/ads/' + ad.id} key={ad.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="ad-card">
+                  <div className="ad-card-image">
+                    {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
+                    {ad.images && ad.images.length > 0 ? (
+                      <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
+                    ) : (
+                      <Image size={40} style={{ color: '#A1A1AA' }} />
+                    )}
+                  </div>
+                  <div className="ad-card-body">
+                    <h3 className="ad-card-title">{ad.title}</h3>
+                    <div className="ad-card-price">
+                      <Euro size={16} style={{ verticalAlign: 'text-bottom' }} /> {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}
+                    </div>
+                    <div className="ad-card-meta">
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                        <MapPin size={14} /> {ad.location || 'N/A'}
+                      </span>
+                      {ad.category_name && (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <Folder size={14} /> {ad.category_name}
+                        </span>
                       )}
                     </div>
-                    <div className="ad-card-body">
-                      <h3 className="ad-card-title">{ad.title}</h3>
-                      <div className="ad-card-price">{ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}</div>
-                      <div className="ad-card-meta">
-                        <span>📍 {ad.location || 'Localisation non spécifiée'}</span>
-                        {ad.category_name && <span>📁 {ad.category_name}</span>}
-                      </div>
-                      <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: 'var(--gray-400)' }}>
-                        {ad.user_name} — {new Date(ad.created_at).toLocaleDateString('fr-FR')}
-                      </div>
-                    </div>
                   </div>
-                </Link>
-              ))}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="page-container" style={{ paddingTop: '3rem', paddingBottom: '2rem' }}>
+        <div className="trust-section">
+          <div className="trust-card">
+            <div className="trust-icon" style={{ background: 'rgba(124,58,237,0.1)' }}>
+              <Shield size={28} style={{ color: '#7C3AED' }} />
             </div>
-          )}
-          {pagination.pages > 1 && (
-            <div className="pagination">
-              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(p => (
-                <button key={p} onClick={() => setPagination(prev => ({ ...prev, page: p }))}
-                  className={`page-btn ${p === pagination.page ? 'active' : ''}`}>{p}</button>
-              ))}
+            <h3 className="trust-title">Transactions sécurisées</h3>
+            <p className="trust-desc">Achetez et vendez en toute confiance sur notre plateforme.</p>
+          </div>
+          <div className="trust-card">
+            <div className="trust-icon" style={{ background: 'rgba(34,197,94,0.1)' }}>
+              <Users size={28} style={{ color: '#22C55E' }} />
             </div>
-          )}
-        </>
-      )}
+            <h3 className="trust-title">Grande communauté</h3>
+            <p className="trust-desc">Rejoignez des milliers d'utilisateurs actifs près de chez vous.</p>
+          </div>
+          <div className="trust-card">
+            <div className="trust-icon" style={{ background: 'rgba(245,158,11,0.1)' }}>
+              <Euro size={28} style={{ color: '#F59E0B' }} />
+            </div>
+            <h3 className="trust-title">100% gratuit</h3>
+            <p className="trust-desc">Publiez vos annonces gratuitement, sans commission.</p>
+          </div>
+          <div className="trust-card">
+            <div className="trust-icon" style={{ background: 'rgba(239,68,68,0.1)' }}>
+              <Search size={28} style={{ color: '#EF4444' }} />
+            </div>
+            <h3 className="trust-title">Recherche intelligente</h3>
+            <p className="trust-desc">Filtres avancés pour trouver exactement ce qu'il vous faut.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="page-container" style={{ paddingTop: '0', paddingBottom: '2rem' }}>
+        <div className="cta-banner">
+          <h2 className="cta-title">Prêt à vendre ?</h2>
+          <p className="cta-subtitle">
+            Publiez votre première annonce en moins de 2 minutes. Rejoignez des milliers de vendeurs satisfaits.
+          </p>
+          <Link to="/ads/new" className="btn btn-success btn-lg" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+            Déposer une annonce <ArrowRight size={18} />
+          </Link>
+        </div>
+      </section>
     </div>
   );
 };
 
-export default Home;
+export default Landing;
