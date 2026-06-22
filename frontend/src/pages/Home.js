@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
-import { MapPin, Folder, Image, Search, Package, Shield, Users, Euro, ArrowRight, Briefcase, Home, Car, Shirt, Sofa, Gamepad, Dumbbell, Wrench } from '../utils/icons';
+import { MapPin, Folder, Image, Search, Package, Shield, Users, Euro, ArrowRight, Briefcase, Home, Car, Shirt, Sofa, Gamepad, Dumbbell, Wrench, Star, Quote } from '../utils/icons';
 
 const categoriesList = [
   { name: 'Emploi', icon: Briefcase, color: '#3B82F6', bg: '#EFF6FF' },
@@ -168,6 +168,59 @@ const Landing = () => {
             <h3 className="trust-title">Recherche intelligente</h3>
             <p className="trust-desc">Filtres avancés pour trouver exactement ce qu'il vous faut.</p>
           </div>
+        </div>
+      </section>
+
+      <section className="page-container" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
+        <div className="section-header">
+          <h2 className="section-title">Ce que disent nos utilisateurs</h2>
+        </div>
+        <div className="testimonials-grid">
+          {[
+            {
+              name: 'Sophie Martin',
+              role: 'Acheteuse régulière',
+              avatar: 'SM',
+              color: '#7C3AED',
+              text: 'J\'ai trouvé un super canapé à moitié prix. La mise en relation avec le vendeur était rapide et le paiement sécurisé. Je recommande !',
+              stars: 5,
+            },
+            {
+              name: 'Thomas Dubois',
+              role: 'Vendeur pro',
+              avatar: 'TD',
+              color: '#10B981',
+              text: 'Je vends régulièrement sur cette plateforme. L\'interface est intuitive et les acheteurs sont sérieux. J\'ai déjà vendu plus de 30 articles.',
+              stars: 5,
+            },
+            {
+              name: 'Léa Petit',
+              role: 'Acheteuse et vendeuse',
+              avatar: 'LP',
+              color: '#F59E0B',
+              text: 'Le système de messagerie intégré est très pratique. Pas besoin de donner son numéro, tout se fait via l\'application. Sécurisé et simple.',
+              stars: 5,
+            },
+          ].map((t, i) => (
+            <div key={i} className="testimonial-card animate-fade-in" style={{ animationDelay: i * 0.1 + 's' }}>
+              <Quote size={20} style={{ color: 'var(--primary)', opacity: 0.3, position: 'absolute', top: '1rem', left: '1rem' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                <div className="avatar" style={{ background: t.color }}>{t.avatar}</div>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{t.name}</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{t.role}</div>
+                </div>
+              </div>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.75rem' }}>
+                "{t.text}"
+              </p>
+              <div style={{ display: 'flex', gap: '0.15rem' }}>
+                {Array.from({ length: t.stars }).map((_, si) => (
+                  <Star key={si} size={14} style={{ color: '#F59E0B', fill: '#F59E0B' }} />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
