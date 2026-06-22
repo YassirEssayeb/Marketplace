@@ -20,7 +20,7 @@ const Landing = () => {
   const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
-    api.get('/ads?limit=8&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
+    api.get('/ads?limit=12&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
   }, []);
 
   const handleSearch = (e) => {
@@ -97,12 +97,7 @@ const Landing = () => {
             Voir tout <ArrowRight size={16} />
           </Link>
         </div>
-        {ads.length === 0 ? (
-          <div className="empty-state">
-            <Package size={48} />
-            <p>Aucune annonce pour le moment. Soyez le premier à publier !</p>
-          </div>
-        ) : (
+        {ads.length > 0 ? (
           <div className="ad-grid">
             {ads.map(ad => (
               <Link to={'/ads/' + ad.id} key={ad.id} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -134,6 +129,15 @@ const Landing = () => {
                 </div>
               </Link>
             ))}
+          </div>
+        ) : (
+          <div className="empty-state" style={{ padding: '3rem 0' }}>
+            <Package size={48} />
+            <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Aucune annonce pour le moment</p>
+            <p style={{ marginTop: '0.375rem', marginBottom: '1.5rem' }}>Soyez le premier à publier une annonce !</p>
+            <Link to="/ads/new" className="btn btn-primary btn-lg">
+              Déposer une annonce
+            </Link>
           </div>
         )}
       </section>
