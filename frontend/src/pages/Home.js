@@ -45,7 +45,7 @@ const Landing = () => {
     }
   };
 
-  const allProducts = ads.length > 0 ? ads : demoProducts;
+  const allProducts = [...ads, ...demoProducts].slice(0, 12);
 
   return (
     <div className="fade-in">
