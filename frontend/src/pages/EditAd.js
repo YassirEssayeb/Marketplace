@@ -59,71 +59,133 @@ const EditAd = () => {
   };
 
   return (
-    <div className="page-container" style={{ maxWidth: '640px' }}>
-      <div className="card-lg" style={{ marginTop: '1rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1.5rem' }}>Modifier l'annonce</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Titre</label>
-            <input name="title" placeholder="Titre" value={form.title} onChange={handleChange} required className="form-input" />
+    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Modifier l'annonce</h1>
+        <p className="font-body-md text-on-surface-variant mb-8">Mettez à jour les informations de votre annonce.</p>
+
+        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl border border-outline-variant space-y-6">
+          {/* Title */}
+          <div>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Titre</label>
+            <input
+              name="title"
+              placeholder="Titre"
+              value={form.title}
+              onChange={handleChange}
+              required
+              className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+            />
           </div>
-          <div className="form-group">
-            <label className="form-label">Description</label>
-            <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} rows="5" className="form-input" />
+
+          {/* Description */}
+          <div>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Description</label>
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={form.description}
+              onChange={handleChange}
+              rows="5"
+              className="w-full px-4 py-3 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none resize-none"
+            />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-            <div className="form-group">
-              <label className="form-label">Prix (€)</label>
-              <input name="price" type="number" step="0.01" placeholder="Prix" value={form.price} onChange={handleChange} className="form-input" />
+
+          {/* Price & Category */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Prix (€)</label>
+              <input
+                name="price"
+                type="number"
+                step="0.01"
+                placeholder="Prix"
+                value={form.price}
+                onChange={handleChange}
+                className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+              />
             </div>
-            <div className="form-group">
-              <label className="form-label">Catégorie</label>
-              <select name="category_id" value={form.category_id} onChange={handleChange} className="form-input">
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Catégorie</label>
+              <select
+                name="category_id"
+                value={form.category_id}
+                onChange={handleChange}
+                className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none bg-white cursor-pointer"
+              >
                 <option value="">Catégorie</option>
                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
           </div>
-          <div className="form-group">
-            <label className="form-label">Localisation</label>
-            <input name="location" placeholder="Localisation" value={form.location} onChange={handleChange} className="form-input" />
+
+          {/* Location */}
+          <div>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Localisation</label>
+            <input
+              name="location"
+              placeholder="Localisation"
+              value={form.location}
+              onChange={handleChange}
+              className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+            />
           </div>
-          <div className="form-group">
-            <label className="form-label">Images (max 10, 5Mo chacune)</label>
+
+          {/* Images */}
+          <div>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Images (max 10, 5Mo chacune)</label>
             {existingImages.length > 0 && (
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+              <div className="flex gap-2 mb-3 flex-wrap">
                 {existingImages.map((url, i) => (
-                  <div key={i} style={{ position: 'relative' }}>
-                    <img src={getImageUrl(url)} alt="" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: 'var(--radius-sm)', border: '1px solid var(--gray-200)' }} />
-                    <button type="button" onClick={() => setExistingImages(existingImages.filter((_, j) => j !== i))}
-                      style={{ position: 'absolute', top: '-6px', right: '-6px', background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: '22px', height: '22px', cursor: 'pointer', fontSize: '12px', lineHeight: '22px', padding: 0, boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>✕</button>
+                  <div key={i} className="relative">
+                    <img src={getImageUrl(url)} alt="" className="w-20 h-20 object-cover rounded-lg border border-outline-variant" />
+                    <button
+                      type="button"
+                      onClick={() => setExistingImages(existingImages.filter((_, j) => j !== i))}
+                      className="absolute -top-2 -right-2 bg-error text-white rounded-full w-6 h-6 flex items-center justify-center text-xs cursor-pointer border-none shadow-md hover:opacity-80"
+                    >✕</button>
                   </div>
                 ))}
               </div>
             )}
-            <div onClick={() => document.getElementById('file-input-edit').click()}
-              style={{ border: '2px dashed var(--gray-300)', borderRadius: 'var(--radius-md)', padding: '2rem', textAlign: 'center', cursor: 'pointer', background: 'var(--gray-50)', transition: 'border-color 0.2s' }}
-              onMouseOver={e => e.currentTarget.style.borderColor = 'var(--primary)'}
-              onMouseOut={e => e.currentTarget.style.borderColor = 'var(--gray-300)'}>
-              <p style={{ fontSize: '2rem', margin: 0, color: 'var(--gray-400)' }}>📷</p>
-              <p style={{ fontWeight: 600, color: 'var(--gray-600)', margin: '0.5rem 0 0.25rem' }}>Cliquez pour ajouter des images</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--gray-400)', margin: 0 }}>Formats: JPG, PNG, GIF, WebP, AVIF, HEIC — jusqu'à 10 fichiers</p>
+            <div
+              onClick={() => document.getElementById('file-input-edit').click()}
+              className="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center cursor-pointer hover:border-secondary transition-colors bg-surface-container-low"
+            >
+              <span className="material-symbols-outlined text-5xl text-outline mb-2 block">add_a_photo</span>
+              <p className="font-body-md font-semibold text-on-surface mb-1">Cliquez pour ajouter des images</p>
+              <p className="font-body-sm text-on-surface-variant">JPG, PNG, GIF, WebP — jusqu'à 10 fichiers</p>
             </div>
             <input id="file-input-edit" type="file" accept="image/*" multiple onChange={handleFiles} style={{ display: 'none' }} />
             {previews.length > 0 && (
-              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+              <div className="flex gap-2 mt-3 flex-wrap">
                 {previews.map((p, i) => (
-                  <img key={i} src={p} alt="" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: 'var(--radius-sm)', border: '1px solid var(--gray-200)' }} />
+                  <img key={i} src={p} alt="" className="w-20 h-20 object-cover rounded-lg border border-outline-variant" />
                 ))}
               </div>
             )}
           </div>
-          <button type="submit" disabled={uploading} className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', opacity: uploading ? 0.7 : 1 }}>
-            {uploading ? '⏳ Enregistrement...' : '💾 Enregistrer les modifications'}
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={uploading}
+            className="w-full bg-secondary text-on-secondary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer disabled:opacity-50"
+          >
+            {uploading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Enregistrement...
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined text-[20px]">save</span> Enregistrer les modifications
+              </>
+            )}
           </button>
         </form>
       </div>
-    </div>
+    </main>
   );
 };
 

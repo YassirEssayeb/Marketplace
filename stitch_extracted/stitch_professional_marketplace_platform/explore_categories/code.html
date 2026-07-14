@@ -1,0 +1,393 @@
+<!DOCTYPE html><html lang="en" class="light" style=""><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#7c839b",
+                      "surface-container": "#eceef0",
+                      "on-secondary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed": "#dbe1ff",
+                      "tertiary-fixed": "#fcdeb5",
+                      "surface": "#f7f9fb",
+                      "on-tertiary-fixed": "#271901",
+                      "on-tertiary-fixed-variant": "#574425",
+                      "surface-variant": "#e0e3e5",
+                      "on-secondary-container": "#fefcff",
+                      "background": "#f7f9fb",
+                      "on-tertiary-container": "#98805d",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#000000",
+                      "surface-tint": "#565e74",
+                      "primary": "#000000",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#191c1e",
+                      "surface-dim": "#d8dadc",
+                      "secondary-fixed-dim": "#b4c5ff",
+                      "surface-container-low": "#f2f4f6",
+                      "primary-fixed-dim": "#bec6e0",
+                      "outline": "#76777d",
+                      "primary-container": "#131b2e",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#191c1e",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "inverse-primary": "#bec6e0",
+                      "outline-variant": "#c6c6cd",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-container-highest": "#e0e3e5",
+                      "tertiary-fixed-dim": "#dec29a",
+                      "tertiary-container": "#271901",
+                      "primary-fixed": "#dae2fd",
+                      "on-surface-variant": "#45464d",
+                      "inverse-surface": "#2d3133",
+                      "surface-bright": "#f7f9fb",
+                      "on-error": "#ffffff",
+                      "secondary": "#0051d5",
+                      "surface-container-high": "#e6e8ea",
+                      "secondary-container": "#316bf3",
+                      "on-secondary-fixed": "#00174b",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-secondary-fixed-variant": "#003ea8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-lg": "32px",
+                      "stack-sm": "8px",
+                      "container-max": "1280px",
+                      "margin-desktop": "48px",
+                      "margin-mobile": "16px",
+                      "stack-md": "16px",
+                      "gutter": "24px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    }catch(_e){}</script><meta charset="utf-8"></head><body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest fixed top-0 w-full z-50 shadow-sm border-b border-outline-variant">
+<div class="max-w-container-max mx-auto px-margin-desktop flex justify-between items-center h-20">
+<div class="flex items-center gap-8">
+<img src="https://lh3.googleusercontent.com/aida/AP1WRLvSsAvzA2UGmU9koKPHbdo6chE2NVcGdBdHzzOJzAX5P0cXbKK5SPbWJ6_bU0Bz1MiocaVe5LAs8G-GIq95rIAm67K-HmmyW98tl0EFsw2eXmeGozQWB6rrlS0t5p6I2nReTey-yTFk0UyarUHnELb75gUg7DLow2hbcG4h2Pv9j7QG99EDxHNZ4mbwZDZUC9QIaz7SqwifJaCSa0dW-R5ARpvBHI9yiMY3K2nS__6qFY6-OqAFdw" alt="ProMarket Logo" class="h-8 w-auto object-contain bg-transparent">
+<nav class="hidden md:flex gap-6">
+<a href="#" class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-md text-label-md">Browse</a>
+<a href="#" class="text-secondary font-bold border-b-2 border-secondary pb-1 font-label-md text-label-md">Categories</a>
+<a href="#" class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-md text-label-md">Sellers</a>
+<a href="#" class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-md text-label-md">Help</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-secondary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-secondary transition-colors"><span class="material-symbols-outlined">shopping_cart</span></button>
+</div>
+<div class="hidden sm:flex gap-3">
+<button class="px-6 py-2 font-label-md text-label-md text-primary hover:text-secondary transition-colors">Sign In</button>
+<button class="px-6 py-2 bg-secondary text-white font-label-md text-label-md rounded hover:bg-opacity-90 transition-all">Post Listing</button>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Search Section -->
+<section class="relative py-24 bg-surface-container-low overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="absolute top-0 left-0 w-96 h-96 bg-secondary blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+<div class="absolute bottom-0 right-0 w-96 h-96 bg-tertiary-fixed blur-[120px] rounded-full translate-x-1/2 translate-y-1/2"></div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-desktop relative z-10 text-center">
+<h1 class="font-headline-lg text-headline-lg mb-4 text-primary">Discover Marketplace Categories</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">Connect with expert sellers across specialized industries and scale your business with enterprise-grade solutions.</p>
+<div class="max-w-3xl mx-auto relative">
+<div class="glass-effect p-2 rounded-xl shadow-lg flex items-center border border-outline-variant">
+<span class="material-symbols-outlined px-4 text-outline">search</span>
+<input type="text" placeholder="Search for categories, industries, or specific services..." class="w-full bg-transparent border-none focus:ring-0 text-body-md py-4">
+<button class="bg-secondary text-white px-8 py-4 rounded-lg font-label-md text-label-md hover:shadow-lg transition-all">Search Categories</button>
+</div>
+<div class="mt-4 flex flex-wrap justify-center gap-3">
+<span class="text-label-sm text-outline px-2">Trending:</span>
+<a href="#" class="text-label-sm text-secondary hover:underline">Cloud Infrastructure</a>
+<a href="#" class="text-label-sm text-secondary hover:underline">UI/UX Design</a>
+<a href="#" class="text-label-sm text-secondary hover:underline">Legal Consulting</a>
+<a href="#" class="text-label-sm text-secondary hover:underline">Supply Chain</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Bento Grid -->
+<section class="py-16 max-w-container-max mx-auto px-margin-desktop">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Category 1: Technology (Large) -->
+<div class="md:col-span-8 group category-card bg-white border border-outline-variant rounded-xl overflow-hidden transition-standard hover:shadow-md">
+<div class="flex flex-col md:flex-row h-full">
+<div class="md:w-1/2 h-64 md:h-full overflow-hidden">
+<div class="zoom-img h-full w-full bg-cover bg-center transition-standard" data-alt="A futuristic professional technology environment with glowing server racks and high-tech interface panels in a bright, clean corporate data center. The lighting is crisp and modern with soft blue and white highlights, emphasizing a high-end enterprise marketplace feel. Minimalist and sleek digital hardware is visible in the background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxE2gQUO-DGMrXAdzK9Zmn0ekTKVIeZg_oC52Pus-lNnb4pbsKRZgO8xctfU5bjlGXMC8QBmhqAED4wMBFlDHNx-VoFXEZHXODo86bzGpnutN_YxPAwmID02M92vWo3CxyL76daOarLaXc9mjbLq2RTmU3p0dNVY-2rGaKe4D2mzKaxIhkzAUHtiLXKReeNNNqMGu5E0gufoG4En2vVHILgZ3dAtygcBd6OzaVEbvBl2FTIMfN')"></div>
+</div>
+<div class="md:w-1/2 p-8 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-md text-headline-md text-primary">Tech &amp; Software</h2>
+<span class="bg-surface-container text-on-primary-container px-3 py-1 rounded-full text-label-sm">1,240 Listings</span>
+</div>
+<p class="text-on-surface-variant font-body-md mb-6">Cloud computing, software architecture, and cybersecurity solutions from top-tier engineering teams.</p>
+<div class="space-y-3">
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-wider">Sub-Categories</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container-low border border-outline-variant text-body-sm rounded-lg hover:border-secondary transition-colors cursor-pointer">SaaS Development</span>
+<span class="px-3 py-1 bg-surface-container-low border border-outline-variant text-body-sm rounded-lg hover:border-secondary transition-colors cursor-pointer">DevOps &amp; Cloud</span>
+<span class="px-3 py-1 bg-surface-container-low border border-outline-variant text-body-sm rounded-lg hover:border-secondary transition-colors cursor-pointer">Data Science</span>
+<span class="px-3 py-1 bg-surface-container-low border border-outline-variant text-body-sm rounded-lg hover:border-secondary transition-colors cursor-pointer">Blockchain</span>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant">
+<h4 class="font-label-md text-label-md text-primary mb-4">Featured Sellers</h4>
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a corporate software architect, high-key lighting, clean white background, professional attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYHQchzzLlKJ-Ti_05AjGgcL5rwyKXY_zOn0M48hmj9uE_jMVRrKOQjs_9-fpCs2QJERl-QDXcic3459yK60hZSNatu9BLjXzziUjVgo84euxty_xL2Zu1PfnWkg-iu0PTT20XEw8FBznVf4XKXlfdf9oxEhPmlz165WNNcwhVZlaM15e-XM_pT0GUi-DetAOMB6Eliq7cKn0kwkLZYHvu9RPVdT7lySf9kq3q5hz7nRoNM55P">
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a female technology executive, modern office background with soft bokeh, high-end photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7Yu9sDJzl4sxS27TF2lVdJrZFGzcGfrF8hZxX8seZXHdsLDi55vUO_v3RUD-Fvd4-dhCZU_BaTThijhBZQs5o_7WYL8oZArQJEfN5giR-CXIf22B8LXZFHtLICzlWOrJbD1JFH96ahk-Cpc1SqCKgMrCvgAgpSsletatFR_u9PkFi0p2y5R_PYFbdGTIqqUsHntyG2_TZcsNTSFV39L2OvvuWkDFZq_OeEQ1mxiRZ4D2IWK8Q">
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a senior system developer, clean composition, studio lighting, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWouZVBZcPjVYlQqawYKY2cRgEvuGIB9YOMET1QX6kHPszP1a9PlEtWve1gjroW4RMfTM3jrBnnvsOHhVwIyYz4bD_DC359sTGHj3dySg2tA_Ouqn6SaIEkDOwjRGfezjI4uN3QAbD79jjhh1R2SCMI_h-mqn5rDC4z9_hUqlA4azVAwK-Pzn2NYFRXyqzXaa1nMyp8Pn6AVXhY81GXbbzSPBeLTtTOEkgUfORwxKGWeUy0hhg">
+</div>
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-white bg-secondary text-white text-label-sm font-bold">
+                                        +42
+                                    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Category 2: Creative (Small) -->
+<div class="md:col-span-4 category-card bg-white border border-outline-variant rounded-xl overflow-hidden transition-standard hover:shadow-md flex flex-col">
+<div class="h-48 overflow-hidden">
+<div class="zoom-img h-full w-full bg-cover bg-center transition-standard" data-alt="A sophisticated design studio interior with minimalist aesthetic. Featuring high-end computers, color palettes, and modern art pieces. The scene is bathed in natural morning light, creating a bright and inspiring professional atmosphere. Colors are muted slates and whites with subtle blue accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUOcEGVqM7eCtz-eqMFGyYeuyGyekwZXCSM52TIMEhjTOavWCUYup-ABA5qcViiYPP0u7L8_d0c7LQnwy4ulpxsSUd42ORzgYBe0cv7JGdvVbYGF_ppyNrlSxXBHNiIYMwwid_we_T2WQOQKrCpS0pYSNiLMX1SJdUZf-phIPsKvKyp3-gP79_w0lpGYEyAOU7rLMvKMC-5C1bffmJ790grQ4PuS55qxpADR0p06aBwcyktolt')"></div>
+</div>
+<div class="p-8 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-sm text-headline-sm text-primary">Creative Arts</h2>
+<span class="bg-surface-container text-on-primary-container px-3 py-1 rounded-full text-label-sm">840</span>
+</div>
+<p class="text-on-surface-variant font-body-sm mb-4">Brand identity, UI/UX, and multimedia production by award-winning agencies.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="text-label-sm text-secondary px-2 py-1 bg-secondary-fixed rounded">#UIUX</span>
+<span class="text-label-sm text-secondary px-2 py-1 bg-secondary-fixed rounded">#Branding</span>
+<span class="text-label-sm text-secondary px-2 py-1 bg-secondary-fixed rounded">#Motion</span>
+</div>
+</div>
+<button class="w-full py-3 border border-secondary text-secondary font-label-md rounded hover:bg-secondary hover:text-white transition-all">Explore Creative</button>
+</div>
+</div>
+<!-- Category 3: Consulting (Small) -->
+<div class="md:col-span-4 category-card bg-white border border-outline-variant rounded-xl overflow-hidden transition-standard hover:shadow-md flex flex-col">
+<div class="h-48 overflow-hidden">
+<div class="zoom-img h-full w-full bg-cover bg-center transition-standard" data-alt="A high-end corporate boardroom with panoramic city views at twilight. Polished wood tables, sleek ergonomic chairs, and sophisticated presentation screens. The atmosphere is quiet, professional, and authoritative. Lighting is warm and controlled, reflecting a premium consulting firm." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLM1t2SPVI3LTxXE85CD2oNaXmMW33d4cBF-KQZfMmaOHOYINzBmSUuO3tMFiS8jiQEP_8pU2l7FxSD7LbQ7Ez5rhhGh0D1iS4oZO5FWndDk2kA1moQ2AuKFA7wUo81L3fwehWrrwsBgwrx3hnUelPEbXRY_1GzlUtO1nlIBM_cefRWbKxTs7WNt8nDBSmxSD-l0IpiK83j6ptUlOx_kBL_UK_pBQrCoalpmbk0bBNk3A1wvGg')"></div>
+</div>
+<div class="p-8 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-sm text-headline-sm text-primary">Consulting</h2>
+<span class="bg-surface-container text-on-primary-container px-3 py-1 rounded-full text-label-sm">620</span>
+</div>
+<p class="text-on-surface-variant font-body-sm mb-4">Strategy, financial advisory, and business operations excellence.</p>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<span class="">Verified Strategists</span>
+</div>
+<button class="w-full py-3 border border-secondary text-secondary font-label-md rounded hover:bg-secondary hover:text-white transition-all">View Services</button>
+</div>
+</div>
+</div>
+<!-- Category 4: Industrial (Large) -->
+<div class="md:col-span-8 group category-card bg-white border border-outline-variant rounded-xl overflow-hidden transition-standard hover:shadow-md">
+<div class="flex flex-col md:flex-row-reverse h-full">
+<div class="md:w-1/2 h-64 md:h-full overflow-hidden">
+<div class="zoom-img h-full w-full bg-cover bg-center transition-standard" data-alt="A massive, clean industrial logistics hub with high-efficiency automation systems. Precision robotics and organized storage units in a vast warehouse space. The lighting is industrial yet bright and professional. The aesthetic is one of extreme efficiency, stability, and large-scale manufacturing capability." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6jwT0AjUn5rYRLm9ukyqRwcl4AoeGmhx6UvlLideNhqmdc4OBgkzMiWeYaOpdAv79dewM5r47sFUYVr1-cZtf9wAex7PNM9mCMN5E2f7OnvUB_Dmxft9GRPIV_XhaBmwnDrN_BMNvYwXV8KjZxfaaOnePTkmCUkyYp1QH78OwkkXUCXUEio684kcdkhFrimXafqJWZqUfUqrOmaZM9secOS_dO7T8qxG6TfUtJKpcCHd-K7Va')"></div>
+</div>
+<div class="md:w-1/2 p-8 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-md text-headline-md text-primary">Industrial &amp; Supply</h2>
+<span class="bg-surface-container text-on-primary-container px-3 py-1 rounded-full text-label-sm">2,150 Listings</span>
+</div>
+<p class="text-on-surface-variant font-body-md mb-6">Manufacturing, logistics, and global supply chain management for enterprise scale.</p>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-surface rounded-lg border border-outline-variant">
+<p class="font-label-md text-label-md text-primary">Logistics</p>
+<p class="text-body-sm text-outline">412 Active Pools</p>
+</div>
+<div class="p-4 bg-surface rounded-lg border border-outline-variant">
+<p class="font-label-md text-label-md text-primary">Fabrication</p>
+<p class="text-body-sm text-outline">189 Facilities</p>
+</div>
+</div>
+</div>
+<div class="mt-8 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-label-sm text-outline uppercase tracking-tighter">Market Activity</span>
+<span class="font-headline-sm text-headline-sm text-secondary">+12.4% <small class="text-on-surface-variant text-label-sm">this month</small></span>
+</div>
+<button class="bg-primary text-white px-8 py-3 rounded font-label-md hover:bg-opacity-80 transition-all">Explore Industry</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Specialized Industries Section -->
+<section class="bg-surface-container py-20 mt-16">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div>
+<span class="text-secondary font-label-md tracking-[0.2em] uppercase">Deep Vertical Exploration</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mt-2">Specialized Niche Markets</h2>
+</div>
+<a class="flex items-center gap-2 text-secondary font-label-md hover:gap-3 transition-all" href="#">
+                        VIEW ALL 42 INDUSTRIES <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Niche 1 -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant hover:shadow-lg transition-all group cursor-pointer">
+<div class="w-12 h-12 bg-secondary-fixed text-secondary rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">health_and_safety</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Healthcare</h3>
+<p class="text-body-sm text-on-surface-variant mb-4">Medical compliance and health-tech staffing solutions.</p>
+<span class="text-label-sm text-outline">142 Listings</span>
+</div>
+<!-- Niche 2 -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant hover:shadow-lg transition-all group cursor-pointer">
+<div class="w-12 h-12 bg-secondary-fixed text-secondary rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">balance</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Legal Tech</h3>
+<p class="text-body-sm text-on-surface-variant mb-4">IP management and corporate litigation support.</p>
+<span class="text-label-sm text-outline">98 Listings</span>
+</div>
+<!-- Niche 3 -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant hover:shadow-lg transition-all group cursor-pointer">
+<div class="w-12 h-12 bg-secondary-fixed text-secondary rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">solar_power</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Renewables</h3>
+<p class="text-body-sm text-on-surface-variant mb-4">Sustainable energy infrastructure and auditing.</p>
+<span class="text-label-sm text-outline">215 Listings</span>
+</div>
+<!-- Niche 4 -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant hover:shadow-lg transition-all group cursor-pointer">
+<div class="w-12 h-12 bg-secondary-fixed text-secondary rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-original-icon="education">circle</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">EdTech</h3>
+<p class="text-body-sm text-on-surface-variant mb-4">Corporate training and learning management systems.</p>
+<span class="text-label-sm text-outline">312 Listings</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Marketplace Stats Callout -->
+<section class="max-w-container-max mx-auto px-margin-desktop py-24">
+<div class="bg-primary text-white rounded-2xl p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<div class="w-full h-full" style="background-image: radial-gradient(circle at 20% 50%, rgba(49, 107, 243, 0.4) 0%, transparent 50%);"></div>
+</div>
+<div class="relative z-10 md:w-2/3">
+<h2 class="font-headline-lg text-headline-lg mb-6">Ready to scale your business with professional services?</h2>
+<p class="text-body-lg text-slate-300 mb-8 max-w-xl">Join over 10,000 global enterprises sourcing high-end professional listings on ProMarket every day.</p>
+<div class="flex flex-wrap gap-10">
+<div>
+<p class="font-headline-md text-headline-md text-secondary-fixed">240k+</p>
+<p class="text-label-sm uppercase tracking-widest text-slate-400">Monthly Transactions</p>
+</div>
+<div>
+<p class="font-headline-md text-headline-md text-secondary-fixed">98.2%</p>
+<p class="text-label-sm uppercase tracking-widest text-slate-400">Success Rate</p>
+</div>
+</div>
+</div>
+<div class="relative z-10 flex flex-col gap-4 w-full md:w-auto">
+<button class="bg-secondary text-white px-10 py-4 rounded-lg font-label-md text-label-md hover:scale-105 transition-transform">Get Started Today</button>
+<button class="bg-white/10 backdrop-blur-md text-white px-10 py-4 rounded-lg font-label-md text-label-md hover:bg-white/20 transition-all">Request Demo</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-outline-variant">
+<div class="max-w-container-max mx-auto px-margin-desktop py-stack-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+<div class="flex flex-col gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">ProMarket</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">The premium destination for professional marketplace excellence.</p>
+</div>
+<nav class="flex flex-wrap gap-8">
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">Trust &amp; Safety</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">Contact Us</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">About Us</a>
+</nav>
+<div class="text-on-surface-variant font-label-sm text-label-sm">
+                © 2024 ProMarket Global. All rights reserved.
+            </div>
+</div>
+</footer>
+<script>
+        // Simple search interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-secondary/20', 'border-secondary');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-secondary/20', 'border-secondary');
+        });
+
+        // Micro-interaction for category cards
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+
+</body></html>

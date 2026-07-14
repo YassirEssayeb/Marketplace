@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
-import { Heart, Image, Trash2 } from '../utils/icons';
 
 const MyFavorites = () => {
   const { user } = useAuth();
@@ -23,43 +22,58 @@ const MyFavorites = () => {
   };
 
   return (
-    <div className="page-container">
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>Mes favoris</h2>
-      <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>{ads.length} annonce{ads.length > 1 ? 's' : ''} sauvegardée{ads.length > 1 ? 's' : ''}.</p>
+    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
+      <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Mes favoris</h1>
+      <p className="font-body-md text-on-surface-variant mb-8">{ads.length} annonce{ads.length > 1 ? 's' : ''} sauvegardée{ads.length > 1 ? 's' : ''}.</p>
+
       {ads.length === 0 ? (
-        <div className="card-lg" style={{ textAlign: 'center', padding: '4rem' }}>
-          <Heart size={48} style={{ color: 'var(--gray-300)', marginBottom: '1rem' }} />
-          <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.5rem' }}>Aucun favori</p>
-          <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem' }}>Parcourez les annonces pour ajouter des favoris.</p>
-          <Link to="/" className="btn btn-primary">Parcourir les annonces</Link>
+        <div className="bg-white p-12 rounded-xl border border-outline-variant text-center">
+          <span className="material-symbols-outlined text-6xl text-outline mb-4 block">favorite</span>
+          <p className="font-headline-sm text-headline-sm text-primary mb-2">Aucun favori</p>
+          <p className="font-body-md text-on-surface-variant mb-6">Parcourez les annonces pour ajouter des favoris.</p>
+          <Link to="/browse" className="inline-flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold no-underline">
+            <span className="material-symbols-outlined text-[18px]">search</span> Parcourir les annonces
+          </Link>
         </div>
       ) : (
-        <div className="ad-grid fade-in">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {ads.map(ad => (
-            <div key={ad.id} className="ad-card">
-              <Link to={'/ads/' + ad.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div className="ad-card-image">
+            <div key={ad.id} className="group bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <Link to={'/ads/' + ad.id} className="no-underline">
+                <div className="relative aspect-[4/3] overflow-hidden bg-surface-container">
                   {ad.images && ad.images.length > 0 ? (
-                    <img src={getImageUrl(ad.images[0])} alt={ad.title} />
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      src={getImageUrl(ad.images[0])}
+                      alt={ad.title}
+                      loading="lazy"
+                    />
                   ) : (
-                    <Image size={40} style={{ color: 'var(--gray-400)' }} />
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="material-symbols-outlined text-5xl text-outline">image</span>
+                    </div>
                   )}
                 </div>
-                <div className="ad-card-body">
-                  <h3 className="ad-card-title">{ad.title}</h3>
-                  <div className="ad-card-price">{ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}</div>
+                <div className="p-5">
+                  <h4 className="font-headline-sm text-headline-sm text-primary mb-1 truncate group-hover:text-secondary transition-colors">{ad.title}</h4>
+                  <span className="font-headline-sm text-headline-sm text-primary">
+                    {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix N/S'}
+                  </span>
                 </div>
               </Link>
-              <div style={{ padding: '0 1.25rem 1.25rem' }}>
-                <button onClick={() => removeFavorite(ad.id)} className="btn btn-danger btn-sm" style={{ width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>
-                  <Trash2 size={14} /> Retirer des favoris
+              <div className="px-5 pb-5">
+                <button
+                  onClick={() => removeFavorite(ad.id)}
+                  className="w-full bg-error-container text-on-error-container border-none py-2.5 rounded-lg font-label-md text-label-md font-bold hover:opacity-80 transition-all cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <span className="material-symbols-outlined text-[16px]">delete</span> Retirer
                 </button>
               </div>
             </div>
           ))}
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

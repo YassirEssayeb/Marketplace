@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-import { User, Package, Flag, MessageCircle, Folder, Plus, Trash2, CheckCircle, AlertCircle } from '../utils/icons';
 
 const TABS = ['stats', 'users', 'ads', 'reports', 'categories'];
 const TAB_LABELS = { stats: 'Statistiques', users: 'Utilisateurs', ads: 'Annonces', reports: 'Signalements', categories: 'Catégories' };
+const TAB_ICONS = { stats: 'analytics', users: 'people', ads: 'inventory_2', reports: 'flag', categories: 'category' };
 
 const Admin = () => {
   const { user } = useAuth();
@@ -63,50 +63,94 @@ const Admin = () => {
   };
 
   return (
-    <div className="page-container">
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.25rem' }}>Administration</h2>
-      <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>Gérez votre plateforme.</p>
+    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
+      <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Administration</h1>
+      <p className="font-body-md text-on-surface-variant mb-8">Gérez votre plateforme.</p>
 
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+      {/* Tabs */}
+      <div className="flex gap-2 mb-8 flex-wrap">
         {TABS.map(t => (
-          <button key={t} onClick={() => setTab(t)} className={`btn ${tab === t ? 'btn-primary' : 'btn-outline'}`}>
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-label-md text-label-md border cursor-pointer transition-all ${
+              tab === t
+                ? 'bg-secondary text-on-secondary border-secondary'
+                : 'bg-white text-on-surface-variant border-outline-variant hover:bg-surface-container'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[18px]">{TAB_ICONS[t]}</span>
             {TAB_LABELS[t]}
           </button>
         ))}
       </div>
 
+      {/* Stats */}
       {tab === 'stats' && stats && (
-        <div className="stats-grid fade-in">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
-            { label: 'Utilisateurs', value: stats.users },
-            { label: 'Annonces', value: stats.ads },
-            { label: 'Annonces actives', value: stats.active },
-            { label: 'Signalements', value: stats.reports },
-            { label: 'Messages', value: stats.messages },
+            { label: 'Utilisateurs', value: stats.users, icon: 'people' },
+            { label: 'Annonces', value: stats.ads, icon: 'inventory_2' },
+            { label: 'Actives', value: stats.active, icon: 'check_circle' },
+            { label: 'Signalements', value: stats.reports, icon: 'flag' },
+            { label: 'Messages', value: stats.messages, icon: 'chat' },
           ].map(s => (
-            <div key={s.label} className="stat-card">
-              <div className="stat-value">{s.value}</div>
-              <div className="stat-label">{s.label}</div>
+            <div key={s.label} className="bg-white p-6 rounded-xl border border-outline-variant text-center">
+              <span className="material-symbols-outlined text-3xl text-secondary mb-2 block">{s.icon}</span>
+              <div className="font-display-lg text-display-lg text-primary">{s.value}</div>
+              <div className="font-label-md text-label-md text-on-surface-variant mt-1">{s.label}</div>
             </div>
           ))}
         </div>
       )}
 
+      {/* Users Table */}
       {tab === 'users' && (
-        <div className="table-container fade-in">
-          <table className="table">
-            <thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Admin</th><th>Date</th><th>Actions</th></tr></thead>
+        <div className="bg-white rounded-xl border border-outline-variant overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-outline-variant bg-surface-container-low">
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ID</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Nom</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Email</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Rôle</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th>
+                <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
             <tbody>
               {users.map(u => (
-                <tr key={u.id}>
-                  <td>{u.id}</td><td style={{ fontWeight: 600 }}>{u.name}</td><td>{u.email}</td>
-                  <td>{u.is_admin ? <span className="status-badge status-active">Admin</span> : <span className="status-badge status-archived">Utilisateur</span>}</td>
-                  <td style={{ color: 'var(--gray-500)' }}>{new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
-                  <td>
-                    <button onClick={() => toggleAdmin(u.id, u.is_admin)} className={`btn btn-sm ${u.is_admin ? 'btn-warning' : 'btn-success'}`} style={{ marginRight: '0.375rem' }}>
-                      {u.is_admin ? 'Rétrograder' : 'Promouvoir'}
-                    </button>
-                    <button onClick={() => deleteUser(u.id)} className="btn btn-sm btn-danger">Supprimer</button>
+                <tr key={u.id} className="border-b border-outline-variant/30 hover:bg-surface-bright transition-colors">
+                  <td className="p-4 text-body-sm text-on-surface-variant">{u.id}</td>
+                  <td className="p-4 font-body-md font-semibold text-primary">{u.name}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{u.email}</td>
+                  <td className="p-4">
+                    {u.is_admin ? (
+                      <span className="px-3 py-1 rounded-full text-label-sm font-label-sm bg-secondary-fixed text-on-secondary-fixed border border-secondary-fixed">Admin</span>
+                    ) : (
+                      <span className="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface-variant border border-outline-variant">Utilisateur</span>
+                    )}
+                  </td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td className="p-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => toggleAdmin(u.id, u.is_admin)}
+                        className={`px-3 py-1.5 rounded-lg font-label-sm text-label-sm border cursor-pointer transition-colors ${
+                          u.is_admin
+                            ? 'bg-surface-container-high text-primary border-outline-variant hover:bg-surface-container'
+                            : 'bg-secondary-fixed text-on-secondary-fixed border-secondary-fixed hover:opacity-80'
+                        }`}
+                      >
+                        {u.is_admin ? 'Rétrograder' : 'Promouvoir'}
+                      </button>
+                      <button
+                        onClick={() => deleteUser(u.id)}
+                        className="bg-error-container text-on-error-container border-none px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:opacity-80 cursor-pointer"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -115,20 +159,44 @@ const Admin = () => {
         </div>
       )}
 
+      {/* Ads Table */}
       {tab === 'ads' && (
-        <div className="table-container fade-in">
-          <table className="table">
-            <thead><tr><th>ID</th><th>Titre</th><th>Utilisateur</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+        <div className="bg-white rounded-xl border border-outline-variant overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-outline-variant bg-surface-container-low">
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ID</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Titre</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Utilisateur</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Statut</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th>
+                <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
             <tbody>
               {ads.map(a => (
-                <tr key={a.id}>
-                  <td>{a.id}</td><td style={{ fontWeight: 600 }}>{a.title}</td><td>{a.user_name}</td>
-                  <td><span className={`status-badge status-${a.status}`}>{a.status}</span></td>
-                  <td style={{ color: 'var(--gray-500)' }}>{new Date(a.created_at).toLocaleDateString('fr-FR')}</td>
-                  <td>
-                    {a.status !== 'archived' && <button onClick={() => updateAdStatus(a.id, 'archived')} className="btn btn-sm btn-warning" style={{ marginRight: '0.375rem' }}>Archiver</button>}
-                    {a.status !== 'active' && <button onClick={() => updateAdStatus(a.id, 'active')} className="btn btn-sm btn-success" style={{ marginRight: '0.375rem' }}>Activer</button>}
-                    <button onClick={() => deleteAd(a.id)} className="btn btn-sm btn-danger">Supprimer</button>
+                <tr key={a.id} className="border-b border-outline-variant/30 hover:bg-surface-bright transition-colors">
+                  <td className="p-4 text-body-sm text-on-surface-variant">{a.id}</td>
+                  <td className="p-4 font-body-md font-semibold text-primary">{a.title}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{a.user_name}</td>
+                  <td className="p-4">
+                    <span className={`px-3 py-1 rounded-full text-label-sm font-label-sm ${
+                      a.status === 'active' ? 'bg-green-50 text-green-700 border border-green-200' :
+                      a.status === 'sold' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                      'bg-gray-50 text-gray-500 border border-gray-200'
+                    }`}>{a.status}</span>
+                  </td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(a.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td className="p-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      {a.status !== 'archived' && (
+                        <button onClick={() => updateAdStatus(a.id, 'archived')} className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-surface-container cursor-pointer">Archiver</button>
+                      )}
+                      {a.status !== 'active' && (
+                        <button onClick={() => updateAdStatus(a.id, 'active')} className="bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-green-100 cursor-pointer">Activer</button>
+                      )}
+                      <button onClick={() => deleteAd(a.id)} className="bg-error-container text-on-error-container border-none px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:opacity-80 cursor-pointer">Supprimer</button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -137,17 +205,31 @@ const Admin = () => {
         </div>
       )}
 
+      {/* Reports Table */}
       {tab === 'reports' && (
-        <div className="table-container fade-in">
-          <table className="table">
-            <thead><tr><th>ID</th><th>Annonce</th><th>Signalé par</th><th>Motif</th><th>Date</th><th>Actions</th></tr></thead>
+        <div className="bg-white rounded-xl border border-outline-variant overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-outline-variant bg-surface-container-low">
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ID</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Annonce</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Signalé par</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Motif</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th>
+                <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
             <tbody>
               {reports.map(r => (
-                <tr key={r.id}>
-                  <td>{r.id}</td><td style={{ fontWeight: 600 }}>{r.ad_title}</td><td>{r.reporter_name}</td>
-                  <td style={{ color: 'var(--danger)' }}>{r.reason}</td>
-                  <td style={{ color: 'var(--gray-500)' }}>{new Date(r.created_at).toLocaleDateString('fr-FR')}</td>
-                  <td><button onClick={() => deleteReport(r.id)} className="btn btn-sm btn-success">Traité</button></td>
+                <tr key={r.id} className="border-b border-outline-variant/30 hover:bg-surface-bright transition-colors">
+                  <td className="p-4 text-body-sm text-on-surface-variant">{r.id}</td>
+                  <td className="p-4 font-body-md font-semibold text-primary">{r.ad_title}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{r.reporter_name}</td>
+                  <td className="p-4 text-body-sm text-error">{r.reason}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(r.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td className="p-4 text-right">
+                    <button onClick={() => deleteReport(r.id)} className="bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-green-100 cursor-pointer">Traité</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -155,31 +237,54 @@ const Admin = () => {
         </div>
       )}
 
+      {/* Categories */}
       {tab === 'categories' && (
-        <div className="fade-in">
-          <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
-            <input value={newCat} onChange={e => setNewCat(e.target.value)} placeholder="Nouvelle catégorie" className="form-input" style={{ maxWidth: '300px' }} />
-            <button onClick={addCategory} className="btn btn-success">Ajouter</button>
+        <div>
+          <div className="flex gap-3 mb-6">
+            <input
+              value={newCat}
+              onChange={e => setNewCat(e.target.value)}
+              placeholder="Nouvelle catégorie"
+              className="flex-1 max-w-sm h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+            />
+            <button
+              onClick={addCategory}
+              className="bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-all flex items-center gap-2 border-none cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[18px]">add</span> Ajouter
+            </button>
           </div>
-          <div className="table-container">
-            <table className="table">
-              <thead><tr><th>ID</th><th>Nom</th><th>Actions</th></tr></thead>
+          <div className="bg-white rounded-xl border border-outline-variant overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-outline-variant bg-surface-container-low">
+                  <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ID</th>
+                  <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Nom</th>
+                  <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
               <tbody>
                 {categories.map(c => (
-                  <tr key={c.id}>
-                    <td>{c.id}</td>
-                    <td style={{ fontWeight: 600 }}>
+                  <tr key={c.id} className="border-b border-outline-variant/30 hover:bg-surface-bright transition-colors">
+                    <td className="p-4 text-body-sm text-on-surface-variant">{c.id}</td>
+                    <td className="p-4 font-body-md font-semibold text-primary">
                       {editCat === c.id ? (
-                        <form onSubmit={e => { e.preventDefault(); renameCategory(c.id, e.target.name.value); }} style={{ display: 'flex', gap: '0.5rem' }}>
-                          <input name="name" defaultValue={c.name} className="form-input" style={{ padding: '0.4rem', fontSize: '0.85rem' }} autoFocus />
-                          <button type="submit" className="btn btn-sm btn-success">OK</button>
-                          <button type="button" onClick={() => setEditCat(null)} className="btn btn-sm btn-outline">Annuler</button>
+                        <form onSubmit={e => { e.preventDefault(); renameCategory(c.id, e.target.name.value); }} className="flex gap-2">
+                          <input name="name" defaultValue={c.name} className="h-9 px-3 border border-outline-variant rounded-lg font-body-sm focus:border-secondary outline-none" autoFocus />
+                          <button type="submit" className="bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-lg font-label-sm text-label-sm cursor-pointer">OK</button>
+                          <button type="button" onClick={() => setEditCat(null)} className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1 rounded-lg font-label-sm text-label-sm cursor-pointer">Annuler</button>
                         </form>
                       ) : c.name}
                     </td>
-                    <td>
-                      <button onClick={() => setEditCat(c.id)} className="btn btn-sm btn-outline" style={{ marginRight: '0.375rem' }}>Renommer</button>
-                      <button onClick={() => deleteCategory(c.id)} className="btn btn-sm btn-danger">Supprimer</button>
+                    <td className="p-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button onClick={() => setEditCat(c.id)} className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-surface-container cursor-pointer">
+                          <span className="material-symbols-outlined text-[14px]">edit</span>
+                        </button>
+                        <button onClick={() => deleteCategory(c.id)} className="bg-error-container text-on-error-container border-none px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:opacity-80 cursor-pointer">
+                          <span className="material-symbols-outlined text-[14px]">delete</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -188,7 +293,7 @@ const Admin = () => {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

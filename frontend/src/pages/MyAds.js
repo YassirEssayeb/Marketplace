@@ -2,7 +2,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-import { Plus, Pencil, Trash2, Package, CheckCircle } from '../utils/icons';
 
 const MyAds = () => {
   const { user } = useAuth();
@@ -29,54 +28,90 @@ const MyAds = () => {
     } catch { alert('Erreur'); }
   };
 
-  const statusClass = (s) => s === 'active' ? 'status-badge status-active' : s === 'sold' ? 'status-badge status-sold' : 'status-badge status-archived';
-  const statusLabel = (s) => s === 'active' ? 'Active' : s === 'sold' ? 'Vendue' : 'Archivée';
+  const statusBadge = (s) => {
+    const styles = {
+      active: 'bg-green-50 text-green-700 border-green-200',
+      sold: 'bg-blue-50 text-blue-700 border-blue-200',
+      archived: 'bg-gray-50 text-gray-500 border-gray-200',
+    };
+    const labels = { active: 'Active', sold: 'Vendue', archived: 'Archivée' };
+    return (
+      <span className={`px-3 py-1 rounded-full text-label-sm font-label-sm border ${styles[s] || styles.active}`}>
+        {labels[s] || s}
+      </span>
+    );
+  };
 
   return (
-    <div className="page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
+      <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Mes annonces</h2>
-          <p style={{ color: 'var(--gray-500)', fontSize: '0.9rem' }}>{ads.length} annonce{ads.length > 1 ? 's' : ''}</p>
+          <h1 className="font-headline-lg text-headline-lg text-primary">Mes annonces</h1>
+          <p className="font-body-md text-on-surface-variant">{ads.length} annonce{ads.length > 1 ? 's' : ''}</p>
         </div>
-        <Link to="/ads/new" className="btn btn-success" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-          <Plus size={18} /> Nouvelle annonce
+        <Link
+          to="/ads/new"
+          className="bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-all active:scale-95 flex items-center gap-2 no-underline"
+        >
+          <span className="material-symbols-outlined text-[18px]">add</span> Nouvelle annonce
         </Link>
       </div>
+
       {ads.length === 0 ? (
-        <div className="card-lg" style={{ textAlign: 'center', padding: '4rem' }}>
-          <Package size={48} style={{ color: 'var(--gray-300)', marginBottom: '1rem' }} />
-          <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.5rem' }}>Aucune annonce</p>
-          <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem' }}>Publiez votre première annonce dès maintenant.</p>
-          <Link to="/ads/new" className="btn btn-primary">Publier une annonce</Link>
+        <div className="bg-white p-12 rounded-xl border border-outline-variant text-center">
+          <span className="material-symbols-outlined text-6xl text-outline mb-4 block">inventory_2</span>
+          <p className="font-headline-sm text-headline-sm text-primary mb-2">Aucune annonce</p>
+          <p className="font-body-md text-on-surface-variant mb-6">Publiez votre première annonce dès maintenant.</p>
+          <Link to="/ads/new" className="inline-flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold no-underline">
+            <span className="material-symbols-outlined text-[18px]">add</span> Publier une annonce
+          </Link>
         </div>
       ) : (
-        <div className="table-container">
-          <table className="table">
+        <div className="bg-white rounded-xl border border-outline-variant overflow-hidden">
+          <table className="w-full">
             <thead>
-              <tr>
-                <th>Titre</th><th>Prix</th><th>Statut</th><th>Date</th><th>Actions</th>
+              <tr className="border-b border-outline-variant bg-surface-container-low">
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Titre</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Prix</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Statut</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th>
+                <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
               {ads.map(ad => (
-                <tr key={ad.id}>
-                  <td><Link to={'/ads/' + ad.id} style={{ fontWeight: 600 }}>{ad.title}</Link></td>
-                  <td style={{ fontWeight: 600 }}>{ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : '-'}</td>
-                  <td><span className={statusClass(ad.status)}>{statusLabel(ad.status)}</span></td>
-                  <td style={{ color: 'var(--gray-500)' }}>{new Date(ad.created_at).toLocaleDateString('fr-FR')}</td>
-                  <td>
-                    {ad.status === 'active' && (
-                      <button onClick={() => markAsSold(ad.id)} className="btn btn-success btn-sm" style={{ marginRight: '0.375rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <CheckCircle size={14} /> Vendu
+                <tr key={ad.id} className="border-b border-outline-variant/30 hover:bg-surface-bright transition-colors">
+                  <td className="p-4">
+                    <Link to={'/ads/' + ad.id} className="font-body-md font-semibold text-primary hover:text-secondary transition-colors no-underline">{ad.title}</Link>
+                  </td>
+                  <td className="p-4 font-headline-sm text-headline-sm text-primary">
+                    {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : '-'}
+                  </td>
+                  <td className="p-4">{statusBadge(ad.status)}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(ad.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td className="p-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      {ad.status === 'active' && (
+                        <button
+                          onClick={() => markAsSold(ad.id)}
+                          className="bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-green-100 transition-colors cursor-pointer flex items-center gap-1"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">check_circle</span> Vendu
+                        </button>
+                      )}
+                      <Link
+                        to={'/ads/' + ad.id + '/edit'}
+                        className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-surface-container transition-colors flex items-center gap-1 no-underline"
+                      >
+                        <span className="material-symbols-outlined text-[14px]">edit</span> Modifier
+                      </Link>
+                      <button
+                        onClick={() => deleteAd(ad.id)}
+                        className="bg-error-container text-on-error-container border-none px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:opacity-80 transition-colors cursor-pointer flex items-center gap-1"
+                      >
+                        <span className="material-symbols-outlined text-[14px]">delete</span>
                       </button>
-                    )}
-                    <Link to={'/ads/' + ad.id + '/edit'} className="btn btn-warning btn-sm" style={{ marginRight: '0.375rem', color: 'white', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                      <Pencil size={14} /> Modifier
-                    </Link>
-                    <button onClick={() => deleteAd(ad.id)} className="btn btn-danger btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                      <Trash2 size={14} /> Supprimer
-                    </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -84,7 +119,7 @@ const MyAds = () => {
           </table>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

@@ -1,349 +1,297 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
-import { MapPin, Folder, Image, Search, Package, Shield, Users, Euro, ArrowRight, X, Briefcase, Home, Car, Shirt, Sofa, Gamepad, Dumbbell, Wrench, Star, Quote, Clock } from '../utils/icons';
 
-const categoriesList = [
-  { name: 'Emploi', icon: Briefcase, color: '#3B82F6', bg: '#EFF6FF' },
-  { name: 'Immobilier', icon: Home, color: '#10B981', bg: '#ECFDF5' },
-  { name: 'Véhicules', icon: Car, color: '#F59E0B', bg: '#FFFBEB' },
-  { name: 'Mode', icon: Shirt, color: '#EC4899', bg: '#FDF2F8' },
-  { name: 'Maison & Jardin', icon: Sofa, color: '#8B5CF6', bg: '#F5F3FF' },
-  { name: 'Multimédia', icon: Gamepad, color: '#EF4444', bg: '#FEF2F2' },
-  { name: 'Loisirs', icon: Dumbbell, color: '#14B8A6', bg: '#F0FDFA' },
-  { name: 'Services', icon: Wrench, color: '#F97316', bg: '#FFF7ED' },
-];
-
-const timeAgo = (hours) => {
-  if (hours < 1) return "À l'instant";
-  if (hours < 2) return 'Il y a 1h';
-  if (hours < 24) return `Il y a ${hours}h`;
-  const days = Math.round(hours / 24);
-  if (days < 2) return 'Il y a 1 jour';
-  if (days < 30) return `Il y a ${days} jours`;
-  const months = Math.round(days / 30);
-  if (months < 2) return 'Il y a 1 mois';
-  return `Il y a ${months} mois`;
-};
-
-const PXL = (id) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&h=350`;
 const demoProducts = [
-  { title: 'iPhone 15 Pro Max 256 Go', price: 899, location: 'Paris', category: 'Multimédia', img: PXL(29020349), desc: 'iPhone 15 Pro Max 256 Go, couleur Titane naturel. Acheté il y a 3 mois, état impeccable.', badge: 'nouveau', hours: 1, seller: 'Sophie M.', views: 142 },
-  { title: 'Canapé d\'angle en cuir 5 places', price: 450, location: 'Lyon', category: 'Maison & Jardin', img: PXL(4740494), desc: 'Canapé d\'angle en cuir véritable, 5 places. Couleur gris foncé, état très bon.', badge: 'urgent', hours: 3, seller: 'Pierre L.', views: 89 },
-  { title: 'Volkswagen Golf 8 1.5 TSI', price: 18500, location: 'Marseille', category: 'Véhicules', img: PXL(12433114), desc: 'Volkswagen Golf 8, 1.5 TSI 130ch, 25 000 km, finition Carat. Première main.', hours: 5, seller: 'Marc D.', views: 325 },
-  { title: 'Appartement 3 pièces 65m²', price: 135000, location: 'Bordeaux', category: 'Immobilier', img: PXL(7546648), desc: 'Bel appartement 3 pièces de 65m², exposé sud. Cuisine équipée, balcon, cave.', badge: 'top', hours: 8, seller: 'Julie R.', views: 567 },
-  { title: 'MacBook Pro M3 14" 18Go RAM', price: 1650, location: 'Toulouse', category: 'Multimédia', img: PXL(8068269), desc: 'MacBook Pro M3 14 pouces, 18Go RAM, 512Go SSD. Charge cycles: 45, batterie 98%.', badge: 'nouveau', hours: 12, seller: 'Thomas B.', views: 234 },
-  { title: 'Veste en cuir vintage taille M', price: 85, location: 'Lille', category: 'Mode', img: PXL(12345554), desc: 'Veste en cuir vintage, taille M. Cuir souple et patiné. Parfait état, doublure intacte.', hours: 18, seller: 'Emma P.', views: 56 },
-  { title: 'Table de jardin en teck 6 places', price: 220, location: 'Nantes', category: 'Maison & Jardin', img: PXL(32076746), desc: 'Table de jardin en teck massif, 6 places (180x90cm). Utilisée 2 saisons.', hours: 24, seller: 'Lucas H.', views: 78 },
-  { title: 'Vélo électrique VTT 27.5"', price: 780, location: 'Strasbourg', category: 'Loisirs', img: PXL(34259660), desc: 'VTT électrique 27.5", moteur Bosch 250W, batterie 500Wh. Autonomie 80km.', badge: 'urgent', hours: 36, seller: 'Sarah K.', views: 198 },
-  { title: 'Nintendo Switch OLED + jeux', price: 250, location: 'Rennes', category: 'Loisirs', img: PXL(34482313), desc: 'Nintendo Switch OLED modèle 2023, avec 4 jeux (Mario Kart, Zelda, Odyssey, Smash).', hours: 48, seller: 'Alexandre V.', views: 412 },
-  { title: 'Lit superposé enfant 2 places', price: 120, location: 'Nice', category: 'Maison & Jardin', img: PXL(4221413), desc: 'Lit superposé en bois massif, 2 places (90x190cm). Matelas inclus.', hours: 72, seller: 'Camille T.', views: 34 },
-  { title: 'Canapé-lit convertible 140x190', price: 180, location: 'Paris', category: 'Maison & Jardin', img: PXL(7166930), desc: 'Canapé-lit convertible, matelas 140x190. Mécanisme facile, housse lavable.', hours: 120, seller: 'Sophie M.', views: 145 },
-  { title: 'Bague en or blanc diamant', price: 590, location: 'Paris', category: 'Mode', img: PXL(2849742), desc: 'Bague en or blanc 750, diamant 0.5ct. Certificat inclus. Jamais portée.', hours: 168, seller: 'Claire D.', views: 234 },
-  { title: 'PlayStation 5 + 3 manettes', price: 380, location: 'Montpellier', category: 'Multimédia', img: PXL(13189290), desc: 'PS5 standard, 825Go. 3 manettes, 2 jeux (FIFA 25, Spider-Man 2). Très bon état.', badge: 'urgent', hours: 240, seller: 'Julien M.', views: 876 },
-  { title: 'Studio 25m² centre ville', price: 89000, location: 'Lyon', category: 'Immobilier', img: PXL(6447384), desc: 'Studio 25m² rénové, centre Lyon. Cuisine équipée, salle de douche.', hours: 360, seller: 'Marie L.', views: 543 },
-  { title: 'Trottinette électrique Xiaomi', price: 280, location: 'Grenoble', category: 'Véhicules', img: PXL(9168370), desc: 'Xiaomi Pro 2, autonomie 45km. 200km, état neuf. Chargeur + antivol inclus.', hours: 480, seller: 'Antoine R.', views: 156 },
-  { title: 'Machine à laver hublot 7kg', price: 150, location: 'Tours', category: 'Maison & Jardin', img: PXL(9669475), desc: 'Machine à laver hublot 7kg, classe A++. Très bon état, détartrée.', hours: 720, seller: 'Isabelle P.', views: 89 },
-  { title: 'Drone DJI Mini 4 Pro', price: 720, location: 'Nice', category: 'Loisirs', img: PXL(5555813), desc: 'DJI Mini 4 Pro, 3 batteries, télécommande RC2. Volé 2h seulement.', badge: 'nouveau', hours: 1440, seller: 'Romain G.', views: 321 },
-  { title: 'Appareil photo Sony A7III', price: 1400, location: 'Lille', category: 'Multimédia', img: PXL(19826563), desc: 'Sony A7III, 24MP, 15000 déclenchements. Objectif 28-70mm inclus. Très bon état.', hours: 2160, seller: 'David C.', views: 267 },
-  { title: 'Pouf ottoman en velours', price: 65, location: 'Marseille', category: 'Maison & Jardin', img: PXL(10964021), desc: 'Pouf ottoman velours bleu canard. Diamètre 50cm. Parfait pour salon ou chambre.', hours: 2880, seller: 'Laura S.', views: 34 },
-  { title: 'Tondeuse autoportée Husqvarna', price: 2200, location: 'Rennes', category: 'Loisirs', img: PXL(5163431), desc: 'Husqvarna automotrice, 80cm de coupe. Révision récente, 150h d\'utilisation.', hours: 4320, seller: 'Philippe M.', views: 123 },
+  { title: 'Aura NC Headphones', price: '499.00', category: 'Tech & Audio', rating: 5, reviews: '2.4k', badge: 'Tendance', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBriRFWh07SKUuBVDznHwL4d2flGKma4hHj3NquvY6i_Xiq6rZnINfLKg_jUGWhoLB1JcGVd-SlUwr00-imR-3hQgQQxw5eJjUUEA7Wb43TVmK4KdAK2PMme18lec0bGrXCLAz9B43ugrgiNnaZVseT_CXSmtYvJ2WaAmv0Oh6WMeIu3aM4rmERw9fV_au6fSAoxoFrqbLRG1cdbu4xgFKd2gMJa5jyZx_Lca6HtEno2YTf2E9M' },
+  { title: 'V-Series Ergo Chair', price: '1 150.00', category: 'Bureau', rating: 4, reviews: '840', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC9LLjBIENd8j2cTdy8l4hmQQNQb9NsE4TSaAsEf6nWA4ktXZJa-h-NtdB_eOOmxjBeO59Wkh3MWdf0xKdwETzGSf_M5nLeq2Y0WyxR_-q-44iyu7UljY1t6I9feV8L1BDmvLkF6BcrWjsj3wOaSWAg4S1uJnH89OWD3DjfEp_-3KRrL-UG2M_kpbMonLE1h3Lbk06dgXmRTcVOyu26q7U-3sHyHycAhBjaLaIO2DlPfVu9bTuJ' },
+  { title: 'Pro-Brew 9000', price: '2 890.00', category: 'Électroménager', rating: 5, reviews: '310', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAnZF9DhxKKhdYZqFwuICf0fh_cUATKnWIvRdLlbT6Pl0eJQUqww13Sybvuo0pkb1wWc8uPr-iBD6gYoY09vWtpzpJ2qqJtXcHHg7I4saWGklQpbTf0IaHnaPPQjrl_IsFZiTfBlrxYDHXhSO83Rot_MKvAkNLAJRQHSNFB7AFx5SEsglIDFH__3NUQVQ0-Fw9ZM5Rf7_3xdd8lYCfMDd0vCVeWvOtkfxpVcUH5jYaAeTVUxnlj' },
+  { title: 'Chronos Titanium X', price: '6 200.00', category: 'Accessoires', rating: 5, reviews: '142', badge: 'Édition limitée', badgeType: 'error', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDR3dQDilTyBUB1fCxU6Cz2N2wt7Cb55mh73tSpf7RK0gFDIAwRUe8vTyjeDfnyVjqWF_DyF-J9k_mseGnQrfUQUyGDVgBcheLSyg2Qj5it8LkBBZQy6AuGPu2fVtYzMM_lf5EKeI_xah_d450WecAhk6VmS2zUQXNaa-MNl_WBbPrbxK2snRgOC2KfTlO5fBD45VjR9_M82chYXPx4sOPhRKLOIFp2y7T2e5vliwZBq3gS4CJX' },
 ];
 
 const Landing = () => {
   const [ads, setAds] = useState([]);
-  const [searchInput, setSearchInput] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [failedImages, setFailedImages] = useState({});
-  const [modalImgFailed, setModalImgFailed] = useState(false);
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
-    api.get('/ads?limit=24&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
+    api.get('/ads?limit=4&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchInput.trim()) {
-      window.location.href = '/browse?search=' + encodeURIComponent(searchInput);
-    }
-  };
-
-  const allProducts = [...ads, ...demoProducts].slice(0, 24);
+  const displayProducts = ads.length > 0 ? ads.map(ad => ({
+    id: ad.id,
+    title: ad.title,
+    price: ad.price ? ad.price.toLocaleString('fr-FR') : 'N/C',
+    category: ad.category_name || '',
+    img: ad.images && ad.images.length > 0 ? getImageUrl(ad.images[0]) : null,
+    rating: 4 + Math.floor(Math.random() * 2),
+    reviews: Math.floor(Math.random() * 2000) + 10,
+  })) : demoProducts;
 
   return (
-    <div className="fade-in">
-      <section className="hero-section" style={{ margin: '1.5rem 1.5rem 2.5rem' }}>
-        <div className="hero-pattern" />
-        <div className="hero-content" style={{ maxWidth: '720px', margin: '0 auto', textAlign: 'center' }}>
-          <h1 className="hero-title">
-            Trouvez tout près de chez vous
-          </h1>
-          <p className="hero-subtitle" style={{ marginLeft: 'auto', marginRight: 'auto', marginBottom: '1.75rem' }}>
-            Des milliers de petites annances partout en France. Meubles, mode, immobilier, v&eacute;hicules et bien plus.
-          </p>
-          <form onSubmit={handleSearch}>
-            <div className="hero-search" style={{ margin: '0 auto' }}>
-              <div className="hero-search-input">
-                <Search size={20} style={{ color: '#A1A1AA', flexShrink: 0 }} />
-                <input
-                  value={searchInput}
-                  onChange={e => setSearchInput(e.target.value)}
-                  placeholder="Que cherchez-vous ? (ex: iPhone, canapé, appartement...)"
-                />
-              </div>
-              <button type="submit" className="hero-search-btn">
-                Rechercher
-              </button>
-            </div>
-          </form>
-          <div className="hero-stats" style={{ justifyContent: 'center' }}>
-            <div className="hero-stat"><Package size={16} /> +10 000 annonces</div>
-            <div className="hero-stat"><Users size={16} /> 5 000 utilisateurs</div>
-            <div className="hero-stat"><Shield size={16} /> Paiement sécurisé</div>
-          </div>
-        </div>
-      </section>
-
-      <section className="page-container" style={{ paddingTop: '0.5rem', paddingBottom: '1rem' }}>
-        <div className="section-header">
-          <h2 className="section-title">Catégories</h2>
-          <Link to="/browse" className="section-link">
-            Tout voir <ArrowRight size={16} />
-          </Link>
-        </div>
-        <div className="categories-grid">
-          {categoriesList.map((cat, i) => {
-            const Icon = cat.icon;
-            return (
-              <Link to={'/browse?category=' + (i + 1)} key={i} className="category-card"
-                onMouseEnter={e => { e.currentTarget.style.borderColor = cat.color; e.currentTarget.style.boxShadow = '0 8px 25px ' + cat.color + '20'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.boxShadow = ''; }}
-              >
-                <div className="category-icon" style={{ background: cat.bg, color: cat.color }}>
-                  <Icon size={22} />
-                </div>
-                <p className="category-name" style={{ color: cat.color }}>{cat.name}</p>
+    <div>
+      {/* Hero Section */}
+      <section className="relative h-[720px] flex items-center overflow-hidden bg-surface">
+        <div className="max-w-container-max mx-auto px-margin-desktop w-full relative z-10">
+          <div className="max-w-2xl">
+            <span className="inline-block bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm mb-6 tracking-wider uppercase">Marketplace Professionnelle</span>
+            <h1 className="font-display-lg text-display-lg text-primary mb-6">Trouvez l'extraordinaire. Construisez l'avenir.</h1>
+            <p className="font-body-lg text-body-lg text-on-surface-variant mb-10 leading-relaxed">Connectez-vous avec des milliers de vendeurs vérifiés. De l'immobilier à l'électronique, découvrez la qualité qui définit votre standard.</p>
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <Link to="/browse" className="bg-secondary text-on-secondary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-secondary/20 active:scale-95 transition-all no-underline">
+                Commencer à parcourir
+                <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="page-container" style={{ paddingTop: '1rem' }}>
-        <div className="section-header">
-          <h2 className="section-title">
-            {ads.length > 0 ? 'Annonces récentes' : 'Ce que vendent nos membres'}
-          </h2>
-          <Link to="/browse" className="section-link">
-            Voir tout <ArrowRight size={16} />
-          </Link>
-        </div>
-        <div className="ad-grid">
-          {allProducts.map((ad, i) => {
-            const isReal = ad.id !== undefined;
-            return (
-              <div key={i} onClick={() => { if (!isReal) setSelectedProduct(ad); }} style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
-                {isReal ? (
-                  <Link to={'/ads/' + ad.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <AdCard ad={ad} isReal={true} />
-                  </Link>
-                ) : (
-                  <AdCard ad={ad} isReal={false} imgFailed={failedImages[ad.title]} onImgError={() => setFailedImages(prev => ({...prev, [ad.title]: true}))} />
-                )}
+              <Link to="/register" className="bg-white border border-outline-variant text-primary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:bg-surface-container-low transition-all no-underline">
+                Devenir partenaire
+              </Link>
+            </div>
+            <div className="flex items-center gap-8">
+              <div>
+                <p className="font-headline-md text-headline-md text-primary">10k+</p>
+                <p className="font-label-sm text-label-sm text-on-surface-variant">Annonces</p>
               </div>
-            );
-          })}
+              <div className="w-px h-10 bg-outline-variant"></div>
+              <div>
+                <p className="font-headline-md text-headline-md text-primary">5k+</p>
+                <p className="font-label-sm text-label-sm text-on-surface-variant">Vendeurs vérifiés</p>
+              </div>
+              <div className="w-px h-10 bg-outline-variant"></div>
+              <div>
+                <p className="font-headline-md text-headline-md text-primary">24/7</p>
+                <p className="font-label-sm text-label-sm text-on-surface-variant">Support expert</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Hero Floating Card */}
+        <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[480px]">
+          <div className="bg-white p-6 rounded-2xl shadow-2xl border border-outline-variant relative">
+            <div className="absolute -top-4 -left-4 bg-primary text-on-primary p-4 rounded-xl shadow-lg">
+              <span className="material-symbols-outlined text-3xl">verified_user</span>
+            </div>
+            <div className="mt-4 rounded-xl overflow-hidden mb-6 h-64 bg-surface-container">
+              <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZLi8Ke7UwQIwSIJupZq-y3Aox5T4ALhdrrDuupg804YvEieQgCzJ3iKSdUJtvc-xv5im4EhMKp1t9J_njUfgris7qJq_jcx25Wdy-UNmJAEqq470DOEfv-YvnitFZCkf0ge5eMMYJ-p7utLsijKh0_hrA3iSBDxR_KOETB00B2xzE_AVkoulbRGKkymrBsei6cvP2brUU4cyClFl_9vzGZJV07wXpA-ckcl4esaV9snsVF6vu" alt="Produit en vedette" />
+            </div>
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="font-headline-sm text-headline-sm text-primary">Optic-X Pro Series 5</h3>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">Haute performance imaging</p>
+              </div>
+              <span className="font-headline-sm text-headline-sm text-secondary">3 499 €</span>
+            </div>
+            <div className="flex items-center gap-2 mb-6">
+              <div className="flex text-amber-400">
+                {[1,2,3,4].map(s => (
+                  <span key={s} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                ))}
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star_half</span>
+              </div>
+              <span className="font-label-sm text-label-sm text-on-surface-variant">(128 avis)</span>
+            </div>
+            <Link to="/browse" className="block w-full py-4 rounded-lg bg-surface-container-high text-primary font-label-md text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all text-center no-underline">Voir les spécifications</Link>
+          </div>
         </div>
       </section>
 
-      <section className="page-container" style={{ paddingTop: '3rem', paddingBottom: '2rem' }}>
-        <div className="trust-section">
-          <div className="trust-card">
-            <div className="trust-icon" style={{ background: 'rgba(124,58,237,0.1)' }}>
-              <Shield size={28} style={{ color: '#7C3AED' }} />
+      {/* Categories Section (Bento Grid Style) */}
+      <section className="py-24 bg-white">
+        <div className="max-w-container-max mx-auto px-margin-desktop">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+              <h2 className="font-headline-lg text-headline-lg text-primary mb-2">Catégories sur mesure</h2>
+              <p className="font-body-md text-body-md text-on-surface-variant">Explorez des milliers de produits dans nos secteurs principaux.</p>
             </div>
-            <h3 className="trust-title">Transactions sécurisées</h3>
-            <p className="trust-desc">Achetez et vendez en toute confiance sur notre plateforme.</p>
+            <Link to="/browse" className="font-label-md text-label-md text-secondary font-bold flex items-center gap-2 hover:gap-3 transition-all no-underline">
+              Voir toutes les catégories <span className="material-symbols-outlined">arrow_right_alt</span>
+            </Link>
           </div>
-          <div className="trust-card">
-            <div className="trust-icon" style={{ background: 'rgba(34,197,94,0.1)' }}>
-              <Users size={28} style={{ color: '#22C55E' }} />
-            </div>
-            <h3 className="trust-title">Grande communauté</h3>
-            <p className="trust-desc">Rejoignez des milliers d'utilisateurs actifs près de chez vous.</p>
-          </div>
-          <div className="trust-card">
-            <div className="trust-icon" style={{ background: 'rgba(245,158,11,0.1)' }}>
-              <Euro size={28} style={{ color: '#F59E0B' }} />
-            </div>
-            <h3 className="trust-title">100% gratuit</h3>
-            <p className="trust-desc">Publiez vos annonces gratuitement, sans commission.</p>
-          </div>
-          <div className="trust-card">
-            <div className="trust-icon" style={{ background: 'rgba(239,68,68,0.1)' }}>
-              <Search size={28} style={{ color: '#EF4444' }} />
-            </div>
-            <h3 className="trust-title">Recherche intelligente</h3>
-            <p className="trust-desc">Filtres avancés pour trouver exactement ce qu'il vous faut.</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-gutter h-[600px]">
+            {/* Tech (Large) */}
+            <Link to="/browse?category=Multimedia" className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-2xl bg-primary border border-outline-variant no-underline">
+              <div className="absolute inset-0 opacity-60 group-hover:scale-110 transition-transform duration-700">
+                <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZsNozmhzCP5__PoMcczSf7VgHO4Mz46tOa68ciPcBTxrxRepYv5eTLKj204uOWaU7af6wU_c_8eHzZ7GgOgk4VVP3QQaiaLVt4aOvgZsHIG-wRTN2KPU4aVhSPEtHHgApKHq9HRAFRU_sMyhftEwIf-4DKTeEjpAeO-q_q_k1OwyyqB8ki3h4kK4ZceiTcbhfXKUj3e7sXOY4ni1I3b6VGeVF9cGEjvBYLwePu8tQoWFn57tI" alt="Tech & Innovation" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 p-10">
+                <h3 className="text-white font-display-lg text-3xl mb-2">Tech & Innovation</h3>
+                <p className="text-white/80 font-body-md text-body-md mb-6 max-w-sm">Matériel de nouvelle génération, serveurs entreprise et électronique premium pour professionnels.</p>
+                <span className="bg-white text-primary px-6 py-3 rounded-lg font-label-md text-label-md font-bold inline-block">Parcourir la Tech</span>
+              </div>
+            </Link>
+            {/* Home */}
+            <Link to="/browse?category=Maison" className="md:col-span-2 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container border border-outline-variant no-underline">
+              <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
+                <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG0QNdry9llwx_zEl3W-hYHH6fKMM9vsCsmCteEBo5WabvmYocO-OC09pooLE8we1Mhwmf7apwyZFY1Plm-JRX4-N_g_R9ZWh9xm692hBN4ERtIwwVnhHcXNiDroq_5dgUJbdYPM9qFfUjMnZEOWRFnBnX66DcY1lCncEn2L8Rkav1sxYkf2S-Wm6zvt-OQeKKPSZlpHV8rbAfKHtCpzBHjcF9oJW_VsdR_zWTPkAVHerLJoWK" alt="Home & Living" />
+              </div>
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all"></div>
+              <div className="absolute bottom-0 left-0 p-8">
+                <h3 className="text-white font-headline-md text-headline-md mb-1 drop-shadow-md">Maison & Living</h3>
+                <p className="text-white/90 font-label-sm text-label-sm mb-4 drop-shadow-md">Électroménager professionnel et mobilier de design.</p>
+                <span className="text-white font-bold font-label-md flex items-center gap-1">Explorer <span className="material-symbols-outlined">chevron_right</span></span>
+              </div>
+            </Link>
+            {/* Fashion */}
+            <Link to="/browse?category=Mode" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline">
+              <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
+                <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxJI2YYuFV9aMiHwSeZaW0gPTy9P57B796u8DeEYU0ezhowq6mIxnIRVkA-u5Yd_uawCO49LFkgBQkOapPI_xELMCbnLc3-CVhAmIkpNO02I17OAKDISn9leen91zevUmKKnS8FpHILubPMN9QGGHocBR0QciSQrgR0x-DxTVqcW-gv5RLT4VIw6nYtLDn9nnKFH_GIbAdx1WwWcygD1lI8qlUHlKIFCXA2uhxgyDzo8Q0eJPw" alt="Fashion" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 p-6">
+                <h3 className="text-white font-headline-sm text-headline-sm">Mode</h3>
+                <span className="text-white/80 font-label-sm text-label-sm">Sur-mesure & Industriel</span>
+              </div>
+            </Link>
+            {/* Accessories */}
+            <Link to="/browse?category=Accessoires" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline">
+              <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
+                <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdo90J4xn8AZh9ppnVUW3ADB4PYgPit3ws4Eg7HYs3iVp5cXy6yyxMfWiSF_6TcT0V0S1SX6o3SJn0pJdgvTJNzTtP_yRtQwcSW2pvv-Ezjnxj2PpycINcTPNalgg5g55b1IFSAhgfx78eY0_08c6bxleHBi8e64vMZx-29pOOyWUEZ1FbpzrjpIdf91KPynNpZwT91NR5ESiFGEIwIjWI6qD7Nlv0JqNrLC1h8ispjLcJFzXc" alt="Accessories" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 p-6">
+                <h3 className="text-white font-headline-sm text-headline-sm">Accessoires</h3>
+                <span className="text-white/80 font-label-sm text-label-sm">Accessoires essentiels</span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
 
-      <section className="page-container" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
-        <div className="section-header">
-          <h2 className="section-title">Ce que disent nos utilisateurs</h2>
-        </div>
-        <div className="testimonials-grid">
-          {[
-            {
-              name: 'Sophie Martin',
-              role: 'Acheteuse régulière',
-              avatar: 'SM',
-              color: '#7C3AED',
-              text: 'J\'ai trouvé un super canapé à moitié prix. La mise en relation avec le vendeur était rapide et le paiement sécurisé. Je recommande !',
-              stars: 5,
-            },
-            {
-              name: 'Thomas Dubois',
-              role: 'Vendeur pro',
-              avatar: 'TD',
-              color: '#10B981',
-              text: 'Je vends régulièrement sur cette plateforme. L\'interface est intuitive et les acheteurs sont sérieux. J\'ai déjà vendu plus de 30 articles.',
-              stars: 5,
-            },
-            {
-              name: 'Léa Petit',
-              role: 'Acheteuse et vendeuse',
-              avatar: 'LP',
-              color: '#F59E0B',
-              text: 'Le système de messagerie intégré est très pratique. Pas besoin de donner son numéro, tout se fait via l\'application. Sécurisé et simple.',
-              stars: 5,
-            },
-          ].map((t, i) => (
-            <div key={i} className="testimonial-card animate-fade-in" style={{ animationDelay: i * 0.1 + 's' }}>
-              <Quote size={20} style={{ color: 'var(--primary)', opacity: 0.3, position: 'absolute', top: '1rem', left: '1rem' }} />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                <div className="avatar" style={{ background: t.color }}>{t.avatar}</div>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{t.name}</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{t.role}</div>
+      {/* Trending Products Section */}
+      <section className="py-24 bg-background">
+        <div className="max-w-container-max mx-auto px-margin-desktop">
+          <div className="text-center mb-16">
+            <h2 className="font-headline-lg text-headline-lg text-primary mb-4">Tendances du moment</h2>
+            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Découvrez les produits qui définissent actuellement le standard du marché dans notre écosystème global.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+            {displayProducts.map((ad, i) => (
+              <div key={i} className="group bg-white rounded-xl border border-outline-variant premium-card-hover overflow-hidden">
+                <div className="relative h-64 overflow-hidden bg-surface-container">
+                  {ad.img ? (
+                    <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={ad.img} alt={ad.title} loading="lazy" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-surface-container-high">
+                      <span className="text-4xl font-bold text-on-surface-variant">{ad.title.charAt(0)}</span>
+                    </div>
+                  )}
+                  <button className="absolute top-4 right-4 bg-white/80 backdrop-blur p-2 rounded-full text-primary hover:bg-white transition-all border-none cursor-pointer">
+                    <span className="material-symbols-outlined">favorite</span>
+                  </button>
+                  {ad.badge && (
+                    <div className={`absolute bottom-4 left-4 px-2 py-1 rounded font-label-sm text-label-sm ${ad.badgeType === 'error' ? 'bg-error text-on-error' : 'bg-primary text-on-primary'}`}>{ad.badge}</div>
+                  )}
+                </div>
+                <div className="p-5">
+                  <p className="font-label-sm text-label-sm text-secondary mb-1">{ad.category}</p>
+                  <h4 className="font-headline-sm text-headline-sm text-primary mb-1 truncate">{ad.title}</h4>
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex text-amber-400 text-sm">
+                      {[1,2,3,4,5].map(s => (
+                        <span key={s} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: s <= ad.rating ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                      ))}
+                    </div>
+                    <span className="font-label-sm text-label-sm text-on-surface-variant">({ad.reviews})</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-headline-md text-headline-md text-primary">{ad.price} €</span>
+                    <Link to="/messages" className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-secondary hover:text-on-secondary transition-all no-underline">
+                      <span className="material-symbols-outlined">chat</span>
+                    </Link>
+                  </div>
                 </div>
               </div>
-              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '0.75rem' }}>
-                "{t.text}"
-              </p>
-              <div style={{ display: 'flex', gap: '0.15rem' }}>
-                {Array.from({ length: t.stars }).map((_, si) => (
-                  <Star key={si} size={14} style={{ color: '#F59E0B', fill: '#F59E0B' }} />
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="page-container" style={{ paddingTop: '0', paddingBottom: '2rem' }}>
-        <div className="cta-banner">
-          <h2 className="cta-title">Prêt à vendre ?</h2>
-          <p className="cta-subtitle">
-            Publiez votre première annonce en moins de 2 minutes. Rejoignez des milliers de vendeurs satisfaits.
-          </p>
-          <Link to="/ads/new" className="btn btn-success btn-lg" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-            Déposer une annonce <ArrowRight size={18} />
-          </Link>
-        </div>
-      </section>
-
-      {selectedProduct && (
-        <div className="modal-overlay" onClick={() => { setSelectedProduct(null); setModalImgFailed(false); }}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => { setSelectedProduct(null); setModalImgFailed(false); }}><X size={20} /></button>
-            <div className="modal-image" style={modalImgFailed ? { background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}}>
-              {modalImgFailed ? (
-                <span style={{ fontSize: '4rem', color: 'white', fontWeight: 700 }}>{selectedProduct.title.charAt(0)}</span>
-              ) : (
-                <img src={selectedProduct.img} alt={selectedProduct.title} onError={() => setModalImgFailed(true)} />
-              )}
-            </div>
-            <div className="modal-body">
-              <div className="modal-category">{selectedProduct.category}</div>
-              <h2 className="modal-title">{selectedProduct.title}</h2>
-              <div className="modal-price">{selectedProduct.price.toLocaleString('fr-FR')} €</div>
-              <div className="modal-location"><MapPin size={14} /> {selectedProduct.location}</div>
-              <p className="modal-desc">{selectedProduct.desc}</p>
-              <div className="modal-footer">
-                <Link to={"/browse?search=" + encodeURIComponent(selectedProduct.title.split(' ')[0])} className="btn btn-primary" onClick={() => { setSelectedProduct(null); setModalImgFailed(false); }}>
-                  Voir annonces similaires <ArrowRight size={16} />
-                </Link>
+      {/* Why Shop With Us Section */}
+      <section className="py-24 bg-surface-container-low relative overflow-hidden">
+        <div className="max-w-container-max mx-auto px-margin-desktop relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div>
+              <h2 className="font-headline-lg text-headline-lg text-primary mb-8">La confiance des entreprises mondiales</h2>
+              <div className="space-y-8">
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-14 h-14 bg-secondary-fixed rounded-xl flex items-center justify-center">
+                    <span className="material-symbols-outlined text-on-secondary-fixed text-3xl">verified</span>
+                  </div>
+                  <div>
+                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">Vendeurs vérifiés uniquement</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant">Chaque commerçant sur ProMarket passe par un processus de certification rigouxe en 5 étapes avant sa première annonce.</p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-14 h-14 bg-secondary-fixed rounded-xl flex items-center justify-center">
+                    <span className="material-symbols-outlined text-on-secondary-fixed text-3xl">shield_with_heart</span>
+                  </div>
+                  <div>
+                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">Transactions sécurisées</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant">Chiffrement multi-couches et services d'escrow intégrés protègent votre capital jusqu'à réception des marchandises.</p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-14 h-14 bg-secondary-fixed rounded-xl flex items-center justify-center">
+                    <span className="material-symbols-outlined text-on-secondary-fixed text-3xl">public</span>
+                  </div>
+                  <div>
+                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">Réseau logistique mondial</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant">Expédition sans frais vers plus de 180 pays avec suivi en temps réel et assurance premium sur chaque commande à haute valeur.</p>
+                  </div>
+                </div>
               </div>
+              <Link to="/about" className="mt-12 inline-block bg-primary text-on-primary px-8 py-4 rounded-lg font-label-md text-label-md font-bold hover:shadow-xl transition-all no-underline">
+                En savoir plus sur nos standards
+              </Link>
+            </div>
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4 pt-12">
+                  <div className="h-64 rounded-2xl overflow-hidden shadow-lg border border-outline-variant">
+                    <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_wd_FjT1uJvCyShDWSK1foxe2OYEQjImR8YUEl2VmWhoSjNEYmEyudbsLADu4heZpncZktpwGDB8qaCxMMBDscVsR39gMgHL2JNFuSLr4xkMxnCU7kNc4u-NyUIwFYQp_8Ie6-yYvqaOPv8RhL3Aig2a414gSnGqAFdvulcOtKI0jVdbtdt97w4Zra-ZuGXp8F3LRkVq_xY8spIz5IeLNJ-io_L3IhjLLiRYMD69_nv2dtcXY" alt="Professionnels" />
+                  </div>
+                  <div className="h-48 rounded-2xl overflow-hidden shadow-lg border border-outline-variant">
+                    <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5fH9_7zEoMehyfe5AgZrY6TVUmbgS2oXnD2QU5Hduz2rSBIK3eXOuD61BTI-1s7i5EZLMNPceKXc96C7DgDq_jACMQkY_HQFiH5BCnM1EXcXBuqN7F0Siie8_vqMXXg8DclYd6spWHRNRA7n-kQ-Yp_LfQVCitwEj7hwvEBdQAYEsYYxSpcP8K29T8vfRsQYoUBlsr4WnNFExSR7PxuDPzOE4XjHZsRV_aKqRhfD-KgWeU-hn" alt="Sécurité" />
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="h-48 rounded-2xl overflow-hidden shadow-lg border border-outline-variant">
+                    <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgUczkm2GEAO98yNckK0I3SnK46ciuVjXRemKUgw0zzW3ya52_bt6fzn6SHbzmeXmd3pusNwLBKNDbampDjE1S2MWlHzc3Noyi9AfPrUVYI_HEAvLVFbMlnV5wT3QWFwXbD-TOmVe307PJamIhW2pAYBTHroe9XPMqFGInr4iMto_tTq59qvmdEE7uvRLRM3Sn2ANPzXHTIakRp8SRRrqOly4wbZAX8eIoI70s6dfsHqAEYf6O" alt="Logistique" />
+                  </div>
+                  <div className="h-64 rounded-2xl overflow-hidden shadow-lg border border-outline-variant">
+                    <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI5r46nQpGnyg17uNzbLBqzHxACeGS7TWuIPPtHsMlagzLAhSRnCZce_XYtPMGYcvWOyF_Tsl6GhLWI13y_uQd2s8Z5_duG_BH120t4LAXs2QOfuosjQbcVsv3B7y5SA3FFWQBfiyFvSbJ04gqWs2a11jAKjHlOz0KXZIiLvGut7gcXiZ3II1_fbKd9r5P2ml95R8K6JV55oJFMCv3QSysCWPqDJb4XiIOMNvx8XjGyRGZWWvz" alt="Partenariat" />
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-secondary/10 rounded-full blur-3xl"></div>
             </div>
           </div>
         </div>
-      )}
+      </section>
+
+      {/* Newsletter / CTA Section */}
+      <section className="py-24 bg-primary text-on-primary">
+        <div className="max-w-container-max mx-auto px-margin-desktop text-center">
+          <h2 className="font-display-lg text-display-lg mb-6">Prêt à élever vos standards ?</h2>
+          <p className="font-body-lg text-body-lg text-on-primary-container max-w-2xl mx-auto mb-10">Rejoignez les 50 000 acheteurs professionnels qui reçovent chaque semaine des insights marketplace et un accès anticipé aux annonces premium.</p>
+          <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-4" onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="flex-grow bg-white/10 border border-white/20 rounded-lg px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-white/50 transition-all placeholder:text-white/40"
+              placeholder="Entrez votre email professionnel"
+            />
+            <button type="submit" className="bg-white text-primary px-8 py-4 rounded-lg font-label-md text-label-md font-bold hover:bg-secondary-fixed transition-all whitespace-nowrap border-none cursor-pointer">
+              S'abonner
+            </button>
+          </form>
+          <p className="mt-6 text-on-primary-container font-label-sm text-label-sm opacity-60">Pas de spam. Uniquement des mises à jour à fort impact. Désabonnement à tout moment.</p>
+        </div>
+      </section>
     </div>
   );
 };
-
-const AdCard = ({ ad, isReal, imgFailed, onImgError }) => (
-  <div className="ad-card">
-    <div className="ad-card-image">
-      {ad.status === 'sold' && <div className="ad-card-status"><span className="status-badge status-sold">Vendu</span></div>}
-      {ad.badge === 'nouveau' && <div className="ad-card-badge ad-card-badge-new">Nouveau</div>}
-      {ad.badge === 'urgent' && <div className="ad-card-badge ad-card-badge-urgent">Urgent</div>}
-      {ad.badge === 'top' && <div className="ad-card-badge ad-card-badge-top">Top</div>}
-      {!isReal && ad.hours != null && (
-        <div className="ad-card-time">
-          <Clock size={10} /> {timeAgo(ad.hours)}
-        </div>
-      )}
-      {isReal && ad.created_at && (
-        <div className="ad-card-time">
-          <Clock size={10} /> {new Date(ad.created_at).toLocaleDateString('fr-FR')}
-        </div>
-      )}
-      {isReal && ad.images && ad.images.length > 0 ? (
-        <img src={getImageUrl(ad.images[0])} alt={ad.title} loading="lazy" />
-      ) : !isReal && ad.img && !imgFailed ? (
-        <img src={ad.img} alt={ad.title} loading="lazy" onError={onImgError} />
-      ) : (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: 'linear-gradient(135deg, #7C3AED, #A78BFA)', color: 'white', fontSize: '2.5rem', fontWeight: 700 }}>
-          {ad.title.charAt(0)}
-        </div>
-      )}
-    </div>
-    <div className="ad-card-body">
-      <h3 className="ad-card-title">{ad.title}</h3>
-      <div className="ad-card-price">
-        {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix non spécifié'}
-      </div>
-      <div className="ad-card-meta">
-        {ad.location && (
-          <span className="ad-card-meta-item">
-            <MapPin size={12} /> {ad.location}
-          </span>
-        )}
-        {ad.category_name && (
-          <span className="ad-card-meta-item">
-            <Folder size={12} /> {ad.category_name}
-          </span>
-        )}
-        {ad.category && !ad.category_name && (
-          <span className="ad-card-meta-item">
-            <Folder size={12} /> {ad.category}
-          </span>
-        )}
-      </div>
-    </div>
-    {!isReal && ad.seller && (
-      <div className="ad-card-seller">
-        <div className="ad-card-seller-avatar">
-          {ad.seller.split(' ').map(n => n[0]).join('')}
-        </div>
-        <span className="ad-card-seller-name">{ad.seller}</span>
-      </div>
-    )}
-  </div>
-);
 
 export default Landing;

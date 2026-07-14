@@ -1,7 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { User } from '../utils/icons';
 
 const Register = () => {
   const [data, setData] = useState({ name: '', email: '', password: '', phone: '', city: '' });
@@ -22,43 +21,92 @@ const Register = () => {
   };
 
   return (
-    <div className="page-container" style={{ maxWidth: '480px' }}>
-      <div className="card-lg" style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>Inscription</h2>
-        <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>Créez votre compte gratuitement.</p>
-        {error && <div className="toast toast-error" style={{ marginBottom: '1rem', animation: 'none' }}>{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Nom complet *</label>
-            <input name="name" placeholder="Votre nom" value={data.name} onChange={handleChange} required className="form-input" />
+    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-md">
+        <div className="bg-white p-8 rounded-xl border border-outline-variant">
+          <div className="text-center mb-8">
+            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Inscription</h1>
+            <p className="font-body-md text-on-surface-variant">Créez votre compte gratuitement.</p>
           </div>
-          <div className="form-group">
-            <label className="form-label">Email *</label>
-            <input name="email" type="email" placeholder="votre@email.fr" value={data.email} onChange={handleChange} required className="form-input" />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Mot de passe *</label>
-            <input name="password" type="password" placeholder="••••••••" value={data.password} onChange={handleChange} required className="form-input" />
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-            <div className="form-group">
-              <label className="form-label">Téléphone</label>
-              <input name="phone" placeholder="Téléphone" value={data.phone} onChange={handleChange} className="form-input" />
+
+          {error && (
+            <div className="bg-error-container text-on-error-container p-4 rounded-lg mb-6 flex items-center gap-2 font-body-sm">
+              <span className="material-symbols-outlined text-[18px]">error</span> {error}
             </div>
-            <div className="form-group">
-              <label className="form-label">Ville</label>
-              <input name="city" placeholder="Ville" value={data.city} onChange={handleChange} className="form-input" />
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Nom complet *</label>
+              <input
+                name="name"
+                placeholder="Votre nom"
+                value={data.name}
+                onChange={handleChange}
+                required
+                className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+              />
             </div>
-          </div>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-            <User size={18} /> S'inscrire
-          </button>
-        </form>
-        <p style={{ marginTop: '1.5rem', textAlign: 'center', color: 'var(--gray-500)', fontSize: '0.9rem' }}>
-          Déjà un compte ? <Link to="/login" style={{ fontWeight: 600 }}>Connectez-vous</Link>
-        </p>
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Email *</label>
+              <input
+                name="email"
+                type="email"
+                placeholder="votre@email.fr"
+                value={data.email}
+                onChange={handleChange}
+                required
+                className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+              />
+            </div>
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Mot de passe *</label>
+              <input
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                value={data.password}
+                onChange={handleChange}
+                required
+                className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Téléphone</label>
+                <input
+                  name="phone"
+                  placeholder="Téléphone"
+                  value={data.phone}
+                  onChange={handleChange}
+                  className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+                />
+              </div>
+              <div>
+                <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Ville</label>
+                <input
+                  name="city"
+                  placeholder="Ville"
+                  value={data.city}
+                  onChange={handleChange}
+                  className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-secondary text-on-secondary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[20px]">person_add</span> S'inscrire
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-body-sm text-on-surface-variant">
+            Déjà un compte ? <Link to="/login" className="font-semibold text-secondary hover:underline no-underline">Connectez-vous</Link>
+          </p>
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 

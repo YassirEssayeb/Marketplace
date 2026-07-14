@@ -21,6 +21,9 @@ import Profile from './pages/Profile';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
+import AccountSettings from './pages/AccountSettings';
+import JoinAsSeller from './pages/JoinAsSeller';
+import SellerDashboard from './pages/SellerDashboard';
 import NotFound from './pages/NotFound';
 import './App.css';
 
@@ -46,6 +49,9 @@ function App() {
             <Route path="/favorites" element={<MyFavorites />} />
             <Route path="/messages" element={<Messaging />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<AccountSettings />} />
+            <Route path="/join-as-seller" element={<JoinAsSeller />} />
+            <Route path="/seller-dashboard" element={<SellerDashboard />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />

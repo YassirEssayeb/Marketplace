@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import api from '../services/api';
-import { Sun, Moon, Heart, MessageCircle, LogOut, LogIn, Plus, Menu, X, User, Logo } from '../utils/icons';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -22,82 +21,114 @@ const Navbar = () => {
     return () => clearInterval(interval);
   }, [user]);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location]);
+  useEffect(() => { setMobileOpen(false); }, [location]);
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMobileOpen(false);
-      }
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMobileOpen(false);
     };
-    if (mobileOpen) {
-      document.addEventListener('mousedown', handleClick);
-      return () => document.removeEventListener('mousedown', handleClick);
-    }
+    if (mobileOpen) { document.addEventListener('mousedown', handleClick); return () => document.removeEventListener('mousedown', handleClick); }
   }, [mobileOpen]);
 
-  const isActive = (path) => location.pathname === path ? 'active' : '';
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="navbar">
-      <div className="navbar-inner">
-        <Link to="/" className="navbar-brand">
-          <Logo size={28} />
-        </Link>
-
-        <button
-          className="navbar-mobile-toggle"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-        >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
-
-        <div ref={menuRef} className={`navbar-center${mobileOpen ? ' open' : ''}`}>
-          <Link to="/" className={`nav-link ${isActive('/')}`}>Accueil</Link>
-          <Link to="/browse" className={`nav-link ${isActive('/browse')}`}>Parcourir</Link>
-          <Link to="/ads/new" className={`nav-link ${isActive('/ads/new')}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-            <Plus size={16} /> Déposer
+    <nav className="bg-surface-container-lowest fixed top-0 w-full z-50 border-b border-outline-variant shadow-sm">
+      <div className="max-w-container-max mx-auto px-margin-desktop flex justify-between items-center h-20">
+        <div className="flex items-center gap-12 h-full">
+          <Link to="/" className="flex items-center no-underline">
+            <span className="font-headline-sm text-headline-sm font-bold text-primary">ProMarket</span>
           </Link>
+          <div className="hidden md:flex items-center gap-stack-lg">
+            <Link to="/browse" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/browse') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>Parcourir</Link>
+            <Link to="/browse?tab=categories" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/categories') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>Catégories</Link>
+            <Link to="/browse?tab=sellers" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/sellers') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>Vendeurs</Link>
+            <Link to="/join-as-seller" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/join-as-seller') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>Vendeur</Link>
+            <Link to="/about" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/about') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>Aide</Link>
+          </div>
         </div>
+        <div className="flex items-center gap-6">
+          <div className="hidden lg:flex items-center bg-surface-container-low rounded-full px-4 py-2 border border-outline-variant w-64 focus-within:ring-2 focus-within:ring-secondary/20 transition-all">
+            <span className="material-symbols-outlined text-outline">search</span>
+            <input
+              type="text"
+              placeholder="Rechercher une annonce..."
+              className="bg-transparent border-none focus:ring-0 text-body-sm font-body-sm w-full"
+              onFocus={() => navigate('/browse')}
+              readOnly
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <button onClick={toggle} className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors bg-transparent border-none cursor-pointer" title={dark ? 'Mode clair' : 'Mode sombre'}>
+              {dark ? 'light_mode' : 'dark_mode'}
+            </button>
+            {user ? (
+              <>
+                <Link to="/messages" className={`relative material-symbols-outlined transition-colors no-underline ${isActive('/messages') ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
+                  chat
+                  {unread > 0 && <span className="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>}
+                </Link>
+                <Link to="/seller-dashboard" className={`material-symbols-outlined transition-colors no-underline ${isActive('/seller-dashboard') ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`} title="Dashboard vendeur">
+                  dashboard
+                </Link>
+                <Link to="/favorites" className={`material-symbols-outlined transition-colors no-underline ${isActive('/favorites') ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
+                  favorite
+                </Link>
+                <div className="h-8 w-px bg-outline-variant mx-1"></div>
+                <Link to="/profile" className="hidden md:flex items-center gap-3 no-underline">
+                  <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center border border-outline-variant">
+                    <span className="material-symbols-outlined text-on-surface-variant text-[20px]">person</span>
+                  </div>
+                  <span className="font-label-md text-label-md text-on-surface hidden lg:block">{user.name}</span>
+                </Link>
+                {user.is_admin && (
+                  <Link to="/admin" className="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors no-underline hidden lg:block">Admin</Link>
+                )}
+                <Link to="/ads/new" className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md font-bold hover:bg-opacity-90 active:scale-95 transition-all no-underline">
+                  Déposer
+                </Link>
+              </>
+            ) : (
+              <>
+                <div className="h-8 w-px bg-outline-variant mx-1"></div>
+                <Link to="/login" className="text-on-surface font-label-md text-label-md font-semibold hover:text-secondary transition-colors no-underline hidden lg:block">Connexion</Link>
+                <Link to="/ads/new" className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md font-bold hover:bg-opacity-90 active:scale-95 transition-all no-underline">Déposer</Link>
+              </>
+            )}
+            <button className="md:hidden material-symbols-outlined text-on-surface-variant bg-transparent border-none cursor-pointer" onClick={() => setMobileOpen(!mobileOpen)}>
+              {mobileOpen ? 'close' : 'menu'}
+            </button>
+          </div>
+        </div>
+      </div>
 
-        <div className={`navbar-right${mobileOpen ? ' open' : ''}`}>
-          <button onClick={toggle} className="nav-link" title={dark ? 'Mode clair' : 'Mode sombre'} style={{ fontSize: '1.15rem', lineHeight: 1, border: 'none', background: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', padding: '0.5rem' }}>
-            {dark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+      {mobileOpen && (
+        <div ref={menuRef} className="md:hidden bg-surface-container-lowest border-t border-outline-variant p-4 space-y-2 shadow-lg">
+          <Link to="/browse" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Parcourir</Link>
+          <Link to="/browse?tab=categories" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Catégories</Link>
+          <Link to="/browse?tab=sellers" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Vendeurs</Link>
+          <Link to="/about" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Aide</Link>
+          <div className="border-t border-outline-variant my-2"></div>
           {user ? (
             <>
-              <Link to="/favorites" className={`nav-link ${isActive('/favorites')}`}>
-                <Heart size={16} style={{ verticalAlign: 'text-bottom', marginRight: '0.15rem' }} /> Favoris
+              <Link to="/profile" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Mon profil</Link>
+              <Link to="/settings" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Paramètres</Link>
+              <Link to="/seller-dashboard" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Dashboard vendeur</Link>
+              <Link to="/messages" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">
+                Messages {unread > 0 && <span className="ml-2 bg-error text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{unread}</span>}
               </Link>
-              {user.is_admin && <Link to="/admin" className="nav-link nav-link-admin">Admin</Link>}
-              <Link to="/messages" className={`nav-link ${isActive('/messages')}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.15rem' }}>
-                <MessageCircle size={16} /> Messages{unread > 0 && <span className="badge" style={{ marginLeft: '0.2rem' }}>{unread}</span>}
-              </Link>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginLeft: '0.25rem' }}>
-                <Link to="/profile" className={`nav-link ${isActive('/profile')}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-                  <div className="avatar avatar-sm"><User size={14} /></div>
-                  <span style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</span>
-                </Link>
-                <button onClick={() => { logout(); navigate('/'); }} className="btn btn-outline btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-                  <LogOut size={14} />
-                </button>
-              </div>
+              <Link to="/favorites" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Favoris</Link>
+              {user.is_admin && <Link to="/admin" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Admin</Link>}
+              <button onClick={() => { logout(); navigate('/'); }} className="w-full text-left px-4 py-3 rounded-lg font-label-md text-label-md text-error hover:bg-error-container transition-colors bg-transparent border-none cursor-pointer">Déconnexion</button>
             </>
           ) : (
             <>
-              <Link to="/login" className={`nav-link ${isActive('/login')}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-                <LogIn size={16} /> Connexion
-              </Link>
-              <Link to="/register" className="btn btn-primary btn-sm" style={{ textDecoration: 'none' }}>
-                Inscription
-              </Link>
+              <Link to="/login" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">Connexion</Link>
+              <Link to="/register" className="block px-4 py-3 rounded-lg font-label-md text-label-md bg-primary text-on-primary text-center font-bold no-underline">Inscription</Link>
             </>
           )}
         </div>
-      </div>
+      )}
     </nav>
   );
 };

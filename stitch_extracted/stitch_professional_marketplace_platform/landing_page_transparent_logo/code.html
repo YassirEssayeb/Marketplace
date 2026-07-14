@@ -1,0 +1,561 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ProMarket | High-End Professional Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#d8dadc",
+                    "primary": "#000000",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "tertiary": "#000000",
+                    "on-surface": "#191c1e",
+                    "on-background": "#191c1e",
+                    "tertiary-fixed-dim": "#dec29a",
+                    "surface-container": "#eceef0",
+                    "tertiary-container": "#271901",
+                    "surface-tint": "#565e74",
+                    "surface-variant": "#e0e3e5",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#c6c6cd",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#00174b",
+                    "on-tertiary-fixed": "#271901",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#98805d",
+                    "outline": "#76777d",
+                    "on-surface-variant": "#45464d",
+                    "on-tertiary-fixed-variant": "#574425",
+                    "on-error-container": "#93000a",
+                    "secondary": "#0051d5",
+                    "primary-fixed": "#dae2fd",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#f7f9fb",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container-high": "#e6e8ea",
+                    "surface": "#f7f9fb",
+                    "secondary-fixed": "#dbe1ff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-container": "#316bf3",
+                    "inverse-surface": "#2d3133",
+                    "on-primary-fixed": "#131b2e",
+                    "tertiary-fixed": "#fcdeb5",
+                    "inverse-primary": "#bec6e0",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "primary-container": "#131b2e",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#fefcff",
+                    "on-primary-container": "#7c839b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px",
+                    "unit": "4px",
+                    "margin-desktop": "48px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .premium-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .premium-card-hover:hover {
+            box-shadow: 0px 4px 12px rgba(15, 23, 42, 0.08);
+            transform: translateY(-2px);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest fixed top-0 w-full z-50 border-b border-outline-variant shadow-sm">
+<div class="max-w-container-max mx-auto px-margin-desktop flex justify-between items-center h-20">
+<div class="flex items-center gap-12 h-full">
+<img alt="ProMarket Logo" class="h-8 w-auto object-contain block" src="https://lh3.googleusercontent.com/aida/AP1WRLvSsAvzA2UGmU9koKPHbdo6chE2NVcGdBdHzzOJzAX5P0cXbKK5SPbWJ6_bU0Bz1MiocaVe5LAs8G-GIq95rIAm67K-HmmyW98tl0EFsw2eXmeGozQWB6rrlS0t5p6I2nReTey-yTFk0UyarUHnELb75gUg7DLow2hbcG4h2Pv9j7QG99EDxHNZ4mbwZDZUC9QIaz7SqwifJaCSa0dW-R5ARpvBHI9yiMY3K2nS__6qFY6-OqAFdw">
+<div class="hidden md:flex items-center gap-stack-lg">
+<a class="text-secondary font-bold border-b-2 border-secondary pb-1 font-label-md text-label-md" href="#">Browse</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-md text-label-md" href="#">Categories</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-md text-label-md" href="#">Sellers</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-md text-label-md" href="#">Help</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center bg-surface-container-low rounded-full px-4 py-2 border border-outline-variant w-64 focus-within:ring-2 focus-within:ring-secondary/20 transition-all">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm font-body-sm w-full" placeholder="Search listing..." type="text">
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">shopping_cart</button>
+<div class="h-8 w-px bg-outline-variant mx-1"></div>
+<button class="text-on-surface font-label-md text-label-md font-semibold hover:text-secondary transition-colors">Sign In</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md font-bold hover:bg-opacity-90 active:scale-95 transition-all">Post Listing</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[720px] flex items-center overflow-hidden bg-surface">
+<!-- Animated Background Placeholder Replacement -->
+<div class="max-w-container-max mx-auto px-margin-desktop w-full relative z-10">
+<div class="max-w-2xl">
+<span class="inline-block bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm mb-6 tracking-wider uppercase">Enterprise Grade Marketplace</span>
+<h1 class="font-display-lg text-display-lg text-primary mb-6">Source the Extraordinary. Build the Future.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 leading-relaxed">Connect with thousands of verified professional sellers. From industrial machinery to bespoke fashion, discover quality that defines your standard.</p>
+<div class="flex flex-col sm:flex-row gap-4 mb-12">
+<button class="bg-secondary text-on-secondary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-secondary/20 active:scale-95 transition-all">
+                            Start Browsing
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="bg-white border border-outline-variant text-primary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:bg-surface-container-low transition-all">
+                            Partner With Us
+                        </button>
+</div>
+<div class="flex items-center gap-8">
+<div>
+<p class="font-headline-md text-headline-md text-primary">500k+</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Products</p>
+</div>
+<div class="w-px h-10 bg-outline-variant"></div>
+<div>
+<p class="font-headline-md text-headline-md text-primary">12k+</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Verified Sellers</p>
+</div>
+<div class="w-px h-10 bg-outline-variant"></div>
+<div>
+<p class="font-headline-md text-headline-md text-primary">24/7</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Expert Support</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Floating Card (Asymmetric Layout) -->
+<div class="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[480px]">
+<div class="bg-white p-6 rounded-2xl shadow-2xl border border-outline-variant relative">
+<div class="absolute -top-4 -left-4 bg-primary text-on-primary p-4 rounded-xl shadow-lg">
+<span class="material-symbols-outlined text-3xl">verified_user</span>
+</div>
+<div class="mt-4 rounded-xl overflow-hidden mb-6 h-64 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A hyper-realistic close-up of a high-tech carbon fiber professional camera lens sitting on a polished glass surface. The lighting is cold and clinical, emphasizing the premium build quality and precision engineering of the product. The background is a soft-focus laboratory setting with deep blues and neutral grays, aligning with a corporate modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZLi8Ke7UwQIwSIJupZq-y3Aox5T4ALhdrrDuupg804YvEieQgCzJ3iKSdUJtvc-xv5im4EhMKp1t9J_njUfgris7qJq_jcx25Wdy-UNmJAEqq470DOEfv-YvnitFZCkf0ge5eMMYJ-p7utLsijKh0_hrA3iSBDxR_KOETB00B2xzE_AVkoulbRGKkymrBsei6cvP2brUU4cyClFl_9vzGZJV07wXpA-ckcl4esaV9snsVF6vu">
+</div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Optic-X Pro Series 5</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">High-Performance Imaging</p>
+</div>
+<span class="font-headline-sm text-headline-sm text-secondary">$3,499</span>
+</div>
+<div class="flex items-center gap-2 mb-6">
+<div class="flex text-amber-400">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">(128 Reviews)</span>
+</div>
+<button class="w-full py-4 rounded-lg bg-surface-container-high text-primary font-label-md text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all">View Specifications</button>
+</div>
+</div>
+</section>
+<!-- Categories Section (Bento Grid Style) -->
+<section class="py-24 bg-white">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Curated Categories</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Explore thousands of products across our primary industries.</p>
+</div>
+<a class="font-label-md text-label-md text-secondary font-bold flex items-center gap-2 hover:gap-3 transition-all" href="#">View All Categories <span class="material-symbols-outlined">arrow_right_alt</span></a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-gutter h-[600px]">
+<!-- Tech (Large) -->
+<div class="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-2xl bg-primary border border-outline-variant">
+<div class="absolute inset-0 opacity-60 group-hover:scale-110 transition-transform duration-700">
+<img class="w-full h-full object-cover" data-alt="A wide-angle shot of a minimalist, futuristic workstation featuring sleek silver laptops and curved monitors. The environment is a brightly lit, high-ceilinged loft with white walls and soft ambient lighting. The color palette is strictly professional, utilizing whites, slates, and blacks to evoke a sense of high-end technology and focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZsNozmhzCP5__PoMcczSf7VgHO4Mz46tOa68ciPcBTxrxRepYv5eTLKj204uOWaU7af6wU_c_8eHzZ7GgOgk4VVP3QQaiaLVt4aOvgZsHIG-wRTN2KPU4aVhSPEtHHgApKHq9HRAFRU_sMyhftEwIf-4DKTeEjpAeO-q_q_k1OwyyqB8ki3h4kK4ZceiTcbhfXKUj3e7sXOY4ni1I3b6VGeVF9cGEjvBYLwePu8tQoWFn57tI">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-10">
+<h3 class="text-white font-display-lg text-3xl mb-2">Tech &amp; Innovation</h3>
+<p class="text-white/80 font-body-md text-body-md mb-6 max-w-sm">Next-gen hardware, enterprise servers, and premium electronics for professionals.</p>
+<button class="bg-white text-primary px-6 py-3 rounded-lg font-label-md text-label-md font-bold">Browse Tech</button>
+</div>
+</div>
+<!-- Home -->
+<div class="md:col-span-2 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container border border-outline-variant">
+<div class="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
+<img class="w-full h-full object-cover" data-alt="An elegant, modern living space showcasing designer furniture in muted earthy tones. Soft sunlight filters through large windows, highlighting the textures of a linen sofa and a polished marble coffee table. The mood is serene and upscale, focusing on sophisticated interior design and high-quality home goods." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG0QNdry9llwx_zEl3W-hYHH6fKMM9vsCsmCteEBo5WabvmYocO-OC09pooLE8we1Mhwmf7apwyZFY1Plm-JRX4-N_g_R9ZWh9xm692hBN4ERtIwwVnhHcXNiDroq_5dgUJbdYPM9qFfUjMnZEOWRFnBnX66DcY1lCncEn2L8Rkav1sxYkf2S-Wm6zvt-OQeKKPSZlpHV8rbAfKHtCpzBHjcF9oJW_VsdR_zWTPkAVHerLJoWK">
+</div>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-1 drop-shadow-md">Home &amp; Living</h3>
+<p class="text-white/90 font-label-sm text-label-sm mb-4 drop-shadow-md">Professional-grade appliances and designer furniture.</p>
+<span class="text-white font-bold font-label-md flex items-center gap-1">Explore <span class="material-symbols-outlined">chevron_right</span></span>
+</div>
+</div>
+<!-- Fashion -->
+<div class="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant">
+<div class="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
+<img class="w-full h-full object-cover" data-alt="A close-up of high-fashion tailoring, showing the intricate stitching on a navy wool blazer. The lighting is dramatic and directional, creating deep shadows and bright highlights that emphasize the quality of the fabric. The aesthetic is extremely premium, professional, and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxJI2YYuFV9aMiHwSeZaW0gPTy9P57B796u8DeEYU0ezhowq6mIxnIRVkA-u5Yd_uawCO49LFkgBQkOapPI_xELMCbnLc3-CVhAmIkpNO02I17OAKDISn9leen91zevUmKKnS8FpHILubPMN9QGGHocBR0QciSQrgR0x-DxTVqcW-gv5RLT4VIw6nYtLDn9nnKFH_GIbAdx1WwWcygD1lI8qlUHlKIFCXA2uhxgyDzo8Q0eJPw">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h3 class="text-white font-headline-sm text-headline-sm">Fashion</h3>
+<span class="text-white/80 font-label-sm text-label-sm">Bespoke &amp; Industrial</span>
+</div>
+</div>
+<!-- Accessories -->
+<div class="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant">
+<div class="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
+<img class="w-full h-full object-cover" data-alt="Luxury accessories including a leather-bound journal, a fountain pen, and a high-end mechanical watch arranged artistically on a dark wood surface. The palette consists of warm browns, deep blacks, and metallic accents. The lighting is soft and focused, projecting an image of executive luxury and attention to detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdo90J4xn8AZh9ppnVUW3ADB4PYgPit3ws4Eg7HYs3iVp5cXy6yyxMfWiSF_6TcT0V0S1SX6o3SJn0pJdgvTJNzTtP_yRtQwcSW2pvv-Ezjnxj2PpycINcTPNalgg5g55b1IFSAhgfx78eY0_08c6bxleHBi8e64vMZx-29pOOyWUEZ1FbpzrjpIdf91KPynNpZwT91NR5ESiFGEIwIjWI6qD7Nlv0JqNrLC1h8ispjLcJFzXc">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h3 class="text-white font-headline-sm text-headline-sm">Accessories</h3>
+<span class="text-white/80 font-label-sm text-label-sm">Essential Accents</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trending Products Section -->
+<section class="py-24 bg-background">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-4">Trending Now</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Discover the products currently defining the market standard across our global ecosystem.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Product 1 -->
+<div class="group bg-white rounded-xl border border-outline-variant premium-card-hover overflow-hidden">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sleek, matte black wireless pair of over-ear headphones displayed on a minimalist white stand. The lighting is soft and even, highlighting the smooth contours and premium materials. The background is a clean light-gray studio environment, reinforcing a high-end tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBriRFWh07SKUuBVDznHwL4d2flGKma4hHj3NquvY6i_Xiq6rZnINfLKg_jUGWhoLB1JcGVd-SlUwr00-imR-3hQgQQxw5eJjUUEA7Wb43TVmK4KdAK2PMme18lec0bGrXCLAz9B43ugrgiNnaZVseT_CXSmtYvJ2WaAmv0Oh6WMeIu3aM4rmERw9fV_au6fSAoxoFrqbLRG1cdbu4xgFKd2gMJa5jyZx_Lca6HtEno2YTf2E9M">
+<button class="absolute top-4 right-4 bg-white/80 backdrop-blur p-2 rounded-full text-primary hover:bg-white transition-all">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<div class="absolute bottom-4 left-4 bg-primary text-on-primary px-2 py-1 rounded font-label-sm text-label-sm">Trending</div>
+</div>
+<div class="p-5">
+<p class="font-label-sm text-label-sm text-secondary mb-1">Tech &amp; Audio</p>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1 truncate">Aura NC Headphones</h4>
+<div class="flex items-center gap-2 mb-4">
+<div class="flex text-amber-400 text-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">(2.4k)</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary">$499.00</span>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-secondary hover:text-on-secondary transition-all">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group bg-white rounded-xl border border-outline-variant premium-card-hover overflow-hidden">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional-grade ergonomic desk chair with silver mesh and a polished aluminum frame. The chair is positioned in a modern, bright office with glass walls and minimalist decor. High-key lighting creates a clean, transparent, and professional feel, emphasizing ergonomic design and luxury workspace culture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9LLjBIENd8j2cTdy8l4hmQQNQb9NsE4TSaAsEf6nWA4ktXZJa-h-NtdB_eOOmxjBeO59Wkh3MWdf0xKdwETzGSf_M5nLeq2Y0WyxR_-q-44iyu7UljY1t6I9feV8L1BDmvLkF6BcrWjsj3wOaSWAg4S1uJnH89OWD3DjfEp_-3KRrL-UG2M_kpbMonLE1h3Lbk06dgXmRTcVOyu26q7U-3sHyHycAhBjaLaIO2DlPfVu9bTuJ">
+<button class="absolute top-4 right-4 bg-white/80 backdrop-blur p-2 rounded-full text-primary hover:bg-white transition-all">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-5">
+<p class="font-label-sm text-label-sm text-secondary mb-1">Office Gear</p>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1 truncate">V-Series Ergo Chair</h4>
+<div class="flex items-center gap-2 mb-4">
+<div class="flex text-amber-400 text-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]">star</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">(840)</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary">$1,150.00</span>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-secondary hover:text-on-secondary transition-all">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group bg-white rounded-xl border border-outline-variant premium-card-hover overflow-hidden">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A luxury espresso machine crafted from polished chrome and matte black steel. Steam is rising gracefully from the wand. The background is a sophisticated dark-toned kitchen with marble countertops. The lighting is warm and dramatic, highlighting the high-end craftsmanship and precision engineering of the appliance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnZF9DhxKKhdYZqFwuICf0fh_cUATKnWIvRdLlbT6Pl0eJQUqww13Sybvuo0pkb1wWc8uPr-iBD6gYoY09vWtpzpJ2qqJtXcHHg7I4saWGklQpbTf0IaHnaPPQjrl_IsFZiTfBlrxYDHXhSO83Rot_MKvAkNLAJRQHSNFB7AFx5SEsglIDFH__3NUQVQ0-Fw9ZM5Rf7_3xdd8lYCfMDd0vCVeWvOtkfxpVcUH5jYaAeTVUxnlj">
+<button class="absolute top-4 right-4 bg-white/80 backdrop-blur p-2 rounded-full text-primary hover:bg-white transition-all">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-5">
+<p class="font-label-sm text-label-sm text-secondary mb-1">Appliances</p>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1 truncate">Pro-Brew 9000</h4>
+<div class="flex items-center gap-2 mb-4">
+<div class="flex text-amber-400 text-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">(310)</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary">$2,890.00</span>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-secondary hover:text-on-secondary transition-all">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="group bg-white rounded-xl border border-outline-variant premium-card-hover overflow-hidden">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A minimalist, high-end mechanical watch with a sapphire crystal face and a brushed titanium link bracelet. The watch is placed on a dark slate surface under a single soft spotlight. The image focuses on the clarity of the dial and the meticulous detail of the bracelet links. The mood is one of quiet, expensive confidence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR3dQDilTyBUB1fCxU6Cz2N2wt7Cb55mh73tSpf7RK0gFDIAwRUe8vTyjeDfnyVjqWF_DyF-J9k_mseGnQrfUQUyGDVgBcheLSyg2Qj5it8LkBBZQy6AuGPu2fVtYzMM_lf5EKeI_xah_d450WecAhk6VmS2zUQXNaa-MNl_WBbPrbxK2snRgOC2KfTlO5fBD45VjR9_M82chYXPx4sOPhRKLOIFp2y7T2e5vliwZBq3gS4CJX">
+<button class="absolute top-4 right-4 bg-white/80 backdrop-blur p-2 rounded-full text-primary hover:bg-white transition-all">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<div class="absolute bottom-4 left-4 bg-error text-on-error px-2 py-1 rounded font-label-sm text-label-sm">Limited Edition</div>
+</div>
+<div class="p-5">
+<p class="font-label-sm text-label-sm text-secondary mb-1">Accessories</p>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1 truncate">Chronos Titanium X</h4>
+<div class="flex items-center gap-2 mb-4">
+<div class="flex text-amber-400 text-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">(142)</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary">$6,200.00</span>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-secondary hover:text-on-secondary transition-all">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Why Shop With Us Section -->
+<section class="py-24 bg-surface-container-low relative overflow-hidden">
+<div class="max-w-container-max mx-auto px-margin-desktop relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-8">Trusted by Global Enterprises</h2>
+<div class="space-y-8">
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-14 h-14 bg-secondary-fixed rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-fixed text-3xl">verified</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2">Verified Sellers Only</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Every merchant on ProMarket undergoes a rigorous 5-step background and quality certification process before their first listing.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-14 h-14 bg-secondary-fixed rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-fixed text-3xl">shield_with_heart</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2">Secure Transactions</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Multi-layered encryption and integrated escrow services ensure your capital is protected until the goods are in your hands.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-14 h-14 bg-secondary-fixed rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-fixed text-3xl">public</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2">Global Logistics Network</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Seamless shipping to 180+ countries with real-time tracking and premium insurance coverage on every high-value order.</p>
+</div>
+</div>
+</div>
+<button class="mt-12 bg-primary text-on-primary px-8 py-4 rounded-lg font-label-md text-label-md font-bold hover:shadow-xl transition-all">Learn More About Our Safety Standard</button>
+</div>
+<div class="relative">
+<!-- Asymmetric trust image grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-4 pt-12">
+<div class="h-64 rounded-2xl overflow-hidden shadow-lg border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A group of diverse professionals in a high-tech corporate meeting room, discussing strategy around a glass table. The atmosphere is collaborative, focused, and professional. The lighting is soft and modern, reflecting a sense of shared purpose and corporate integrity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_wd_FjT1uJvCyShDWSK1foxe2OYEQjImR8YUEl2VmWhoSjNEYmEyudbsLADu4heZpncZktpwGDB8qaCxMMBDscVsR39gMgHL2JNFuSLr4xkMxnCU7kNc4u-NyUIwFYQp_8Ie6-yYvqaOPv8RhL3Aig2a414gSnGqAFdvulcOtKI0jVdbtdt97w4Zra-ZuGXp8F3LRkVq_xY8spIz5IeLNJ-io_L3IhjLLiRYMD69_nv2dtcXY">
+</div>
+<div class="h-48 rounded-2xl overflow-hidden shadow-lg border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A close-up of a high-tech security server rack with blue glowing LEDs. The focus is on the precision and modern technology used to secure data. The mood is technological, safe, and sophisticated, aligning with enterprise-level security standards." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5fH9_7zEoMehyfe5AgZrY6TVUmbgS2oXnD2QU5Hduz2rSBIK3eXOuD61BTI-1s7i5EZLMNPceKXc96C7DgDq_jACMQkY_HQFiH5BCnM1EXcXBuqN7F0Siie8_vqMXXg8DclYd6spWHRNRA7n-kQ-Yp_LfQVCitwEj7hwvEBdQAYEsYYxSpcP8K29T8vfRsQYoUBlsr4WnNFExSR7PxuDPzOE4XjHZsRV_aKqRhfD-KgWeU-hn">
+</div>
+</div>
+<div class="space-y-4">
+<div class="h-48 rounded-2xl overflow-hidden shadow-lg border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A modern warehouse facility with advanced robotics and automated sorting systems. The space is vast, organized, and brightly lit. The image communicates efficiency, scale, and high-tech global logistics capabilities." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgUczkm2GEAO98yNckK0I3SnK46ciuVjXRemKUgw0zzW3ya52_bt6fzn6SHbzmeXmd3pusNwLBKNDbampDjE1S2MWlHzc3Noyi9AfPrUVYI_HEAvLVFbMlnV5wT3QWFwXbD-TOmVe307PJamIhW2pAYBTHroe9XPMqFGInr4iMto_tTq59qvmdEE7uvRLRM3Sn2ANPzXHTIakRp8SRRrqOly4wbZAX8eIoI70s6dfsHqAEYf6O">
+</div>
+<div class="h-64 rounded-2xl overflow-hidden shadow-lg border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional handshake between two people in business attire, set against a blurred background of a modern city skyline at dusk. The lighting is warm and elegant, symbolizing trust, partnership, and successful global commerce." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI5r46nQpGnyg17uNzbLBqzHxACeGS7TWuIPPtHsMlagzLAhSRnCZce_XYtPMGYcvWOyF_Tsl6GhLWI13y_uQd2s8Z5_duG_BH120t4LAXs2QOfuosjQbcVsv3B7y5SA3FFWQBfiyFvSbJ04gqWs2a11jAKjHlOz0KXZIiLvGut7gcXiZ3II1_fbKd9r5P2ml95R8K6JV55oJFMCv3QSysCWPqDJb4XiIOMNvx8XjGyRGZWWvz">
+</div>
+</div>
+</div>
+<!-- Abstract decorative element -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-secondary/10 rounded-full blur-3xl"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / CTA Section -->
+<section class="py-24 bg-primary text-on-primary">
+<div class="max-w-container-max mx-auto px-margin-desktop text-center">
+<h2 class="font-display-lg text-display-lg mb-6">Ready to upgrade your standards?</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container max-w-2xl mx-auto mb-10">Join over 50,000 professional buyers receiving weekly curated marketplace insights and exclusive early access to premium listings.</p>
+<form class="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
+<input class="flex-grow bg-white/10 border border-white/20 rounded-lg px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-white/50 transition-all placeholder:text-white/40" placeholder="Enter your business email" type="email">
+<button class="bg-white text-primary px-8 py-4 rounded-lg font-label-md text-label-md font-bold hover:bg-secondary-fixed transition-all whitespace-nowrap">Subscribe Now</button>
+</form>
+<p class="mt-6 text-on-primary-container font-label-sm text-label-sm opacity-60">No spam. Only high-impact updates. Unsubscribe anytime.</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-outline-variant">
+<div class="max-w-container-max mx-auto px-margin-desktop py-stack-lg">
+<div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+<div class="max-w-sm">
+<span class="font-headline-sm text-headline-sm font-bold text-primary block mb-6">ProMarket</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">The leading global marketplace for verified professional assets, premium goods, and enterprise-level sourcing.</p>
+<div class="flex gap-4 mt-8">
+<a class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all" href="#"><span class="material-symbols-outlined text-sm">language</span></a>
+<a class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all" href="#"><span class="material-symbols-outlined text-sm">share</span></a>
+<a class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all" href="#"><span class="material-symbols-outlined text-sm">mail</span></a>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-12">
+<div>
+<h4 class="font-label-md text-label-md font-bold text-primary mb-6">Marketplace</h4>
+<ul class="space-y-4">
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Browse All</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Premium Sellers</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Trending</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">New Arrivals</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold text-primary mb-6">Resources</h4>
+<ul class="space-y-4">
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Sourcing Guide</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Partner Program</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Trust &amp; Safety</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold text-primary mb-6">Company</h4>
+<ul class="space-y-4">
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About Us</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Careers</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Press</a></li>
+<li class=""><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-outline-variant gap-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 ProMarket Global. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Trust &amp; Safety</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple Navbar shadow toggle on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+        });
+    </script>
+
+
+</body></html>

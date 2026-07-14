@@ -1,7 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogIn } from '../utils/icons';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -21,32 +20,60 @@ const Login = () => {
   };
 
   return (
-    <div className="page-container" style={{ maxWidth: '440px' }}>
-      <div className="card-lg" style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>Connexion</h2>
-        <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>Connectez-vous à votre compte.</p>
-        {error && <div className="toast toast-error" style={{ marginBottom: '1rem', animation: 'none' }}>{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Email</label>
-            <input type="email" placeholder="vous@exemple.fr" value={email} onChange={e => setEmail(e.target.value)} required className="form-input" />
+    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-md">
+        <div className="bg-white p-8 rounded-xl border border-outline-variant">
+          <div className="text-center mb-8">
+            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Connexion</h1>
+            <p className="font-body-md text-on-surface-variant">Connectez-vous à votre compte.</p>
           </div>
-          <div className="form-group">
-            <label className="form-label">Mot de passe</label>
-            <input type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="form-input" />
-          </div>
-          <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
-            <Link to="/forgot-password" style={{ fontSize: '0.85rem', color: 'var(--gray-500)' }}>Mot de passe oublié ?</Link>
-          </div>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-            <LogIn size={18} /> Se connecter
-          </button>
-        </form>
-        <p style={{ marginTop: '1.5rem', textAlign: 'center', color: 'var(--gray-500)', fontSize: '0.9rem' }}>
-          Pas de compte ? <Link to="/register" style={{ fontWeight: 600 }}>Inscrivez-vous</Link>
-        </p>
+
+          {error && (
+            <div className="bg-error-container text-on-error-container p-4 rounded-lg mb-6 flex items-center gap-2 font-body-sm">
+              <span className="material-symbols-outlined text-[18px]">error</span> {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Email</label>
+              <input
+                type="email"
+                placeholder="vous@exemple.fr"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+              />
+            </div>
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Mot de passe</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+              />
+            </div>
+            <div className="text-right">
+              <Link to="/forgot-password" className="text-body-sm text-secondary font-medium hover:underline no-underline">Mot de passe oublié ?</Link>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-secondary text-on-secondary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[20px]">login</span> Se connecter
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-body-sm text-on-surface-variant">
+            Pas de compte ? <Link to="/register" className="font-semibold text-secondary hover:underline no-underline">Inscrivez-vous</Link>
+          </p>
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { Mail, ArrowLeft } from '../utils/icons';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -22,37 +21,59 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="page-container" style={{ maxWidth: '440px' }}>
-      <div className="card-lg" style={{ marginTop: '3rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>Mot de passe oublié</h2>
-        <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-          Saisissez votre email pour recevoir un lien de réinitialisation.
-        </p>
-        {sent ? (
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
-            <Mail size={40} style={{ color: 'var(--primary)', marginBottom: '1rem' }} />
-            <p style={{ color: 'var(--gray-600)' }}>{msg}</p>
-            <Link to="/login" className="btn btn-primary" style={{ marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-              <ArrowLeft size={16} /> Retour à la connexion
-            </Link>
+    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-md">
+        <div className="bg-white p-8 rounded-xl border border-outline-variant">
+          <div className="text-center mb-8">
+            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Mot de passe oublié</h1>
+            <p className="font-body-md text-on-surface-variant">Saisissez votre email pour recevoir un lien de réinitialisation.</p>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            {error && <div className="toast toast-error" style={{ marginBottom: '1rem', animation: 'none' }}>{error}</div>}
-            <div className="form-group">
-              <label className="form-label">Email</label>
-              <input type="email" placeholder="votre@email.fr" value={email} onChange={e => setEmail(e.target.value)} required className="form-input" />
-            </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem' }}>Envoyer</button>
-            <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-              <Link to="/login" style={{ fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                <ArrowLeft size={14} /> Retour à la connexion
+
+          {sent ? (
+            <div className="text-center py-8">
+              <span className="material-symbols-outlined text-6xl text-secondary mb-4 block">mark_email_read</span>
+              <p className="font-body-md text-on-surface-variant mb-6">{msg}</p>
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold no-underline"
+              >
+                <span className="material-symbols-outlined text-[18px]">arrow_back</span> Retour à la connexion
               </Link>
             </div>
-          </form>
-        )}
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {error && (
+                <div className="bg-error-container text-on-error-container p-4 rounded-lg flex items-center gap-2 font-body-sm">
+                  <span className="material-symbols-outlined text-[18px]">error</span> {error}
+                </div>
+              )}
+              <div>
+                <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Email</label>
+                <input
+                  type="email"
+                  placeholder="votre@email.fr"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-secondary text-on-secondary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">send</span> Envoyer
+              </button>
+              <div className="text-center">
+                <Link to="/login" className="inline-flex items-center gap-1 text-body-sm text-secondary font-medium hover:underline no-underline">
+                  <span className="material-symbols-outlined text-[16px]">arrow_back</span> Retour à la connexion
+                </Link>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 
