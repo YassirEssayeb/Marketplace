@@ -13,9 +13,18 @@ const AdDetail = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [favorited, setFavorited] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
+  const [relatedAds, setRelatedAds] = useState([]);
 
   useEffect(() => {
-    api.get('/ads/' + id).then(r => setAd(r.data)).catch(() => navigate('/'));
+    window.scrollTo(0, 0);
+    api.get('/ads/' + id).then(r => {
+      setAd(r.data);
+      if (r.data.category_id) {
+        api.get('/ads?category=' + r.data.category_id + '&limit=4').then(r2 => {
+          setRelatedAds(r2.data.ads.filter(a => a.id !== parseInt(id)).slice(0, 4));
+        }).catch(() => {});
+      }
+    }).catch(() => navigate('/'));
   }, [id, navigate]);
 
   useEffect(() => {
@@ -25,11 +34,12 @@ const AdDetail = () => {
 
   const sendMessage = async () => {
     if (!user) return navigate('/login');
+    if (!msg.trim()) return;
     try {
       await api.post('/messages', { receiver_id: ad.user_id, content: msg, ad_id: ad.id });
       setMsg('');
       navigate('/messages');
-    } catch { alert('Erreur'); }
+    } catch { alert('Error sending message'); }
   };
 
   const toggleFavorite = async () => {
@@ -42,42 +52,77 @@ const AdDetail = () => {
         await api.post('/favorites/' + id);
         setFavorited(true);
       }
-    } catch { alert('Erreur'); }
+    } catch { alert('Error'); }
   };
 
   const deleteAd = async () => {
-    if (!window.confirm('Supprimer cette annonce ?')) return;
+    if (!window.confirm('Delete this listing?')) return;
     try {
       await api.delete('/ads/' + id);
       navigate('/my-ads');
-    } catch { alert('Erreur'); }
+    } catch { alert('Error'); }
   };
 
   const reportAd = async () => {
-    const reason = prompt('Motif du signalement :');
+    const reason = prompt('Report reason:');
     if (!reason) return;
     try {
       await api.post('/ads/' + id + '/report', { reason });
-      alert('Annonce signalée');
-    } catch { alert('Erreur'); }
+      alert('Listing reported');
+    } catch { alert('Error'); }
+  };
+
+  const timeAgo = (date) => {
+    const diff = Date.now() - new Date(date).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return mins + ' min ago';
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return hours + 'h ago';
+    const days = Math.floor(hours / 24);
+    if (days < 30) return days + 'd ago';
+    const months = Math.floor(days / 30);
+    return months + ' month' + (months > 1 ? 's' : '') + ' ago';
   };
 
   if (!ad) return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen flex flex-col items-center justify-center">
       <div className="w-10 h-10 border-4 border-surface-container-high border-t-secondary rounded-full animate-spin mb-4"></div>
-      <p className="text-on-surface-variant font-body-md">Chargement...</p>
+      <p className="text-on-surface-variant font-body-md">Loading...</p>
     </main>
   );
 
   const images = ad.images && ad.images.length > 0 ? ad.images : [];
+  const specs = [
+    { label: 'Category', value: ad.category_name || 'N/A', icon: 'category' },
+    { label: 'Condition', value: ad.status === 'active' ? 'Available' : ad.status === 'sold' ? 'Sold' : 'Archived', icon: 'check_circle' },
+    { label: 'Location', value: ad.location || 'N/A', icon: 'location_on' },
+    { label: 'Posted', value: timeAgo(ad.created_at), icon: 'schedule' },
+    { label: 'Updated', value: timeAgo(ad.updated_at), icon: 'update' },
+    { label: 'Seller', value: ad.user_name || 'Unknown', icon: 'person' },
+  ];
 
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-sm text-on-surface-variant mb-8">
+        <Link to="/" className="hover:text-primary no-underline text-on-surface-variant">Home</Link>
+        <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+        <Link to="/browse" className="hover:text-primary no-underline text-on-surface-variant">Browse</Link>
+        <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+        {ad.category_name && (
+          <>
+            <Link to={'/browse?category=' + ad.category_id} className="hover:text-primary no-underline text-on-surface-variant">{ad.category_name}</Link>
+            <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+          </>
+        )}
+        <span className="text-primary font-medium truncate max-w-[200px]">{ad.title}</span>
+      </nav>
+
       {/* Product Hero Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        {/* Left: Image Gallery (Bento Style) */}
-        <div className="lg:col-span-7 grid grid-cols-4 gap-4 h-[600px]">
-          <div className="col-span-4 row-span-3 rounded-xl overflow-hidden border border-outline-variant bg-white group cursor-zoom-in">
+        {/* Left: Image Gallery */}
+        <div className="lg:col-span-7">
+          <div className="rounded-2xl overflow-hidden border border-outline-variant bg-white group cursor-zoom-in h-[500px]">
             {images.length > 0 ? (
               <img
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -86,50 +131,61 @@ const AdDetail = () => {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <span className="material-symbols-outlined text-6xl text-outline">image</span>
+                <span className="material-symbols-outlined text-8xl text-outline">image</span>
               </div>
             )}
           </div>
-          {images.slice(0, 4).map((img, i) => (
-            <div
-              key={i}
-              onClick={() => setCurrentImage(i)}
-              className={`col-span-1 rounded-xl overflow-hidden border bg-white cursor-pointer hover:border-secondary transition-colors ${
-                i === currentImage ? 'border-secondary' : 'border-outline-variant'
-              }`}
-            >
-              <img className="w-full h-full object-cover" src={getImageUrl(img)} alt="" />
-            </div>
-          ))}
-          {images.length > 4 && (
-            <div className="col-span-1 rounded-xl overflow-hidden border border-outline-variant bg-white relative cursor-pointer group">
-              <img className="w-full h-full object-cover opacity-60" src={getImageUrl(images[4])} alt="" />
-              <div className="absolute inset-0 flex items-center justify-center font-bold text-primary">+{images.length - 4}</div>
+          {images.length > 1 && (
+            <div className="flex gap-3 mt-4 overflow-x-auto pb-2">
+              {images.map((img, i) => (
+                <div
+                  key={i}
+                  onClick={() => setCurrentImage(i)}
+                  className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${
+                    i === currentImage ? 'border-secondary shadow-md scale-105' : 'border-outline-variant hover:border-secondary/50'
+                  }`}
+                >
+                  <img className="w-full h-full object-cover" src={getImageUrl(img)} alt="" />
+                </div>
+              ))}
             </div>
           )}
         </div>
 
-        {/* Right: Purchase Details */}
+        {/* Right: Product Details */}
         <div className="lg:col-span-5 flex flex-col gap-6 sticky top-24">
-          {/* Title & Rating */}
+          {/* Title & Status */}
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-3">
               <span className="bg-surface-container px-3 py-1 rounded-full text-label-sm font-label-sm text-on-surface-variant border border-outline-variant">
-                {ad.category_name || 'Annonce'}
+                {ad.category_name || 'Listing'}
               </span>
-              <span className="text-secondary font-bold text-label-sm flex items-center gap-1">
-                <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span> 4.9 ({ad.reviews || 124} avis)
+              <span className={`px-3 py-1 rounded-full text-label-sm font-label-sm font-bold ${
+                ad.status === 'active' ? 'bg-green-50 text-green-700 border border-green-200' :
+                ad.status === 'sold' ? 'bg-red-50 text-red-700 border border-red-200' :
+                'bg-gray-50 text-gray-700 border border-gray-200'
+              }`}>
+                {ad.status === 'active' ? 'Available' : ad.status === 'sold' ? 'Sold' : 'Archived'}
               </span>
             </div>
-            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">{ad.title}</h1>
-            <p className="text-on-surface-variant font-body-md text-body-md leading-relaxed">{ad.description || 'Aucune description fournie.'}</p>
+            <h1 className="font-headline-lg text-headline-lg text-primary mb-3">{ad.title}</h1>
+            <div className="flex items-center gap-4 text-sm text-on-surface-variant">
+              <span className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px]">schedule</span>
+                {timeAgo(ad.created_at)}
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px]">location_on</span>
+                {ad.location || 'Morocco'}
+              </span>
+            </div>
           </div>
 
           {/* Price Card */}
           <div className="bg-white p-6 rounded-xl border border-outline-variant shadow-sm">
             <div className="flex items-baseline gap-2 mb-6">
               <span className="text-display-lg font-display-lg text-primary">
-                {ad.price ? (typeof ad.price === 'number' ? ad.price.toLocaleString('fr-FR') + ' €' : ad.price) : 'Prix N/S'}
+                {ad.price ? (typeof ad.price === 'number' ? ad.price.toLocaleString('en-US') + ' $' : ad.price) : 'Price N/A'}
               </span>
             </div>
 
@@ -138,14 +194,14 @@ const AdDetail = () => {
                 <>
                   <button
                     onClick={sendMessage}
-                    className="w-full bg-white border border-outline-variant text-primary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:bg-surface-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer"
+                    className="w-full bg-secondary text-white py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer border-none"
                   >
-                    <span className="material-symbols-outlined text-[20px]">chat</span> Envoyer un message
+                    <span className="material-symbols-outlined text-[20px]">chat</span> Send message
                   </button>
                   <textarea
                     value={msg}
                     onChange={e => setMsg(e.target.value)}
-                    placeholder="Écrivez votre message au vendeur..."
+                    placeholder="Write your message to the seller..."
                     rows="3"
                     className="w-full px-4 py-3 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none resize-none"
                   />
@@ -155,30 +211,21 @@ const AdDetail = () => {
                   to="/login"
                   className="w-full bg-secondary text-white py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 no-underline text-center"
                 >
-                  <span className="material-symbols-outlined text-[20px]">login</span> Se connecter pour contacter
+                  <span className="material-symbols-outlined text-[20px]">login</span> Log in to contact
                 </Link>
               ) : null}
             </div>
 
-            {/* Shipping Info */}
+            {/* Quick Info */}
             <div className="mt-6 pt-6 border-t border-outline-variant grid gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
-                  <span className="material-symbols-outlined">local_shipping</span>
-                </div>
-                <div>
-                  <p className="text-label-sm font-bold">Livraison gratuite</p>
-                  <p className="text-[10px] text-on-surface-variant">Expédié en 2-3 jours</p>
-                </div>
-              </div>
               {ad.location && (
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
                     <span className="material-symbols-outlined">location_on</span>
                   </div>
                   <div>
-                    <p className="text-label-sm font-bold">Localisation</p>
-                    <p className="text-[10px] text-on-surface-variant">{ad.location}</p>
+                    <p className="text-label-sm font-bold">Location</p>
+                    <p className="text-xs text-on-surface-variant">{ad.location}</p>
                   </div>
                 </div>
               )}
@@ -187,10 +234,30 @@ const AdDetail = () => {
                   <span className="material-symbols-outlined">calendar_today</span>
                 </div>
                 <div>
-                  <p className="text-label-sm font-bold">Publiée le</p>
-                  <p className="text-[10px] text-on-surface-variant">{new Date(ad.created_at).toLocaleDateString('fr-FR')}</p>
+                  <p className="text-label-sm font-bold">Posted on</p>
+                  <p className="text-xs text-on-surface-variant">{new Date(ad.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 </div>
               </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+                  <span className="material-symbols-outlined">person</span>
+                </div>
+                <div>
+                  <p className="text-label-sm font-bold">Seller</p>
+                  <p className="text-xs text-on-surface-variant">{ad.user_name}</p>
+                </div>
+              </div>
+              {ad.user_phone && (
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+                    <span className="material-symbols-outlined">phone</span>
+                  </div>
+                  <div>
+                    <p className="text-label-sm font-bold">Phone</p>
+                    <p className="text-xs text-on-surface-variant">{ad.user_phone}</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Owner actions */}
@@ -200,13 +267,13 @@ const AdDetail = () => {
                   to={'/ads/' + ad.id + '/edit'}
                   className="flex-1 bg-surface-container border border-outline-variant text-primary py-3 rounded-lg font-label-md text-label-md font-bold hover:bg-surface-container-high transition-all flex items-center justify-center gap-2 no-underline text-center"
                 >
-                  <span className="material-symbols-outlined text-[18px]">edit</span> Modifier
+                  <span className="material-symbols-outlined text-[18px]">edit</span> Edit
                 </Link>
                 <button
                   onClick={deleteAd}
                   className="flex-1 bg-error-container border border-error-container text-on-error-container py-3 rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer border-none"
                 >
-                  <span className="material-symbols-outlined text-[18px]">delete</span> Supprimer
+                  <span className="material-symbols-outlined text-[18px]">delete</span> Delete
                 </button>
               </div>
             )}
@@ -225,7 +292,7 @@ const AdDetail = () => {
                   <span className="material-symbols-outlined text-[18px]" style={favorited ? { fontVariationSettings: "'FILL' 1" } : {}}>
                     {favorited ? 'favorite' : 'favorite_border'}
                   </span>
-                  {favorited ? 'En favori' : 'Ajouter aux favoris'}
+                  {favorited ? 'Favorited' : 'Add to favorites'}
                 </button>
               )}
               {user && user.id !== ad.user_id && (
@@ -241,10 +308,10 @@ const AdDetail = () => {
         </div>
       </div>
 
-      {/* Description & Seller Tabs */}
+      {/* Tabs Section */}
       <div className="mt-20">
         <div className="flex gap-10 border-b border-outline-variant mb-8">
-          {['description', 'specifications', 'reviews'].map(tab => (
+          {['description', 'specifications', 'seller'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -255,141 +322,123 @@ const AdDetail = () => {
               }`}
             >
               {tab === 'description' && 'Description'}
-              {tab === 'specifications' && 'Spécifications'}
-              {tab === 'reviews' && `Avis (${ad.reviews || 124})`}
+              {tab === 'specifications' && 'Specifications'}
+              {tab === 'seller' && 'About the Seller'}
             </button>
           ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Description Content */}
           <div className="lg:col-span-8 space-y-6">
+            {/* Description Tab */}
             {activeTab === 'description' && (
-              <div className="prose max-w-none text-on-surface-variant font-body-md text-body-md">
-                <p>{ad.description || 'Aucune description fournie.'}</p>
-                <ul className="list-disc pl-5 mt-4 space-y-2">
-                  <li>Matériaux de haute qualité pour une durabilité optimale.</li>
-                  <li>Design professionnel adapté aux exigences du marché.</li>
-                  <li>Garantie fabricant incluse.</li>
-                  <li>Expédition sécurisée avec suivi en temps réel.</li>
-                </ul>
+              <div className="text-on-surface-variant font-body-md text-body-md leading-relaxed whitespace-pre-wrap">
+                {ad.description || 'No description provided.'}
               </div>
             )}
+
+            {/* Specifications Tab */}
             {activeTab === 'specifications' && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-surface-container-low rounded-lg">
-                    <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">État</p>
-                    <p className="font-bold text-primary">Neuf</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {specs.map((s, i) => (
+                  <div key={i} className="p-4 bg-surface-container-low rounded-xl border border-outline-variant/50">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="material-symbols-outlined text-[18px] text-secondary">{s.icon}</span>
+                      <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">{s.label}</p>
+                    </div>
+                    <p className="font-bold text-primary">{s.value}</p>
                   </div>
-                  <div className="p-4 bg-surface-container-low rounded-lg">
-                    <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Catégorie</p>
-                    <p className="font-bold text-primary">{ad.category_name || 'N/A'}</p>
+                ))}
+                <div className="p-4 bg-surface-container-low rounded-xl border border-outline-variant/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="material-symbols-outlined text-[18px] text-secondary">tag</span>
+                    <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">Listing ID</p>
                   </div>
-                  <div className="p-4 bg-surface-container-low rounded-lg">
-                    <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Localisation</p>
-                    <p className="font-bold text-primary">{ad.location || 'N/A'}</p>
+                  <p className="font-bold text-primary">#{ad.id}</p>
+                </div>
+                <div className="p-4 bg-surface-container-low rounded-xl border border-outline-variant/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="material-symbols-outlined text-[18px] text-secondary">sell</span>
+                    <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">Price</p>
                   </div>
-                  <div className="p-4 bg-surface-container-low rounded-lg">
-                    <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Publiée le</p>
-                    <p className="font-bold text-primary">{new Date(ad.created_at).toLocaleDateString('fr-FR')}</p>
-                  </div>
+                  <p className="font-bold text-primary">{ad.price ? ad.price.toLocaleString('en-US') + ' $' : 'N/A'}</p>
                 </div>
               </div>
             )}
-            {activeTab === 'reviews' && (
-              <div className="space-y-4">
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-outline-variant/50">
-                  <div className="flex text-secondary mb-1">
-                    {[1,2,3,4,5].map(s => (
-                      <span key={s} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    ))}
+
+            {/* Seller Tab */}
+            {activeTab === 'seller' && (
+              <div className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant">
+                <div className="flex items-center gap-6 mb-6">
+                  <div className="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center border-2 border-secondary">
+                    <span className="material-symbols-outlined text-4xl text-on-surface-variant">person</span>
                   </div>
-                  <p className="text-xs italic text-on-surface-variant">"Transaction fluide et produit de qualité exceptionnelle. Je recommande vivement ce vendeur."</p>
-                  <p className="text-[10px] mt-2 font-bold">— Marc V., Acheteur vérifié</p>
+                  <div>
+                    <h3 className="font-headline-md text-headline-md text-primary">{ad.user_name}</h3>
+                    <p className="text-sm text-on-surface-variant">Member since {new Date(ad.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
+                    {ad.user_city && (
+                      <p className="text-sm text-on-surface-variant flex items-center gap-1 mt-1">
+                        <span className="material-symbols-outlined text-[14px]">location_on</span>
+                        {ad.user_city}
+                      </p>
+                    )}
+                  </div>
                 </div>
+                <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
+                  Verified seller on ProMarket. All listings are genuine and as described.
+                </p>
+                {user && user.id !== ad.user_id && (
+                  <Link
+                    to={`/messages?user=${ad.user_id}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 border border-secondary text-secondary rounded-lg font-bold text-sm hover:bg-secondary hover:text-white transition-all no-underline"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">chat</span> Contact Seller
+                  </Link>
+                )}
               </div>
             )}
           </div>
+        </div>
+      </div>
 
-          {/* About the Seller Section */}
-          <div className="lg:col-span-4 bg-surface-container-low p-8 rounded-2xl border border-outline-variant">
-            <h3 className="font-headline-sm text-headline-sm text-primary mb-6">À propos du vendeur</h3>
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center">
-                <span className="material-symbols-outlined text-3xl text-on-surface-variant">person</span>
-              </div>
-              <div>
-                <p className="font-bold text-lg text-primary">{ad.user_name}</p>
-                <p className="text-sm text-on-surface-variant">Membre depuis {new Date(ad.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long' })}</p>
-              </div>
+      {/* Related Products */}
+      {relatedAds.length > 0 && (
+        <div className="mt-24">
+          <div className="flex justify-between items-end mb-8">
+            <div>
+              <h2 className="font-headline-lg text-headline-lg text-primary mb-2">Related Products</h2>
+              <p className="text-on-surface-variant font-body-md">More from {ad.category_name || 'this category'}</p>
             </div>
-            <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
-              Vendeur spécialisé dans les produits de haute qualité. Chaque article est vérifié avant la mise en vente.
-            </p>
-            <div className="space-y-4">
-              <p className="font-bold text-sm uppercase tracking-wider text-primary">Avis récents</p>
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-outline-variant/50">
-                <div className="flex text-secondary mb-1">
-                  {[1,2,3,4,5].map(s => (
-                    <span key={s} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                  ))}
-                </div>
-                <p className="text-xs italic text-on-surface-variant">"Excellent vendeur, livraison rapide et produit conforme."</p>
-                <p className="text-[10px] mt-2 font-bold">— Sophie T., Vérifié</p>
-              </div>
-            </div>
-            {user && user.id !== ad.user_id && (
+            <Link to={'/browse?category=' + ad.category_id} className="text-secondary font-bold hover:underline flex items-center gap-1 no-underline">
+              View all <span className="material-symbols-outlined">chevron_right</span>
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {relatedAds.map((item) => (
               <Link
-                to={`/messages?user=${ad.user_id}`}
-                className="w-full mt-6 py-2 border border-secondary text-secondary rounded-lg font-bold text-sm hover:bg-secondary hover:text-white transition-all flex items-center justify-center gap-2 no-underline text-center"
+                key={item.id}
+                to={'/ads/' + item.id}
+                className="group bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 no-underline"
               >
-                <span className="material-symbols-outlined text-[16px]">chat</span> Voir le profil
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    src={item.images && item.images[0] ? getImageUrl(item.images[0]) : ''}
+                    alt={item.title}
+                  />
+                </div>
+                <div className="p-4">
+                  <p className="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-1">{item.category_name}</p>
+                  <h4 className="font-bold text-primary mb-2 truncate">{item.title}</h4>
+                  <span className="text-lg font-bold text-primary">
+                    {item.price ? item.price.toLocaleString('en-US') + ' $' : 'N/A'}
+                  </span>
+                </div>
               </Link>
-            )}
+            ))}
           </div>
         </div>
-      </div>
-
-      {/* Related Products Grid */}
-      <div className="mt-24">
-        <div className="flex justify-between items-end mb-8">
-          <div>
-            <h2 className="font-headline-lg text-headline-lg text-primary mb-2">Produits similaires</h2>
-            <p className="text-on-surface-variant font-body-md">Sélections de notre catalogue professionnel</p>
-          </div>
-          <Link to="/browse" className="text-secondary font-bold hover:underline flex items-center gap-1">
-            Tout voir <span className="material-symbols-outlined">chevron_right</span>
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { title: 'Moniteurs Studio Pro 500', category: 'Audio', price: '1 299 €', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCDA8fTJnLBDhow9aPEzyBUwa5e0cfJncQNg8EPVGu_L7NMw3dKhXOqtJ6ZgMevjijK1XnHUsDygAR4qgFI0t2qdXKIpHp2ectGWUdqT65cNUvqZgybpdTVB-ykp3ANikqk-lCgy3gb5UAHaFYr9_qS4X8L6yVxipJIBDtNg1ltUSdIGc6HHXCfpr6vD-WZgUMJk2Ay4rTP3Ll-oGkhIpUQZ9iDe1_XoyqJG3_p6TM-ZC-9dA8K' },
-            { title: 'Écran Courbe 49"', category: 'Écrans', price: '1 850 €', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA1LM6h_MTmBaTaYN5UfjpKTVyoVG6jvs2eyw84QdrFijMWhG7O0Nk7OlYsttk1mFi-eniZPaGsu0xGT_x4p013Mv7YCYuaRvmHp-gQ7CdASfiW8gZ7ZAw8w6_VvMeDTgJAG6RpDwRJL0-dRPgQLNkn4f25E-HdCgdtQxmq1SGOE8u1BJs0SMZaRg7ghrz_N75LiquALSbm_si1TPIUJ-rnXx86XnywN-3KsNWakbnvesMk0Vt7' },
-            { title: 'Clavier Mécanique Prime', category: 'Périphériques', price: '249 €', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBBVQFJ1zkpPiIHkLYsJa7b8TiacGchJYKuAsUEpnjYfxgXfh_i-GY39SIusdKQdmJxydYeArvl8Bl_w9zqfES4b5cNQrIl2OnUc812sDQ3TKGiyeGpQ_Z4133lowpxlRLmR1bC4JGfqD23Ayli3NIZw8u-AoQQyk0ktG4ziHdsleJHY8ewSnXCyGgOFEqqCUAo2trSk-Mmgy5ICNpiVf8ldGJ7Z48SG_mTIv6SfEmqelK7QvKp' },
-            { title: 'Serveur Cloud 8 To', category: 'Entreprise', price: '2 400 €', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDkzFFKt7X9Cb3gXuCjIuiMy56Tz_BBvmCpG-gDpTqUfz6mnV6mksOmjfQw0-lymsJbzO2AAKYIgPtZmPoUMenolXTMCk5BQGvMVFQCEQ_p2ENnPWc-CcAVo8leFpdz6iOZsNOsgfZCsKqIJX_gik8toqGHbD-Stqjb-MvnpAx5nQF4hDj8S8Sjrsx-DWNAr7GeWMGSo_Rh_lb-rA5oU2o8FsSeVD8BRsOblBU3KTkei8Oe2mJl' },
-          ].map((item, i) => (
-            <div key={i} className="group bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300">
-              <div className="relative h-64 overflow-hidden">
-                <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={item.img} alt={item.title} />
-                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-2 py-1 rounded-md">
-                  <span className="material-symbols-outlined text-primary text-[20px]">favorite</span>
-                </div>
-              </div>
-              <div className="p-4">
-                <p className="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-1">{item.category}</p>
-                <h4 className="font-bold text-primary mb-2 truncate">{item.title}</h4>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold text-primary">{item.price}</span>
-                  <button className="p-2 rounded-full hover:bg-surface-container transition-colors bg-transparent border-none cursor-pointer">
-                    <span className="material-symbols-outlined text-secondary">add_shopping_cart</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
     </main>
   );
 };

@@ -55,7 +55,7 @@ exports.login = async (req, res) => {
 
 exports.me = async (req, res) => {
   try {
-    const [users] = await pool.query('SELECT id, name, email, phone, city, is_admin, created_at FROM users WHERE id = ?', [req.user.id]);
+    const [users] = await pool.query('SELECT id, name, email, phone, city, is_admin, created_at, avatar_url, headline, bio FROM users WHERE id = ?', [req.user.id]);
     if (users.length === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
     res.json(users[0]);
   } catch {
@@ -65,9 +65,20 @@ exports.me = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const { name, phone, city } = req.body;
-    await pool.query('UPDATE users SET name = ?, phone = ?, city = ? WHERE id = ?', [name, phone || null, city || null, req.user.id]);
-    const [users] = await pool.query('SELECT id, name, email, phone, city, created_at FROM users WHERE id = ?', [req.user.id]);
+    const { name, phone, city, headline, bio, avatar_url } = req.body;
+    const fields = [];
+    const values = [];
+    if (name !== undefined) { fields.push('name = ?'); values.push(name); }
+    if (phone !== undefined) { fields.push('phone = ?'); values.push(phone || null); }
+    if (city !== undefined) { fields.push('city = ?'); values.push(city || null); }
+    if (headline !== undefined) { fields.push('headline = ?'); values.push(headline || null); }
+    if (bio !== undefined) { fields.push('bio = ?'); values.push(bio || null); }
+    if (avatar_url !== undefined) { fields.push('avatar_url = ?'); values.push(avatar_url || null); }
+    if (fields.length > 0) {
+      values.push(req.user.id);
+      await pool.query(`UPDATE users SET ${fields.join(', ')} WHERE id = ?`, values);
+    }
+    const [users] = await pool.query('SELECT id, name, email, phone, city, is_admin, created_at, avatar_url, headline, bio FROM users WHERE id = ?', [req.user.id]);
     res.json(users[0]);
   } catch {
     res.status(500).json({ error: 'Erreur serveur' });

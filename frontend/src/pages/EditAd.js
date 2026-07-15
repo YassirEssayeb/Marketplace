@@ -54,23 +54,23 @@ const EditAd = () => {
       });
       navigate('/my-ads');
     } catch (err) {
-      alert(err.response?.data?.error || 'Erreur');
+      alert(err.response?.data?.error || 'Error');
     } finally { setUploading(false); }
   };
 
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
       <div className="max-w-2xl mx-auto">
-        <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Modifier l'annonce</h1>
-        <p className="font-body-md text-on-surface-variant mb-8">Mettez à jour les informations de votre annonce.</p>
+        <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Edit listing</h1>
+        <p className="font-body-md text-on-surface-variant mb-8">Update your listing information.</p>
 
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl border border-outline-variant space-y-6">
           {/* Title */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Titre</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Title</label>
             <input
               name="title"
-              placeholder="Titre"
+              placeholder="Title"
               value={form.title}
               onChange={handleChange}
               required
@@ -94,26 +94,26 @@ const EditAd = () => {
           {/* Price & Category */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Prix (€)</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Price ($)</label>
               <input
                 name="price"
                 type="number"
                 step="0.01"
-                placeholder="Prix"
+                placeholder="Price"
                 value={form.price}
                 onChange={handleChange}
                 className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
               />
             </div>
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Catégorie</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Category</label>
               <select
                 name="category_id"
                 value={form.category_id}
                 onChange={handleChange}
                 className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none bg-white cursor-pointer"
               >
-                <option value="">Catégorie</option>
+                <option value="">Category</option>
                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
@@ -121,10 +121,10 @@ const EditAd = () => {
 
           {/* Location */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Localisation</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Location</label>
             <input
               name="location"
-              placeholder="Localisation"
+              placeholder="Location"
               value={form.location}
               onChange={handleChange}
               className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
@@ -133,7 +133,7 @@ const EditAd = () => {
 
           {/* Images */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Images (max 10, 5Mo chacune)</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Images (max 10, 5MB each)</label>
             {existingImages.length > 0 && (
               <div className="flex gap-2 mb-3 flex-wrap">
                 {existingImages.map((url, i) => (
@@ -153,8 +153,8 @@ const EditAd = () => {
               className="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center cursor-pointer hover:border-secondary transition-colors bg-surface-container-low"
             >
               <span className="material-symbols-outlined text-5xl text-outline mb-2 block">add_a_photo</span>
-              <p className="font-body-md font-semibold text-on-surface mb-1">Cliquez pour ajouter des images</p>
-              <p className="font-body-sm text-on-surface-variant">JPG, PNG, GIF, WebP — jusqu'à 10 fichiers</p>
+              <p className="font-body-md font-semibold text-on-surface mb-1">Click to add images</p>
+              <p className="font-body-sm text-on-surface-variant">JPG, PNG, GIF, WebP — up to 10 files</p>
             </div>
             <input id="file-input-edit" type="file" accept="image/*" multiple onChange={handleFiles} style={{ display: 'none' }} />
             {previews.length > 0 && (
@@ -175,11 +175,11 @@ const EditAd = () => {
             {uploading ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Enregistrement...
+                Saving...
               </>
             ) : (
               <>
-                <span className="material-symbols-outlined text-[20px]">save</span> Enregistrer les modifications
+                <span className="material-symbols-outlined text-[20px]">save</span> Save changes
               </>
             )}
           </button>

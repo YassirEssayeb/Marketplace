@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
 
@@ -67,19 +67,35 @@ const Browse = () => {
 
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
+      {/* Inline Search Bar */}
+      <div className="mb-8">
+        <div className="flex items-center bg-white border border-outline-variant rounded-xl px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-secondary/20 transition-all h-14">
+          <span className="material-symbols-outlined text-outline mr-3">search</span>
+          <input
+            type="text"
+            value={searchInput}
+            onChange={e => setSearchInput(e.target.value)}
+            placeholder="Search for professional gear..."
+            className="bg-transparent border-none focus:ring-0 text-body-md font-body-md w-full outline-none"
+          />
+          {searchInput && (
+            <button onClick={() => setSearchInput('')} className="material-symbols-outlined text-outline hover:text-primary transition-colors bg-transparent border-none cursor-pointer">close</button>
+          )}
+        </div>
+      </div>
       <div className="flex flex-col md:flex-row gap-gutter">
         {/* Sidebar Filters */}
         <aside className="w-full md:w-64 flex-shrink-0 space-y-stack-lg">
           <div className="flex items-center justify-between">
-            <h2 className="font-headline-sm text-headline-sm text-primary">Filtres</h2>
+            <h2 className="font-headline-sm text-headline-sm text-primary">Filters</h2>
             {hasActiveFilters && (
-              <button onClick={clearFilters} className="text-label-sm text-secondary hover:underline border-none bg-transparent cursor-pointer">Réinitialiser</button>
+              <button onClick={clearFilters} className="text-label-sm text-secondary hover:underline border-none bg-transparent cursor-pointer">Reset</button>
             )}
           </div>
 
           {/* Category */}
           <section>
-            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Catégorie</h3>
+            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Category</h3>
             <div className="space-y-2">
               <label className="flex items-center gap-3 cursor-pointer group">
                 <input
@@ -89,7 +105,7 @@ const Browse = () => {
                   onChange={() => handleFilter('category', '')}
                   className="w-5 h-5 border-outline-variant rounded text-secondary focus:ring-secondary/20"
                 />
-                <span className="font-body-sm text-on-surface group-hover:text-secondary transition-colors">Toutes</span>
+                <span className="font-body-sm text-on-surface group-hover:text-secondary transition-colors">All</span>
               </label>
               {categories.map(c => (
                 <label key={c.id} className="flex items-center gap-3 cursor-pointer group">
@@ -110,7 +126,7 @@ const Browse = () => {
 
           {/* Price Range */}
           <section>
-            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Gamme de prix</h3>
+            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Price range</h3>
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <input
@@ -120,7 +136,7 @@ const Browse = () => {
                   onChange={e => handleFilter('minPrice', e.target.value)}
                   className="w-full h-10 px-3 border border-outline-variant rounded-lg font-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none"
                 />
-                <span className="text-outline">à</span>
+                <span className="text-outline">to</span>
                 <input
                   type="number"
                   placeholder="Max"
@@ -143,7 +159,7 @@ const Browse = () => {
           <section>
             <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">État</h3>
             <div className="flex flex-wrap gap-2">
-              {['Neuf', 'Reconditionné', 'Occasion'].map(c => (
+              {['New', 'Refurbished', 'Used'].map(c => (
                 <button
                   key={c}
                   onClick={() => setConditionFilter(c)}
@@ -163,7 +179,7 @@ const Browse = () => {
 
           {/* Rating */}
           <section>
-            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Note vendeur</h3>
+            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Seller rating</h3>
             <div className="space-y-2">
               <button className="flex items-center gap-2 group w-full text-left bg-transparent border-none cursor-pointer">
                 <div className="flex text-amber-500">
@@ -172,7 +188,7 @@ const Browse = () => {
                   ))}
                   <span className="material-symbols-outlined text-[18px]">star</span>
                 </div>
-                <span className="font-body-sm text-on-surface-variant group-hover:text-primary">& Plus</span>
+                <span className="font-body-sm text-on-surface-variant group-hover:text-primary">& Up</span>
               </button>
             </div>
           </section>
@@ -183,21 +199,21 @@ const Browse = () => {
           {/* Sorting & Top Bar */}
           <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 border border-outline-variant rounded-xl gap-4">
             <p className="text-on-surface-variant font-body-sm">
-              {loading ? 'Chargement...' : (
-                <>Affichage <span className="font-bold text-primary">1-{Math.min(12, pagination.total || displayProducts.length)}</span> sur {pagination.total || displayProducts.length} produits</>
+              {loading ? 'Loading...' : (
+                <>Showing <span className="font-bold text-primary">1-{Math.min(12, pagination.total || displayProducts.length)}</span> of {pagination.total || displayProducts.length} products</>
               )}
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-label-md text-on-surface-variant">Trier par :</span>
+              <span className="text-label-md text-on-surface-variant">Sort by:</span>
               <select
                 value={filters.sort}
                 onChange={e => handleFilter('sort', e.target.value)}
                 className="bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 font-label-md text-label-md outline-none focus:border-secondary transition-all cursor-pointer"
               >
-                <option value="date_desc">En vedette</option>
-                <option value="price_asc">Prix : croissant</option>
-                <option value="price_desc">Prix : décroissant</option>
-                <option value="date_asc">Nouvelles arrivées</option>
+                <option value="date_desc">Featured</option>
+                <option value="price_asc">Price: low to high</option>
+                <option value="price_desc">Price: high to low</option>
+                <option value="date_asc">Newest first</option>
               </select>
             </div>
           </div>
@@ -210,13 +226,13 @@ const Browse = () => {
           ) : displayProducts.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <span className="material-symbols-outlined text-6xl text-outline mb-4">search_off</span>
-              <p className="font-headline-sm text-headline-sm text-primary mb-2">Aucune annonce trouvée</p>
-              <p className="font-body-md text-on-surface-variant">Essayez de modifier vos filtres ou d'élargir votre recherche.</p>
+              <p className="font-headline-sm text-headline-sm text-primary mb-2">No listings found</p>
+              <p className="font-body-md text-on-surface-variant">Try adjusting your filters or broadening your search.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {displayProducts.map((ad, i) => (
-                <div key={ad.id || i} className="group bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <Link key={ad.id || i} to={`/ads/${ad.id}`} className="group bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 no-underline text-left block">
                   <div className="relative aspect-[4/3] overflow-hidden bg-surface-container">
                     {ad.img || (ad.images && ad.images.length > 0) ? (
                       <img
@@ -236,7 +252,7 @@ const Browse = () => {
                       }`}>{ad.badge}</div>
                     )}
                     {ad.status === 'sold' && (
-                      <div className="absolute top-3 left-3 bg-error text-white px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Vendu</div>
+                      <div className="absolute top-3 left-3 bg-error text-white px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Sold</div>
                     )}
                     <button className="absolute top-3 right-3 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors border-none cursor-pointer">
                       <span className="material-symbols-outlined">favorite</span>
@@ -249,7 +265,7 @@ const Browse = () => {
                         <p className="text-label-sm text-on-surface-variant">{ad.category_name || ''}{ad.subcategory ? ` • ${ad.subcategory}` : ''}{ad.location ? ` • ${ad.location}` : ''}</p>
                       </div>
                       <span className="font-headline-sm text-headline-sm text-primary ml-3 whitespace-nowrap">
-                        {ad.price ? (typeof ad.price === 'number' ? '$' + ad.price.toLocaleString() : ad.price) : 'Prix N/S'}
+                        {ad.price ? (typeof ad.price === 'number' ? '$' + ad.price.toLocaleString() : ad.price) : 'Price N/A'}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -263,10 +279,10 @@ const Browse = () => {
                       <span className="text-label-sm text-secondary font-bold">{ad.sellerBadge || ''}</span>
                     </div>
                     <button className="w-full bg-primary text-white py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-primary/90 transition-all active:scale-95 border-none cursor-pointer">
-                      <span className="material-symbols-outlined text-[20px]">chat</span> Envoyer un message
+                      <span className="material-symbols-outlined text-[20px]">chat</span> Send message
                     </button>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}

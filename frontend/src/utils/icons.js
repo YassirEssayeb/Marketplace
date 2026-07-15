@@ -23,7 +23,7 @@ export const LogoIcon = ({ size = 32, ...props }) => (
 export const Logo = ({ size = 32, showText = true }) => (
   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
     <LogoIcon size={size} />
-    {showText && <span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: size > 28 ? '1.25rem' : '1rem', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Marché aux Annonces</span>}
+    {showText && <span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: size > 28 ? '1.25rem' : '1rem', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Marketplace</span>}
   </span>
 );
 

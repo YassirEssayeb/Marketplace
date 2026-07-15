@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname))
 });
 
-const upload = multer({
+const imageUpload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
@@ -20,8 +20,19 @@ const upload = multer({
   }
 });
 
+const fileUpload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = /jpeg|jpg|png|gif|webp|avif|heic|heif|jfif|pdf|doc|docx|txt|zip|rar|mp3|mp4|wav/;
+    const ext = allowed.test(path.extname(file.originalname).toLowerCase());
+    if (!ext) cb(new Error('Format non supporté'));
+    else cb(null, true);
+  }
+});
+
 router.post('/', auth, (req, res) => {
-  upload.array('images', 10)(req, res, (err) => {
+  imageUpload.array('images', 10)(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ error: 'Fichier trop volumineux (max 5Mo)' });
       if (err.code === 'LIMIT_UNEXPECTED_FILE') return res.status(400).json({ error: 'Trop de fichiers (max 10)' });
@@ -31,6 +42,21 @@ router.post('/', auth, (req, res) => {
       const base = req.protocol + '://' + req.get('host');
       const urls = req.files.map(f => base + '/uploads/' + f.filename);
       res.json({ urls });
+    } catch {
+      res.status(500).json({ error: 'Erreur serveur' });
+    }
+  });
+});
+
+router.post('/file', auth, (req, res) => {
+  fileUpload.single('file')(req, res, (err) => {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ error: 'Fichier trop volumineux (max 10Mo)' });
+      return res.status(400).json({ error: err.message || 'Erreur upload' });
+    }
+    try {
+      const base = req.protocol + '://' + req.get('host');
+      res.json({ url: base + '/uploads/' + req.file.filename, name: req.file.originalname });
     } catch {
       res.status(500).json({ error: 'Erreur serveur' });
     }

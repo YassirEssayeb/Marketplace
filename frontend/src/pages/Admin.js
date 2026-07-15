@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 
 const TABS = ['stats', 'users', 'ads', 'reports', 'categories'];
-const TAB_LABELS = { stats: 'Statistiques', users: 'Utilisateurs', ads: 'Annonces', reports: 'Signalements', categories: 'Catégories' };
+const TAB_LABELS = { stats: 'Statistics', users: 'Users', ads: 'Listings', reports: 'Reports', categories: 'Categories' };
 const TAB_ICONS = { stats: 'analytics', users: 'people', ads: 'inventory_2', reports: 'flag', categories: 'category' };
 
 const Admin = () => {
@@ -38,9 +38,9 @@ const Admin = () => {
   }, [tab]);
 
   const toggleAdmin = async (id, is_admin) => { await api.put('/admin/users/' + id, { is_admin: !is_admin }); loadUsers(); };
-  const deleteUser = async (id) => { if (!window.confirm('Supprimer cet utilisateur ?')) return; await api.delete('/admin/users/' + id); loadUsers(); };
+  const deleteUser = async (id) => { if (!window.confirm('Delete this user?')) return; await api.delete('/admin/users/' + id); loadUsers(); };
   const updateAdStatus = async (id, status) => { await api.put('/admin/ads/' + id, { status }); loadAds(); };
-  const deleteAd = async (id) => { if (!window.confirm('Supprimer cette annonce ?')) return; await api.delete('/admin/ads/' + id); loadAds(); };
+  const deleteAd = async (id) => { if (!window.confirm('Delete this listing?')) return; await api.delete('/admin/ads/' + id); loadAds(); };
   const deleteReport = async (id) => { await api.delete('/admin/reports/' + id); loadReports(); };
 
   const addCategory = async () => {
@@ -57,7 +57,7 @@ const Admin = () => {
   };
 
   const deleteCategory = async (id) => {
-    if (!window.confirm('Supprimer cette catégorie ?')) return;
+    if (!window.confirm('Delete this category?')) return;
     await api.delete('/admin/categories/' + id);
     loadCategories();
   };
@@ -65,7 +65,7 @@ const Admin = () => {
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
       <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Administration</h1>
-      <p className="font-body-md text-on-surface-variant mb-8">Gérez votre plateforme.</p>
+      <p className="font-body-md text-on-surface-variant mb-8">Manage your platform.</p>
 
       {/* Tabs */}
       <div className="flex gap-2 mb-8 flex-wrap">
@@ -89,10 +89,10 @@ const Admin = () => {
       {tab === 'stats' && stats && (
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
-            { label: 'Utilisateurs', value: stats.users, icon: 'people' },
-            { label: 'Annonces', value: stats.ads, icon: 'inventory_2' },
-            { label: 'Actives', value: stats.active, icon: 'check_circle' },
-            { label: 'Signalements', value: stats.reports, icon: 'flag' },
+            { label: 'Users', value: stats.users, icon: 'people' },
+            { label: 'Listings', value: stats.ads, icon: 'inventory_2' },
+            { label: 'Active', value: stats.active, icon: 'check_circle' },
+            { label: 'Reports', value: stats.reports, icon: 'flag' },
             { label: 'Messages', value: stats.messages, icon: 'chat' },
           ].map(s => (
             <div key={s.label} className="bg-white p-6 rounded-xl border border-outline-variant text-center">
@@ -111,9 +111,9 @@ const Admin = () => {
             <thead>
               <tr className="border-b border-outline-variant bg-surface-container-low">
                 <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ID</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Nom</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Name</th>
                 <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Email</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Rôle</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Role</th>
                 <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th>
                 <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
               </tr>
@@ -128,10 +128,10 @@ const Admin = () => {
                     {u.is_admin ? (
                       <span className="px-3 py-1 rounded-full text-label-sm font-label-sm bg-secondary-fixed text-on-secondary-fixed border border-secondary-fixed">Admin</span>
                     ) : (
-                      <span className="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface-variant border border-outline-variant">Utilisateur</span>
+                      <span className="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface-variant border border-outline-variant">User</span>
                     )}
                   </td>
-                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(u.created_at).toLocaleDateString('en-US')}</td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button
@@ -142,13 +142,13 @@ const Admin = () => {
                             : 'bg-secondary-fixed text-on-secondary-fixed border-secondary-fixed hover:opacity-80'
                         }`}
                       >
-                        {u.is_admin ? 'Rétrograder' : 'Promouvoir'}
+                        {u.is_admin ? 'Demote' : 'Promote'}
                       </button>
                       <button
                         onClick={() => deleteUser(u.id)}
                         className="bg-error-container text-on-error-container border-none px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:opacity-80 cursor-pointer"
                       >
-                        Supprimer
+                        Delete
                       </button>
                     </div>
                   </td>
@@ -166,9 +166,9 @@ const Admin = () => {
             <thead>
               <tr className="border-b border-outline-variant bg-surface-container-low">
                 <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ID</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Titre</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Utilisateur</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Statut</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Title</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">User</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Status</th>
                 <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th>
                 <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
               </tr>
@@ -186,14 +186,14 @@ const Admin = () => {
                       'bg-gray-50 text-gray-500 border border-gray-200'
                     }`}>{a.status}</span>
                   </td>
-                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(a.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(a.created_at).toLocaleDateString('en-US')}</td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       {a.status !== 'archived' && (
-                        <button onClick={() => updateAdStatus(a.id, 'archived')} className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-surface-container cursor-pointer">Archiver</button>
+                        <button onClick={() => updateAdStatus(a.id, 'archived')} className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-surface-container cursor-pointer">Archive</button>
                       )}
                       {a.status !== 'active' && (
-                        <button onClick={() => updateAdStatus(a.id, 'active')} className="bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-green-100 cursor-pointer">Activer</button>
+                        <button onClick={() => updateAdStatus(a.id, 'active')} className="bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-green-100 cursor-pointer">Activate</button>
                       )}
                       <button onClick={() => deleteAd(a.id)} className="bg-error-container text-on-error-container border-none px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:opacity-80 cursor-pointer">Supprimer</button>
                     </div>
@@ -212,9 +212,9 @@ const Admin = () => {
             <thead>
               <tr className="border-b border-outline-variant bg-surface-container-low">
                 <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ID</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Annonce</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Signalé par</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Motif</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Listing</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Reported by</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Reason</th>
                 <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th>
                 <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
               </tr>
@@ -226,9 +226,9 @@ const Admin = () => {
                   <td className="p-4 font-body-md font-semibold text-primary">{r.ad_title}</td>
                   <td className="p-4 text-body-sm text-on-surface-variant">{r.reporter_name}</td>
                   <td className="p-4 text-body-sm text-error">{r.reason}</td>
-                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(r.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(r.created_at).toLocaleDateString('en-US')}</td>
                   <td className="p-4 text-right">
-                    <button onClick={() => deleteReport(r.id)} className="bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-green-100 cursor-pointer">Traité</button>
+                    <button onClick={() => deleteReport(r.id)} className="bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-green-100 cursor-pointer">Resolved</button>
                   </td>
                 </tr>
               ))}
@@ -244,14 +244,14 @@ const Admin = () => {
             <input
               value={newCat}
               onChange={e => setNewCat(e.target.value)}
-              placeholder="Nouvelle catégorie"
+              placeholder="New category"
               className="flex-1 max-w-sm h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
             />
             <button
               onClick={addCategory}
               className="bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-all flex items-center gap-2 border-none cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[18px]">add</span> Ajouter
+              <span className="material-symbols-outlined text-[18px]">add</span> Add
             </button>
           </div>
           <div className="bg-white rounded-xl border border-outline-variant overflow-hidden">
@@ -259,7 +259,7 @@ const Admin = () => {
               <thead>
                 <tr className="border-b border-outline-variant bg-surface-container-low">
                   <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ID</th>
-                  <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Nom</th>
+                  <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Name</th>
                   <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -272,7 +272,7 @@ const Admin = () => {
                         <form onSubmit={e => { e.preventDefault(); renameCategory(c.id, e.target.name.value); }} className="flex gap-2">
                           <input name="name" defaultValue={c.name} className="h-9 px-3 border border-outline-variant rounded-lg font-body-sm focus:border-secondary outline-none" autoFocus />
                           <button type="submit" className="bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-lg font-label-sm text-label-sm cursor-pointer">OK</button>
-                          <button type="button" onClick={() => setEditCat(null)} className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1 rounded-lg font-label-sm text-label-sm cursor-pointer">Annuler</button>
+                          <button type="button" onClick={() => setEditCat(null)} className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1 rounded-lg font-label-sm text-label-sm cursor-pointer">Cancel</button>
                         </form>
                       ) : c.name}
                     </td>

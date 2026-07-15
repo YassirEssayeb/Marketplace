@@ -44,23 +44,23 @@ const CreateAd = () => {
       });
       navigate('/ads/' + res.data.id);
     } catch (err) {
-      alert(err.response?.data?.error || 'Erreur');
+      alert(err.response?.data?.error || 'Error');
     } finally { setUploading(false); }
   };
 
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
       <div className="max-w-2xl mx-auto">
-        <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Déposer une annonce</h1>
-        <p className="font-body-md text-on-surface-variant mb-8">Publiez votre annonce en quelques clics.</p>
+        <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Post a listing</h1>
+        <p className="font-body-md text-on-surface-variant mb-8">Post your listing in just a few clicks.</p>
 
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl border border-outline-variant space-y-6">
           {/* Title */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Titre de l'annonce *</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Listing title *</label>
             <input
               name="title"
-              placeholder="Ex: iPhone 14 Pro Max 256 Go"
+              placeholder="e.g. iPhone 14 Pro Max 256GB"
               value={form.title}
               onChange={handleChange}
               required
@@ -73,7 +73,7 @@ const CreateAd = () => {
             <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Description</label>
             <textarea
               name="description"
-              placeholder="Décrivez votre article en détail..."
+              placeholder="Describe your item in detail..."
               value={form.description}
               onChange={handleChange}
               rows="5"
@@ -84,7 +84,7 @@ const CreateAd = () => {
           {/* Price & Category */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Prix (€)</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Price ($)</label>
               <input
                 name="price"
                 type="number"
@@ -96,14 +96,14 @@ const CreateAd = () => {
               />
             </div>
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Catégorie</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Category</label>
               <select
                 name="category_id"
                 value={form.category_id}
                 onChange={handleChange}
                 className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none bg-white cursor-pointer"
               >
-                <option value="">Sélectionnez</option>
+                <option value="">Select</option>
                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
@@ -111,10 +111,10 @@ const CreateAd = () => {
 
           {/* Location */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Localisation</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Location</label>
             <input
               name="location"
-              placeholder="Ex: Paris 11e"
+              placeholder="e.g. New York, NY"
               value={form.location}
               onChange={handleChange}
               className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
@@ -123,14 +123,14 @@ const CreateAd = () => {
 
           {/* Images */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Images (max 10, 5Mo chacune)</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Images (max 10, 5MB each)</label>
             <div
               onClick={() => document.getElementById('file-input-create').click()}
               className="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center cursor-pointer hover:border-secondary transition-colors bg-surface-container-low"
             >
               <span className="material-symbols-outlined text-5xl text-outline mb-2 block">add_a_photo</span>
-              <p className="font-body-md font-semibold text-on-surface mb-1">Cliquez pour ajouter des images</p>
-              <p className="font-body-sm text-on-surface-variant">JPG, PNG, GIF, WebP — jusqu'à 10 fichiers</p>
+              <p className="font-body-md font-semibold text-on-surface mb-1">Click to add images</p>
+              <p className="font-body-sm text-on-surface-variant">JPG, PNG, GIF, WebP — up to 10 files</p>
             </div>
             <input id="file-input-create" type="file" accept="image/*" multiple onChange={handleFiles} style={{ display: 'none' }} />
             {previews.length > 0 && (
@@ -151,11 +151,11 @@ const CreateAd = () => {
             {uploading ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Publication en cours...
+                Publishing...
               </>
             ) : (
               <>
-                <span className="material-symbols-outlined text-[20px]">publish</span> Publier l'annonce
+                <span className="material-symbols-outlined text-[20px]">publish</span> Publish listing
               </>
             )}
           </button>

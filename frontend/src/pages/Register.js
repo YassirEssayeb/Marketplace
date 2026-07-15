@@ -16,7 +16,7 @@ const Register = () => {
       await register(data.name, data.email, data.password, data.phone, data.city);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error || "Erreur d'inscription");
+      setError(err.response?.data?.error || "Registration error");
     }
   };
 
@@ -25,8 +25,8 @@ const Register = () => {
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-xl border border-outline-variant">
           <div className="text-center mb-8">
-            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Inscription</h1>
-            <p className="font-body-md text-on-surface-variant">Créez votre compte gratuitement.</p>
+            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Sign Up</h1>
+            <p className="font-body-md text-on-surface-variant">Create your account for free.</p>
           </div>
 
           {error && (
@@ -37,10 +37,10 @@ const Register = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Nom complet *</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Full name *</label>
               <input
                 name="name"
-                placeholder="Votre nom"
+                placeholder="Your name"
                 value={data.name}
                 onChange={handleChange}
                 required
@@ -52,7 +52,7 @@ const Register = () => {
               <input
                 name="email"
                 type="email"
-                placeholder="votre@email.fr"
+                placeholder="you@email.com"
                 value={data.email}
                 onChange={handleChange}
                 required
@@ -60,7 +60,7 @@ const Register = () => {
               />
             </div>
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Mot de passe *</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Password *</label>
               <input
                 name="password"
                 type="password"
@@ -73,20 +73,20 @@ const Register = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Téléphone</label>
+                <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Phone</label>
                 <input
                   name="phone"
-                  placeholder="Téléphone"
+                  placeholder="Phone"
                   value={data.phone}
                   onChange={handleChange}
                   className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
                 />
               </div>
               <div>
-                <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Ville</label>
+                <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">City</label>
                 <input
                   name="city"
-                  placeholder="Ville"
+                  placeholder="City"
                   value={data.city}
                   onChange={handleChange}
                   className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
@@ -97,12 +97,12 @@ const Register = () => {
               type="submit"
               className="w-full bg-secondary text-on-secondary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[20px]">person_add</span> S'inscrire
+              <span className="material-symbols-outlined text-[20px]">person_add</span> Sign up
             </button>
           </form>
 
           <p className="mt-6 text-center text-body-sm text-on-surface-variant">
-            Déjà un compte ? <Link to="/login" className="font-semibold text-secondary hover:underline no-underline">Connectez-vous</Link>
+            Already have an account? <Link to="/login" className="font-semibold text-secondary hover:underline no-underline">Log in</Link>
           </p>
         </div>
       </div>

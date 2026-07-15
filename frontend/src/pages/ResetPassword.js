@@ -11,13 +11,13 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirm) return setError('Les mots de passe ne correspondent pas');
+    if (password !== confirm) return setError('Passwords do not match');
     setError('');
     try {
       await api.post('/auth/reset-password', { token: searchParams.get('token'), password });
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur');
+      setError(err.response?.data?.error || 'Error');
     }
   };
 
@@ -26,8 +26,8 @@ const ResetPassword = () => {
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-xl border border-outline-variant">
           <div className="text-center mb-8">
-            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Nouveau mot de passe</h1>
-            <p className="font-body-md text-on-surface-variant">Choisissez un nouveau mot de passe.</p>
+            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">New password</h1>
+            <p className="font-body-md text-on-surface-variant">Choose a new password.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -37,7 +37,7 @@ const ResetPassword = () => {
               </div>
             )}
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Nouveau mot de passe</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">New password</label>
               <input
                 type="password"
                 placeholder="••••••••"
@@ -49,7 +49,7 @@ const ResetPassword = () => {
               />
             </div>
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Confirmer le mot de passe</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Confirm password</label>
               <input
                 type="password"
                 placeholder="••••••••"
@@ -64,11 +64,11 @@ const ResetPassword = () => {
               type="submit"
               className="w-full bg-secondary text-on-secondary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[20px]">lock_reset</span> Réinitialiser
+              <span className="material-symbols-outlined text-[20px]">lock_reset</span> Reset
             </button>
             <div className="text-center">
               <Link to="/login" className="inline-flex items-center gap-1 text-body-sm text-secondary font-medium hover:underline no-underline">
-                <span className="material-symbols-outlined text-[16px]">arrow_back</span> Retour à la connexion
+                <span className="material-symbols-outlined text-[16px]">arrow_back</span> Back to login
               </Link>
             </div>
           </form>

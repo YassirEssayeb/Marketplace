@@ -16,7 +16,7 @@ const ForgotPassword = () => {
       setSent(true);
       setMsg(res.data.message);
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur');
+      setError(err.response?.data?.error || 'Error');
     }
   };
 
@@ -25,8 +25,8 @@ const ForgotPassword = () => {
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-xl border border-outline-variant">
           <div className="text-center mb-8">
-            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Mot de passe oublié</h1>
-            <p className="font-body-md text-on-surface-variant">Saisissez votre email pour recevoir un lien de réinitialisation.</p>
+            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Forgot password</h1>
+            <p className="font-body-md text-on-surface-variant">Enter your email to receive a reset link.</p>
           </div>
 
           {sent ? (
@@ -37,7 +37,7 @@ const ForgotPassword = () => {
                 to="/login"
                 className="inline-flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold no-underline"
               >
-                <span className="material-symbols-outlined text-[18px]">arrow_back</span> Retour à la connexion
+                <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back to login
               </Link>
             </div>
           ) : (
@@ -62,11 +62,11 @@ const ForgotPassword = () => {
                 type="submit"
                 className="w-full bg-secondary text-on-secondary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer"
               >
-                <span className="material-symbols-outlined text-[20px]">send</span> Envoyer
+                <span className="material-symbols-outlined text-[20px]">send</span> Send
               </button>
               <div className="text-center">
                 <Link to="/login" className="inline-flex items-center gap-1 text-body-sm text-secondary font-medium hover:underline no-underline">
-                  <span className="material-symbols-outlined text-[16px]">arrow_back</span> Retour à la connexion
+                  <span className="material-symbols-outlined text-[16px]">arrow_back</span> Back to login
                 </Link>
               </div>
             </form>

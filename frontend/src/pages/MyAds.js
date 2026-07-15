@@ -14,18 +14,18 @@ const MyAds = () => {
   }, [user, navigate]);
 
   const deleteAd = async (id) => {
-    if (!window.confirm('Supprimer cette annonce ?')) return;
+    if (!window.confirm('Delete this listing?')) return;
     try {
       await api.delete('/ads/' + id);
       setAds(ads.filter(a => a.id !== id));
-    } catch { alert('Erreur'); }
+    } catch { alert('Error'); }
   };
 
   const markAsSold = async (id) => {
     try {
       await api.put('/ads/' + id, { status: 'sold' });
       setAds(ads.map(a => a.id === id ? { ...a, status: 'sold' } : a));
-    } catch { alert('Erreur'); }
+    } catch { alert('Error'); }
   };
 
   const statusBadge = (s) => {
@@ -34,7 +34,7 @@ const MyAds = () => {
       sold: 'bg-blue-50 text-blue-700 border-blue-200',
       archived: 'bg-gray-50 text-gray-500 border-gray-200',
     };
-    const labels = { active: 'Active', sold: 'Vendue', archived: 'Archivée' };
+    const labels = { active: 'Active', sold: 'Sold', archived: 'Archived' };
     return (
       <span className={`px-3 py-1 rounded-full text-label-sm font-label-sm border ${styles[s] || styles.active}`}>
         {labels[s] || s}
@@ -46,24 +46,24 @@ const MyAds = () => {
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="font-headline-lg text-headline-lg text-primary">Mes annonces</h1>
-          <p className="font-body-md text-on-surface-variant">{ads.length} annonce{ads.length > 1 ? 's' : ''}</p>
+          <h1 className="font-headline-lg text-headline-lg text-primary">My listings</h1>
+          <p className="font-body-md text-on-surface-variant">{ads.length} listing{ads.length > 1 ? 's' : ''}</p>
         </div>
         <Link
           to="/ads/new"
           className="bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-all active:scale-95 flex items-center gap-2 no-underline"
         >
-          <span className="material-symbols-outlined text-[18px]">add</span> Nouvelle annonce
+          <span className="material-symbols-outlined text-[18px]">add</span> New listing
         </Link>
       </div>
 
       {ads.length === 0 ? (
         <div className="bg-white p-12 rounded-xl border border-outline-variant text-center">
           <span className="material-symbols-outlined text-6xl text-outline mb-4 block">inventory_2</span>
-          <p className="font-headline-sm text-headline-sm text-primary mb-2">Aucune annonce</p>
-          <p className="font-body-md text-on-surface-variant mb-6">Publiez votre première annonce dès maintenant.</p>
+          <p className="font-headline-sm text-headline-sm text-primary mb-2">No listings</p>
+          <p className="font-body-md text-on-surface-variant mb-6">Post your first listing right now.</p>
           <Link to="/ads/new" className="inline-flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold no-underline">
-            <span className="material-symbols-outlined text-[18px]">add</span> Publier une annonce
+            <span className="material-symbols-outlined text-[18px]">add</span> Post a listing
           </Link>
         </div>
       ) : (
@@ -71,9 +71,9 @@ const MyAds = () => {
           <table className="w-full">
             <thead>
               <tr className="border-b border-outline-variant bg-surface-container-low">
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Titre</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Prix</th>
-                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Statut</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Title</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Price</th>
+                <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Status</th>
                 <th className="text-left p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Date</th>
                 <th className="text-right p-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
               </tr>
@@ -85,10 +85,10 @@ const MyAds = () => {
                     <Link to={'/ads/' + ad.id} className="font-body-md font-semibold text-primary hover:text-secondary transition-colors no-underline">{ad.title}</Link>
                   </td>
                   <td className="p-4 font-headline-sm text-headline-sm text-primary">
-                    {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : '-'}
+                    {ad.price ? ad.price.toLocaleString('en-US') + ' $' : '-'}
                   </td>
                   <td className="p-4">{statusBadge(ad.status)}</td>
-                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(ad.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td className="p-4 text-body-sm text-on-surface-variant">{new Date(ad.created_at).toLocaleDateString('en-US')}</td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       {ad.status === 'active' && (
@@ -96,14 +96,14 @@ const MyAds = () => {
                           onClick={() => markAsSold(ad.id)}
                           className="bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-green-100 transition-colors cursor-pointer flex items-center gap-1"
                         >
-                          <span className="material-symbols-outlined text-[14px]">check_circle</span> Vendu
+                          <span className="material-symbols-outlined text-[14px]">check_circle</span> Sold
                         </button>
                       )}
                       <Link
                         to={'/ads/' + ad.id + '/edit'}
                         className="bg-surface-container-high text-primary border border-outline-variant px-3 py-1.5 rounded-lg font-label-sm text-label-sm hover:bg-surface-container transition-colors flex items-center gap-1 no-underline"
                       >
-                        <span className="material-symbols-outlined text-[14px]">edit</span> Modifier
+                        <span className="material-symbols-outlined text-[14px]">edit</span> Edit
                       </Link>
                       <button
                         onClick={() => deleteAd(ad.id)}

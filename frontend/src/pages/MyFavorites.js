@@ -23,16 +23,16 @@ const MyFavorites = () => {
 
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
-      <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Mes favoris</h1>
-      <p className="font-body-md text-on-surface-variant mb-8">{ads.length} annonce{ads.length > 1 ? 's' : ''} sauvegardée{ads.length > 1 ? 's' : ''}.</p>
+      <h1 className="font-headline-lg text-headline-lg text-primary mb-2">My favorites</h1>
+      <p className="font-body-md text-on-surface-variant mb-8">{ads.length} listing{ads.length > 1 ? 's' : ''} saved{ads.length > 1 ? 's' : ''}.</p>
 
       {ads.length === 0 ? (
         <div className="bg-white p-12 rounded-xl border border-outline-variant text-center">
           <span className="material-symbols-outlined text-6xl text-outline mb-4 block">favorite</span>
-          <p className="font-headline-sm text-headline-sm text-primary mb-2">Aucun favori</p>
-          <p className="font-body-md text-on-surface-variant mb-6">Parcourez les annonces pour ajouter des favoris.</p>
+          <p className="font-headline-sm text-headline-sm text-primary mb-2">No favorites</p>
+          <p className="font-body-md text-on-surface-variant mb-6">Browse listings to add favorites.</p>
           <Link to="/browse" className="inline-flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md font-bold no-underline">
-            <span className="material-symbols-outlined text-[18px]">search</span> Parcourir les annonces
+            <span className="material-symbols-outlined text-[18px]">search</span> Browse listings
           </Link>
         </div>
       ) : (
@@ -57,7 +57,7 @@ const MyFavorites = () => {
                 <div className="p-5">
                   <h4 className="font-headline-sm text-headline-sm text-primary mb-1 truncate group-hover:text-secondary transition-colors">{ad.title}</h4>
                   <span className="font-headline-sm text-headline-sm text-primary">
-                    {ad.price ? ad.price.toLocaleString('fr-FR') + ' €' : 'Prix N/S'}
+                    {ad.price ? ad.price.toLocaleString('en-US') + ' $' : 'Price N/A'}
                   </span>
                 </div>
               </Link>
@@ -66,7 +66,7 @@ const MyFavorites = () => {
                   onClick={() => removeFavorite(ad.id)}
                   className="w-full bg-error-container text-on-error-container border-none py-2.5 rounded-lg font-label-md text-label-md font-bold hover:opacity-80 transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
-                  <span className="material-symbols-outlined text-[16px]">delete</span> Retirer
+                  <span className="material-symbols-outlined text-[16px]">delete</span> Remove
                 </button>
               </div>
             </div>

@@ -4,17 +4,17 @@ import { useAuth } from '../context/AuthContext';
 
 
 const demoOrders = [
-  { id: '#PM-9021', customer: 'Jean Dupont', initials: 'JD', status: 'shipped', date: '12 oct. 2024', amount: '312,50 €' },
-  { id: '#PM-9022', customer: 'Marie Laurent', initials: 'ML', status: 'processing', date: '12 oct. 2024', amount: '1 450,00 €' },
-  { id: '#PM-9023', customer: 'Sophie Martin', initials: 'SM', status: 'delivered', date: '11 oct. 2024', amount: '89,00 €' },
-  { id: '#PM-9024', customer: 'Thomas Bernard', initials: 'TB', status: 'refunded', date: '10 oct. 2024', amount: '540,20 €' },
-  { id: '#PM-9025', customer: 'Alice Petit', initials: 'AP', status: 'shipped', date: '10 oct. 2024', amount: '120,00 €' },
+  { id: '#PM-9021', customer: 'John Doe', initials: 'JD', status: 'shipped', date: 'Oct 12, 2024', amount: '$312.50' },
+  { id: '#PM-9022', customer: 'Mary Laurent', initials: 'ML', status: 'processing', date: 'Oct 12, 2024', amount: '$1,450.00' },
+  { id: '#PM-9023', customer: 'Sophie Martin', initials: 'SM', status: 'delivered', date: 'Oct 11, 2024', amount: '$89.00' },
+  { id: '#PM-9024', customer: 'Thomas Bernard', initials: 'TB', status: 'refunded', date: 'Oct 10, 2024', amount: '$540.20' },
+  { id: '#PM-9025', customer: 'Alice Smith', initials: 'AP', status: 'shipped', date: 'Oct 10, 2024', amount: '$120.00' },
 ];
 
 const demoListings = [
-  { title: 'Casque sans fil Apex', price: '299 €', stock: 12, status: 'active' },
-  { title: 'Montre Chronos Skeleton', price: '1 450 €', stock: 3, status: 'pending' },
-  { title: 'Chaise ErgoForm Pro', price: '890 €', stock: 0, status: 'paused' },
+  { title: 'Casque sans fil Apex', price: '$299', stock: 12, status: 'active' },
+  { title: 'Montre Chronos Skeleton', price: '$1,450', stock: 3, status: 'pending' },
+  { title: 'Chaise ErgoForm Pro', price: '$890', stock: 0, status: 'paused' },
 ];
 
 const statusColors = {
@@ -28,13 +28,13 @@ const statusColors = {
 };
 
 const statusLabels = {
-  shipped: 'Expédié',
-  processing: 'En cours',
-  delivered: 'Livré',
-  refunded: 'Remboursé',
-  active: 'Actif',
-  pending: 'En attente',
-  paused: 'En pause',
+  shipped: 'Shipped',
+  processing: 'Processing',
+  delivered: 'Delivered',
+  refunded: 'Refunded',
+  active: 'Active',
+  pending: 'Pending',
+  paused: 'Paused',
 };
 
 const SellerDashboard = () => {
@@ -47,11 +47,11 @@ const SellerDashboard = () => {
   }, [user, navigate]);
 
   const navItems = [
-    { key: 'dashboard', icon: 'dashboard', label: 'Tableau de bord' },
-    { key: 'listings', icon: 'list_alt', label: 'Mes annonces' },
-    { key: 'orders', icon: 'receipt_long', label: 'Commandes' },
-    { key: 'analytics', icon: 'monitoring', label: 'Analytiques' },
-    { key: 'settings', icon: 'settings', label: 'Paramètres' },
+    { key: 'dashboard', icon: 'dashboard', label: 'Dashboard' },
+    { key: 'listings', icon: 'list_alt', label: 'My listings' },
+    { key: 'orders', icon: 'receipt_long', label: 'Orders' },
+    { key: 'analytics', icon: 'monitoring', label: 'Analytics' },
+    { key: 'settings', icon: 'settings', label: 'Settings' },
   ];
 
   return (
@@ -60,7 +60,7 @@ const SellerDashboard = () => {
       <aside className="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-50 flex flex-col p-4 gap-2">
         <div className="px-2 py-6 mb-4">
           <h1 className="font-headline-sm text-headline-sm font-bold text-primary">Seller Studio</h1>
-          <p className="text-on-surface-variant font-label-md text-label-md mt-1">Portail vendeur</p>
+          <p className="text-on-surface-variant font-label-md text-label-md mt-1">Seller portal</p>
         </div>
         <nav className="flex-1 flex flex-col gap-1">
           {navItems.map(item => (
@@ -81,7 +81,7 @@ const SellerDashboard = () => {
         <div className="mt-auto pt-4 border-t border-outline-variant flex flex-col gap-1">
           <button className="w-full bg-secondary text-on-secondary py-3 rounded-lg font-bold flex items-center justify-center gap-2 mb-4 hover:opacity-90 active:scale-95 transition-all border-none cursor-pointer">
             <span className="material-symbols-outlined">add</span>
-            Nouveau produit
+            New product
           </button>
           <button className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all w-full text-left bg-transparent border-none cursor-pointer">
             <span className="material-symbols-outlined">help</span>
@@ -89,7 +89,7 @@ const SellerDashboard = () => {
           </button>
           <button className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all w-full text-left bg-transparent border-none cursor-pointer">
             <span className="material-symbols-outlined">logout</span>
-            <span className="font-label-md">Déconnexion</span>
+            <span className="font-label-md">Logout</span>
           </button>
         </div>
       </aside>
@@ -99,8 +99,8 @@ const SellerDashboard = () => {
         {/* Header */}
         <header className="h-20 bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-12 sticky top-0 z-40 shadow-sm">
           <div className="flex items-center gap-4">
-            <h2 className="font-headline-md text-headline-md font-bold text-primary">Vue d'ensemble</h2>
-            <span className="text-on-surface-variant bg-surface-container px-3 py-1 rounded-full text-label-sm font-label-sm">Session active</span>
+            <h2 className="font-headline-md text-headline-md font-bold text-primary">Overview</h2>
+            <span className="text-on-surface-variant bg-surface-container px-3 py-1 rounded-full text-label-sm font-label-sm">Active session</span>
           </div>
           <div className="flex items-center gap-6">
             <div className="relative">
@@ -109,8 +109,8 @@ const SellerDashboard = () => {
             </div>
             <div className="flex items-center gap-3 pl-6 border-l border-outline-variant">
               <div className="text-right">
-                <p className="font-label-md text-label-md text-primary">{user?.name || 'Vendeur'}</p>
-                <p className="text-[10px] text-on-surface-variant font-medium">MARCHAND PREMIUM</p>
+                <p className="font-label-md text-label-md text-primary">{user?.name || 'Seller'}</p>
+                <p className="text-[10px] text-on-surface-variant font-medium">PREMIUM SELLER</p>
               </div>
               <div className="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant flex items-center justify-center">
                 <span className="text-sm font-bold text-primary">{user?.name?.charAt(0) || 'V'}</span>
@@ -124,9 +124,9 @@ const SellerDashboard = () => {
           {/* Metrics Row */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
-              { label: 'Ventes totales', value: '42 890 €', change: '+12,5%', up: true, icon: 'payments', bg: 'bg-secondary-fixed', color: 'text-on-secondary-fixed' },
-              { label: 'Commandes totales', value: '1 248', change: '+5,2%', up: true, icon: 'shopping_bag', bg: 'bg-primary-fixed', color: 'text-on-primary-fixed' },
-              { label: 'Visites boutique', value: '18,4K', change: '-2,1%', up: false, icon: 'visibility', bg: 'bg-tertiary-fixed', color: 'text-on-tertiary-fixed' },
+              { label: 'Total sales', value: '$42,890', change: '+12.5%', up: true, icon: 'payments', bg: 'bg-secondary-fixed', color: 'text-on-secondary-fixed' },
+              { label: 'Total orders', value: '1,248', change: '+5.2%', up: true, icon: 'shopping_bag', bg: 'bg-primary-fixed', color: 'text-on-primary-fixed' },
+              { label: 'Store Views', value: '18.4K', change: '-2.1%', up: false, icon: 'visibility', bg: 'bg-tertiary-fixed', color: 'text-on-tertiary-fixed' },
             ].map(metric => (
               <div key={metric.label} className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-[0px_2px_4px_rgba(15,23,42,0.05)] hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-start mb-4">
@@ -147,8 +147,8 @@ const SellerDashboard = () => {
             {/* Active Listings Section */}
             <section className="lg:col-span-1 flex flex-col gap-6">
               <div className="flex justify-between items-center">
-                <h4 className="font-headline-sm text-headline-sm">Annonces actives</h4>
-                <button className="text-secondary font-label-md hover:underline bg-transparent border-none cursor-pointer">Tout voir</button>
+                <h4 className="font-headline-sm text-headline-sm">Active listings</h4>
+                <button className="text-secondary font-label-md hover:underline bg-transparent border-none cursor-pointer">View all</button>
               </div>
               <div className="flex flex-col gap-4">
                 {demoListings.map((listing, i) => (
@@ -158,7 +158,7 @@ const SellerDashboard = () => {
                     </div>
                     <div className="flex-1">
                       <h5 className="font-label-md text-primary truncate">{listing.title}</h5>
-                      <p className="text-on-surface-variant text-body-sm">{listing.price} • {listing.stock} en stock</p>
+                      <p className="text-on-surface-variant text-body-sm">{listing.price} • {listing.stock} in stock</p>
                       <span className={`inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${statusColors[listing.status]}`}>
                         {statusLabels[listing.status]}
                       </span>
@@ -172,13 +172,13 @@ const SellerDashboard = () => {
             {/* Recent Orders Table */}
             <section className="lg:col-span-2 flex flex-col gap-6">
               <div className="flex justify-between items-center">
-                <h4 className="font-headline-sm text-headline-sm">Commandes récentes</h4>
+                <h4 className="font-headline-sm text-headline-sm">Recent orders</h4>
                 <div className="flex gap-2">
                   <button className="px-4 py-2 border border-outline-variant rounded-lg text-label-sm font-label-sm hover:bg-surface-variant transition-all flex items-center gap-2 bg-transparent cursor-pointer">
-                    <span className="material-symbols-outlined text-sm">filter_list</span> Filtrer
+                    <span className="material-symbols-outlined text-sm">filter_list</span> Filter
                   </button>
                   <button className="px-4 py-2 border border-outline-variant rounded-lg text-label-sm font-label-sm hover:bg-surface-variant transition-all flex items-center gap-2 bg-transparent cursor-pointer">
-                    <span className="material-symbols-outlined text-sm">download</span> Exporter
+                    <span className="material-symbols-outlined text-sm">download</span> Export
                   </button>
                 </div>
               </div>
@@ -186,11 +186,11 @@ const SellerDashboard = () => {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-surface-container-low border-b border-outline-variant">
-                      <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Commande</th>
-                      <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Client</th>
-                      <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Statut</th>
+                      <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Order</th>
+                      <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Customer</th>
+                      <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Status</th>
                       <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Date</th>
-                      <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant text-right">Montant</th>
+                      <th className="px-6 py-4 font-label-md text-label-md text-on-surface-variant text-right">Amount</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-outline-variant">
@@ -215,7 +215,7 @@ const SellerDashboard = () => {
                   </tbody>
                 </table>
                 <div className="p-4 border-t border-outline-variant flex justify-between items-center bg-surface-container-low">
-                  <span className="text-label-sm text-on-surface-variant">Affichage de 5 sur 48 commandes</span>
+                  <span className="text-label-sm text-on-surface-variant">Showing 5 of 48 orders</span>
                   <div className="flex gap-2">
                     <button className="p-2 border border-outline-variant rounded hover:bg-surface-variant transition-colors disabled:opacity-50 bg-transparent cursor-pointer" disabled>
                       <span className="material-symbols-outlined text-sm">chevron_left</span>
@@ -235,10 +235,10 @@ const SellerDashboard = () => {
           <div className="max-w-[1400px] mx-auto px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex flex-col gap-2">
               <h3 className="font-headline-sm text-headline-sm font-bold text-primary">ProMarket</h3>
-              <p className="text-on-surface-variant font-label-sm text-label-sm">© 2024 ProMarket Global. Tous droits réservés.</p>
+              <p className="text-on-surface-variant font-label-sm text-label-sm">© 2024 ProMarket Global. All rights reserved.</p>
             </div>
             <div className="flex gap-8">
-              {['Politique de confidentialité', 'Conditions d\'utilisation', 'Sécurité', 'Contact'].map(link => (
+              {['Privacy policy', 'Terms of service', 'Security', 'Contact'].map(link => (
                 <button key={link} className="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors bg-transparent border-none cursor-pointer">{link}</button>
               ))}
             </div>
