@@ -168,6 +168,18 @@
   "detail_month_ago": " month ago",
   "detail_months_ago": " months ago",
 
+  "detail_comments": "Comments",
+  "detail_comments_count": "comments",
+  "detail_write_comment": "Write a comment...",
+  "detail_post_comment": "Post",
+  "detail_reply": "Reply",
+  "detail_reply_to": "Reply to",
+  "detail_cancel": "Cancel",
+  "detail_delete_comment": "Delete",
+  "detail_login_comment": "Log in to comment",
+  "detail_no_comments": "No comments yet. Be the first!",
+  "detail_comment_deleted": "Comment deleted",
+
   "login_title": "Log In",
   "login_subtitle": "Sign in to your account.",
   "login_email": "Email",

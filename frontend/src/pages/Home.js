@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
 import { useLanguage } from '../context/LanguageContext';
@@ -15,6 +15,7 @@ const demoProducts = [
 const Landing = () => {
   const { t, formatPrice, currency } = useLanguage();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [ads, setAds] = useState([]);
   const [email, setEmail] = useState('');
 
@@ -31,6 +32,14 @@ const Landing = () => {
     rating: 4 + Math.floor(Math.random() * 2),
     reviews: Math.floor(Math.random() * 2000) + 10,
   })) : demoProducts;
+
+  const featuredAd = {
+    id: 44,
+    title: 'Louis Vuitton Keepall 55',
+    price: 3200,
+    category: 'Mode & Accessoires',
+    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80',
+  };
 
   return (
     <div>
@@ -69,20 +78,29 @@ const Landing = () => {
           </div>
         </div>
         {/* Hero Floating Card */}
-        <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[480px]">
-          <div className="bg-white p-6 rounded-2xl shadow-2xl border border-outline-variant relative">
+        <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[480px] z-20">
+          <div
+            onClick={() => navigate(featuredAd.id ? `/ads/${featuredAd.id}` : '/ad/featured', { state: { ad: featuredAd } })}
+            className="block bg-white p-6 rounded-2xl shadow-2xl border border-outline-variant relative no-underline cursor-pointer"
+          >
             <div className="absolute -top-4 -left-4 bg-primary text-on-primary p-4 rounded-xl shadow-lg">
               <span className="material-symbols-outlined text-3xl">verified_user</span>
             </div>
             <div className="mt-4 rounded-xl overflow-hidden mb-6 h-64 bg-surface-container">
-              <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZLi8Ke7UwQIwSIJupZq-y3Aox5T4ALhdrrDuupg804YvEieQgCzJ3iKSdUJtvc-xv5im4EhMKp1t9J_njUfgris7qJq_jcx25Wdy-UNmJAEqq470DOEfv-YvnitFZCkf0ge5eMMYJ-p7utLsijKh0_hrA3iSBDxR_KOETB00B2xzE_AVkoulbRGKkymrBsei6cvP2brUU4cyClFl_9vzGZJV07wXpA-ckcl4esaV9snsVF6vu" alt="Featured product" />
+              {featuredAd.img ? (
+                <img className="w-full h-full object-cover" src={featuredAd.img} alt={featuredAd.title} />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-on-surface-variant">
+                  <span className="material-symbols-outlined text-5xl">image</span>
+                </div>
+              )}
             </div>
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h3 className="font-headline-sm text-headline-sm text-primary">Optic-X Pro Series 5</h3>
-                <p className="font-body-sm text-body-sm text-on-surface-variant">High-Performance Imaging</p>
+                <h3 className="font-headline-sm text-headline-sm text-primary">{featuredAd.title}</h3>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">{featuredAd.category}</p>
               </div>
-              <span className="font-headline-sm text-headline-sm text-secondary">{formatPrice(3499, currency)}</span>
+              <span className="font-headline-sm text-headline-sm text-secondary">{featuredAd.price ? formatPrice(featuredAd.price, currency) : 'Prix à définir'}</span>
             </div>
             <div className="flex items-center gap-2 mb-6">
               <div className="flex text-amber-400">
@@ -93,7 +111,7 @@ const Landing = () => {
               </div>
               <span className="font-label-sm text-label-sm text-on-surface-variant">(128 reviews)</span>
             </div>
-            <Link to="/browse" className="block w-full py-4 rounded-lg bg-surface-container-high text-primary font-label-md text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all text-center no-underline">{t('home_floating_specs')}</Link>
+            <span className="block w-full py-4 rounded-lg bg-surface-container-high text-primary font-label-md text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all text-center">{t('home_floating_specs')}</span>
           </div>
         </div>
       </section>

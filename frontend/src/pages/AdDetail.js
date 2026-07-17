@@ -1,14 +1,16 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
+import Comments from '../components/Comments';
 
 const AdDetail = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t, formatPrice, currency } = useLanguage();
   const [ad, setAd] = useState(null);
   const [msg, setMsg] = useState('');
@@ -19,6 +21,24 @@ const AdDetail = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (location.state && location.state.ad && !location.state.ad.id) {
+      const stateAd = location.state.ad;
+      setAd({
+        id: 'featured',
+        title: stateAd.title,
+        price: stateAd.price,
+        category_name: stateAd.category,
+        images: stateAd.img ? [stateAd.img] : [],
+        status: 'active',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        description: stateAd.title,
+        location: 'Maroc',
+        user_name: 'Marketplace',
+        user_id: 0,
+      });
+      return;
+    }
     api.get('/ads/' + id).then(r => {
       setAd(r.data);
       if (r.data.category_id) {
@@ -27,7 +47,7 @@ const AdDetail = () => {
         }).catch(() => {});
       }
     }).catch(() => navigate('/'));
-  }, [id, navigate]);
+  }, [id, navigate, location.state]);
 
   useEffect(() => {
     if (!user) return;
@@ -317,7 +337,7 @@ const AdDetail = () => {
       {/* Tabs Section */}
       <div className="mt-20">
         <div className="flex gap-10 border-b border-outline-variant mb-8">
-          {['description', 'specifications', 'seller'].map(tab => (
+          {['description', 'specifications', 'seller', 'comments'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -330,6 +350,7 @@ const AdDetail = () => {
               {tab === 'description' && t('detail_description')}
               {tab === 'specifications' && t('detail_specs')}
               {tab === 'seller' && t('detail_about_seller')}
+              {tab === 'comments' && t('detail_comments')}
             </button>
           ))}
         </div>
@@ -406,6 +427,11 @@ const AdDetail = () => {
                   </Link>
                 )}
               </div>
+            )}
+
+            {/* Comments Tab */}
+            {activeTab === 'comments' && ad.id && ad.id !== 'featured' && (
+              <Comments adId={ad.id} />
             )}
           </div>
         </div>

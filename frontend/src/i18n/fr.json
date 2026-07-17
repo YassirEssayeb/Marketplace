@@ -168,6 +168,18 @@
   "detail_month_ago": " mois",
   "detail_months_ago": " mois",
 
+  "detail_comments": "Commentaires",
+  "detail_comments_count": "commentaires",
+  "detail_write_comment": "Écrivez un commentaire...",
+  "detail_post_comment": "Publier",
+  "detail_reply": "Répondre",
+  "detail_reply_to": "Répondre à",
+  "detail_cancel": "Annuler",
+  "detail_delete_comment": "Supprimer",
+  "detail_login_comment": "Connectez-vous pour commenter",
+  "detail_no_comments": "Aucun commentaire pour l'instant. Soyez le premier !",
+  "detail_comment_deleted": "Commentaire supprimé",
+
   "login_title": "Connexion",
   "login_subtitle": "Connectez-vous à votre compte.",
   "login_email": "Email",

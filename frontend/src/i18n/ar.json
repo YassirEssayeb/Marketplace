@@ -168,6 +168,18 @@
   "detail_month_ago": " شهر مضى",
   "detail_months_ago": " أشهر مضت",
 
+  "detail_comments": "التعليقات",
+  "detail_comments_count": "تعليقات",
+  "detail_write_comment": "اكتب تعليقاً...",
+  "detail_post_comment": "نشر",
+  "detail_reply": "رد",
+  "detail_reply_to": "الرد على",
+  "detail_cancel": "إلغاء",
+  "detail_delete_comment": "حذف",
+  "detail_login_comment": "سجل الدخول للتعليق",
+  "detail_no_comments": "لا توجد تعليقات بعد. كن أول من يعلق!",
+  "detail_comment_deleted": "تم حذف التعليق",
+
   "login_title": "تسجيل الدخول",
   "login_subtitle": "سجل الدخول إلى حسابك.",
   "login_email": "البريد الإلكتروني",

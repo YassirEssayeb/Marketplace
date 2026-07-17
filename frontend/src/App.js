@@ -56,6 +56,7 @@ function Layout() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/ads/new" element={<CreateAd />} />
           <Route path="/ads/:id/edit" element={<EditAd />} />
+          <Route path="/ad/featured" element={<AdDetail />} />
           <Route path="/ads/:id" element={<AdDetail />} />
           <Route path="/my-ads" element={<MyAds />} />
           <Route path="/favorites" element={<MyFavorites />} />
