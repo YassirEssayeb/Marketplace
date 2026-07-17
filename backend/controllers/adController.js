@@ -35,7 +35,7 @@ exports.getAds = async (req, res) => {
 exports.getAd = async (req, res) => {
   try {
     const [rows] = await pool.query(
-      'SELECT a.*, u.name as user_name, u.city as user_city, u.phone as user_phone, c.name as category_name FROM ads a JOIN users u ON a.user_id = u.id LEFT JOIN categories c ON a.category_id = c.id WHERE a.id = ?',
+      'SELECT a.*, u.name as user_name, u.city as user_city, u.phone as user_phone, u.avatar_url as user_avatar_url, c.name as category_name FROM ads a JOIN users u ON a.user_id = u.id LEFT JOIN categories c ON a.category_id = c.id WHERE a.id = ?',
       [req.params.id]
     );
     if (rows.length === 0) return res.status(404).json({ error: 'Annonce introuvable' });
@@ -123,6 +123,33 @@ exports.reportAd = async (req, res) => {
     if (!reason) return res.status(400).json({ error: 'Motif requis' });
     await pool.query('INSERT INTO reports (ad_id, reporter_id, reason) VALUES (?, ?, ?)', [req.params.id, req.user.id, reason]);
     res.status(201).json({ message: 'Annonce signalée' });
+  } catch {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+};
+
+exports.getSellerStats = async (req, res) => {
+  try {
+    const uid = req.user.id;
+    const [[{ totalAds }]] = await pool.query('SELECT COUNT(*) as totalAds FROM ads WHERE user_id = ?', [uid]);
+    const [[{ activeAds }]] = await pool.query("SELECT COUNT(*) as activeAds FROM ads WHERE user_id = ? AND status = 'active'", [uid]);
+    const [[{ soldAds }]] = await pool.query("SELECT COUNT(*) as soldAds FROM ads WHERE user_id = ? AND status = 'sold'", [uid]);
+    const [[{ archivedAds }]] = await pool.query("SELECT COUNT(*) as archivedAds FROM ads WHERE user_id = ? AND status = 'archived'", [uid]);
+    const [[{ totalFavorites }]] = await pool.query(
+      'SELECT COUNT(*) as totalFavorites FROM favorites f JOIN ads a ON f.ad_id = a.id WHERE a.user_id = ?', [uid]
+    );
+    const [[{ totalMessages }]] = await pool.query(
+      'SELECT COUNT(*) as totalMessages FROM messages m JOIN ads a ON m.ad_id = a.id WHERE a.user_id = ?', [uid]
+    );
+    const [[{ unreadMessages }]] = await pool.query(
+      'SELECT COUNT(*) as unreadMessages FROM messages WHERE receiver_id = ? AND is_read = FALSE', [uid]
+    );
+    const [recentMessages] = await pool.query(
+      `SELECT m.*, u.name as sender_name, u.avatar_url as sender_avatar, a.title as ad_title
+       FROM messages m JOIN users u ON m.sender_id = u.id LEFT JOIN ads a ON m.ad_id = a.id
+       WHERE m.receiver_id = ? ORDER BY m.created_at DESC LIMIT 5`, [uid]
+    );
+    res.json({ totalAds, activeAds, soldAds, archivedAds, totalFavorites, totalMessages, unreadMessages, recentMessages });
   } catch {
     res.status(500).json({ error: 'Erreur serveur' });
   }

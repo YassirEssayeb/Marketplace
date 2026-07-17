@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const pool = require('../config/db');
+const { createNotification } = require('../controllers/notificationController');
 
 router.get('/', auth, async (req, res) => {
   try {
@@ -18,6 +19,20 @@ router.get('/', auth, async (req, res) => {
 router.post('/:adId', auth, async (req, res) => {
   try {
     await pool.query('INSERT IGNORE INTO favorites (user_id, ad_id) VALUES (?, ?)', [req.user.id, req.params.adId]);
+
+    // Notify the ad owner
+    const [[ad]] = await pool.query('SELECT user_id, title FROM ads WHERE id = ?', [req.params.adId]);
+    if (ad && ad.user_id !== req.user.id) {
+      const [[user]] = await pool.query('SELECT name FROM users WHERE id = ?', [req.user.id]);
+      const userName = user ? user.name : 'Un utilisateur';
+      await createNotification(
+        ad.user_id, 'favorite',
+        'Nouveau favori',
+        `${userName} a ajouté "${ad.title}" à ses favoris`,
+        '/ads/' + req.params.adId
+      );
+    }
+
     res.status(201).json({ message: 'Ajouté aux favoris' });
   } catch { res.status(500).json({ error: 'Erreur serveur' }); }
 });

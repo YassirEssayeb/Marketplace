@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 const JoinAsSeller = () => {
+  const { t } = useLanguage();
+
   return (
     <main className="pt-20">
       {/* Hero Section with Bento Layout */}
@@ -9,12 +12,12 @@ const JoinAsSeller = () => {
         <div className="grid grid-cols-12 gap-gutter">
           {/* Main CTA Area */}
           <div className="col-span-12 lg:col-span-7 flex flex-col justify-center">
-            <span className="text-secondary font-label-md mb-4 tracking-widest uppercase">Seller program</span>
-            <h1 className="font-display-lg text-display-lg md:text-[64px] leading-tight mb-6">Grow your enterprise sales with ProMarket</h1>
-            <p className="text-body-lg text-on-surface-variant mb-10 max-w-xl">Join the elite network of professional sellers. Connect with global buyers, manage your leads easily and enjoy zero listing fees.</p>
+            <span className="text-secondary font-label-md mb-4 tracking-widest uppercase">{t('join_title')}</span>
+            <h1 className="font-display-lg text-display-lg md:text-[64px] leading-tight mb-6">{t('join_subtitle')}</h1>
+            <p className="text-body-lg text-on-surface-variant mb-10 max-w-xl">{t('join_desc')}</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/register" className="bg-primary text-on-primary px-10 py-5 rounded-lg font-label-md text-lg hover:shadow-xl transition-all active:scale-95 text-center no-underline">Start selling</Link>
-              <button className="bg-surface-container-highest text-primary px-10 py-5 rounded-lg font-label-md text-lg hover:bg-surface-variant transition-all border-none cursor-pointer">Seller guide</button>
+              <Link to="/register" className="bg-primary text-on-primary px-10 py-5 rounded-lg font-label-md text-lg hover:shadow-xl transition-all active:scale-95 text-center no-underline">{t('join_cta')}</Link>
+              <button className="bg-surface-container-highest text-primary px-10 py-5 rounded-lg font-label-md text-lg hover:bg-surface-variant transition-all border-none cursor-pointer">{t('join_guide')}</button>
             </div>
           </div>
           {/* Visual Bento Column */}
@@ -27,8 +30,8 @@ const JoinAsSeller = () => {
               <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAW6ciPFWGyo9bGbAQ6FB_5Nld-OIm-SXtRlDXa5bUNPmHS38njrdMnsW6hrcnvGbSpm2Kp5s_ZbkHqNc8CvGxExXAwOChbmtd16MRZyWLZq8PysCITCusVRBqrdXDlaGEg7Xb2D7eJi1Q4jboSy7PIzf5U1v7c8sP47lGbjwqdfYBaGYi-CtU3ZD25rk2KqAEKtcenKjO-Exn7_NYQh0VFLo3eO3ZW5PTk-H8EMXMIjOcsxXC" alt="Professional equipment" />
             </div>
             <div className="rounded-xl bg-surface-container-low p-6 border border-outline-variant flex flex-col justify-end">
-              <span className="text-headline-md font-black text-secondary">0%</span>
-              <span className="text-body-sm font-label-sm text-on-surface-variant uppercase">Listing fees</span>
+              <span className="text-headline-md font-black text-secondary">{t('join_zero_fees')}</span>
+              <span className="text-body-sm font-label-sm text-on-surface-variant uppercase">{t('join_fees_label')}</span>
             </div>
           </div>
         </div>
@@ -38,14 +41,14 @@ const JoinAsSeller = () => {
       <section className="bg-surface-container-low py-24">
         <div className="max-w-container-max mx-auto px-margin-desktop">
           <div className="text-center mb-16">
-            <h2 className="font-headline-lg text-headline-lg mb-4">Why professional sellers choose us</h2>
+            <h2 className="font-headline-lg text-headline-lg mb-4">{t('join_why_title')}</h2>
             <div className="w-20 h-1 bg-secondary mx-auto"></div>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: 'public', title: 'Connect with global enterprise buyers', desc: 'Instantly access a verified network of Fortune 500 procurement teams and high-growth tech companies.' },
-              { icon: 'forum', title: 'Message-First Sales Flow', desc: 'Our intuitive communication platform streamlines negotiations, technical questions and closing deals directly.' },
-              { icon: 'payments', title: 'Zero listing fees', desc: 'Maximize your margins. List your inventory with no upfront fees and only pay a small commission on sale.' },
+              { icon: 'public', title: t('join_connect_title'), desc: t('join_connect_desc') },
+              { icon: 'forum', title: t('join_flow_title'), desc: t('join_flow_desc') },
+              { icon: 'payments', title: t('join_zero_title'), desc: t('join_zero_desc') },
             ].map((prop, i) => (
               <div key={i} className="bg-surface-container-lowest p-8 border border-outline-variant rounded-xl hover:shadow-md transition-shadow">
                 <div className="w-12 h-12 bg-secondary-fixed text-secondary flex items-center justify-center rounded-lg mb-6">
@@ -63,12 +66,12 @@ const JoinAsSeller = () => {
       <section className="py-24 max-w-container-max mx-auto px-margin-desktop">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
           <div className="lg:w-1/2">
-            <h2 className="font-headline-lg text-headline-lg mb-8">From sign-up to payment in minutes</h2>
+            <h2 className="font-headline-lg text-headline-lg mb-8">{t('join_steps_title')}</h2>
             <div className="space-y-8">
               {[
-                { num: 1, title: 'Create your profile', desc: 'Set up your professional seller storefront. Showcase your expertise, verification badges and shipping capabilities.' },
-                { num: 2, title: 'List your products', desc: 'Use our high-precision listing tools to upload detailed specifications and professional photographs.' },
-                { num: 3, title: 'Negotiate and close', desc: 'Engage with interested buyers through our secure messaging system. Negotiate terms and finalize logistics.' },
+                { num: 1, title: t('join_step1_title'), desc: t('join_step1_desc') },
+                { num: 2, title: t('join_step2_title'), desc: t('join_step2_desc') },
+                { num: 3, title: t('join_step3_title'), desc: t('join_step3_desc') },
               ].map(step => (
                 <div key={step.num} className="flex gap-6 group">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full border-2 border-secondary flex items-center justify-center font-bold text-secondary group-hover:bg-secondary group-hover:text-white transition-colors">{step.num}</div>
@@ -100,10 +103,10 @@ const JoinAsSeller = () => {
               <span className="text-4xl font-bold text-primary">MC</span>
             </div>
             <div>
-              <p className="font-headline-md text-headline-md italic mb-6 leading-relaxed">"ProMarket has transformed our business. We reached enterprise accounts we never could have targeted through traditional social media."</p>
+              <p className="font-headline-md text-headline-md italic mb-6 leading-relaxed">"{t('join_quote')}"</p>
               <div>
-                <span className="block font-bold text-lg">Marcus Chen</span>
-                <span className="block text-on-primary-container">Director, Peak Optic Systems</span>
+                <span className="block font-bold text-lg">{t('join_author')}</span>
+                <span className="block text-on-primary-container">{t('join_author_role')}</span>
               </div>
             </div>
           </div>
@@ -115,10 +118,10 @@ const JoinAsSeller = () => {
         <div className="max-w-container-max mx-auto px-margin-desktop">
           <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 md:p-16 flex flex-col lg:flex-row gap-16 shadow-lg">
             <div className="lg:w-1/2">
-              <h2 className="font-headline-lg text-headline-lg mb-4">Sell internationally</h2>
-              <p className="text-body-lg text-on-surface-variant mb-8">Ready to elevate your marketplace presence? Fill out the form below and our onboarding specialist will contact you within 24 hours.</p>
+              <h2 className="font-headline-lg text-headline-lg mb-4">{t('join_sell_title')}</h2>
+              <p className="text-body-lg text-on-surface-variant mb-8">{t('join_sell_desc')}</p>
               <div className="grid grid-cols-2 gap-4 mb-8">
-                {['Verified seller status', 'Priority support', 'API access', 'Wholesale tools'].map(item => (
+                {[t('join_benefits_verified'), t('join_benefits_support'), t('join_benefits_api'), t('join_benefits_wholesale')].map(item => (
                   <div key={item} className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-secondary">check_circle</span>
                     <span className="text-body-sm font-label-md">{item}</span>
@@ -126,27 +129,27 @@ const JoinAsSeller = () => {
                 ))}
               </div>
             </div>
-            <form className="lg:w-1/2 space-y-4" onSubmit={e => { e.preventDefault(); alert('Request received. Our team will contact you within 24h.'); }}>
+            <form className="lg:w-1/2 space-y-4" onSubmit={e => { e.preventDefault(); alert(t('join_form_success')); }}>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">First name</label>
+                  <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">{t('join_form_first')}</label>
                   <input className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all outline-none" placeholder="John" type="text" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">Last name</label>
+                  <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">{t('join_form_last')}</label>
                   <input className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all outline-none" placeholder="Doe" type="text" />
                 </div>
               </div>
               <div className="space-y-1">
-                <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">Business email</label>
+                <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">{t('join_form_email')}</label>
                 <input className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all outline-none" placeholder="john@company.com" type="email" />
               </div>
               <div className="space-y-1">
-                <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">Website</label>
+                <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">{t('join_form_website')}</label>
                 <input className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all outline-none" placeholder="www.yourcompany.com" type="text" />
               </div>
               <div className="space-y-1">
-                <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">Inventory category</label>
+                <label className="text-label-sm uppercase tracking-wider text-on-surface-variant">{t('join_form_category')}</label>
                 <select className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all outline-none appearance-none">
                   <option>Professional A/V</option>
                   <option>IT & Data Center</option>
@@ -154,7 +157,7 @@ const JoinAsSeller = () => {
                   <option>Scientific equipment</option>
                 </select>
               </div>
-              <button className="w-full bg-secondary text-white py-4 rounded-lg font-label-md text-lg hover:bg-secondary-container transition-all active:scale-95 mt-4 border-none cursor-pointer" type="submit">Submit request</button>
+              <button className="w-full bg-secondary text-white py-4 rounded-lg font-label-md text-lg hover:bg-secondary-container transition-all active:scale-95 mt-4 border-none cursor-pointer" type="submit">{t('join_form_submit')}</button>
             </form>
           </div>
         </div>

@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
     const token = jwt.sign({ id: result.insertId, email }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.status(201).json({
       token,
-      user: { id: result.insertId, name, email, phone: phone || '', city: city || '', is_admin: false }
+      user: { id: result.insertId, name, email, phone: phone || '', city: city || '', is_admin: false, avatar_url: null }
     });
   } catch (err) {
     res.status(500).json({ error: 'Erreur serveur' });
@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.json({
       token,
-      user: { id: user.id, name: user.name, email: user.email, phone: user.phone || '', city: user.city || '', is_admin: !!user.is_admin }
+      user: { id: user.id, name: user.name, email: user.email, phone: user.phone || '', city: user.city || '', is_admin: !!user.is_admin, avatar_url: user.avatar_url || null }
     });
   } catch (err) {
     res.status(500).json({ error: 'Erreur serveur' });
@@ -80,6 +80,25 @@ exports.updateProfile = async (req, res) => {
     }
     const [users] = await pool.query('SELECT id, name, email, phone, city, is_admin, created_at, avatar_url, headline, bio FROM users WHERE id = ?', [req.user.id]);
     res.json(users[0]);
+  } catch {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const [users] = await pool.query(
+      'SELECT id, name, avatar_url, headline, bio, city, created_at FROM users WHERE id = ?',
+      [req.params.id]
+    );
+    if (users.length === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
+    const user = users[0];
+    const [ads] = await pool.query(
+      'SELECT id, title, price, images, status, created_at FROM ads WHERE user_id = ? ORDER BY created_at DESC',
+      [req.params.id]
+    );
+    const [[{ total }]] = await pool.query('SELECT COUNT(*) as total FROM ads WHERE user_id = ?', [req.params.id]);
+    res.json({ ...user, listings: ads.map(a => ({ ...a, images: a.images ? JSON.parse(a.images) : [] })), totalListings: total });
   } catch {
     res.status(500).json({ error: 'Erreur serveur' });
   }

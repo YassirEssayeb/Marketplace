@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
+import { useLanguage } from '../context/LanguageContext';
 
 const demoBrowseProducts = [
   { id: 'd1', title: 'Lumix X-900 Cinema', price: 2499, category_name: 'Electronics', subcategory: 'Cameras', badge: 'New Arrival', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7t-vAd7dx4TIJkuhQh0hiWSYp0LTGlfK41kFPy7HqrhkEx-4PLLGtpGCvqOS1tEUu_j6UltpJzjkz36rUlz93zY-4jUNfgYI4Ow_l0SRfMTOpUCyCmUTI5Es4QK5WfTL3xZKS21Snn3nD-3B4mWCCcXZcPI_nLofgknjPtb_A-U-7RZESibiJhw4yUTfEBtqatIqMMNN5rrgVJBkROvf_vjkl4bN828c-uj72qZ4k9EITeB7T', rating: 5, reviews: 124, sellerBadge: 'Verified Seller' },
@@ -13,18 +14,32 @@ const demoBrowseProducts = [
 ];
 
 const Browse = () => {
+  const { t, formatPrice, currency } = useLanguage();
   const [ads, setAds] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
   const [categories, setCategories] = useState([]);
+  const [sellers, setSellers] = useState([]);
   const [filters, setFilters] = useState({ search: '', category: '', minPrice: '', maxPrice: '', location: '', sort: 'date_desc' });
   const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState('');
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [conditionFilter, setConditionFilter] = useState('Refurbished');
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'ads');
+
+  useEffect(() => {
+    const tab = searchParams.get('tab') || 'ads';
+    setActiveTab(tab);
+  }, [searchParams]);
 
   useEffect(() => {
     api.get('/ads/categories').then(r => setCategories(r.data)).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'sellers') {
+      api.get('/sellers').then(r => setSellers(r.data)).catch(() => {});
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     const q = searchParams.get('search') || '';
@@ -65,8 +80,124 @@ const Browse = () => {
 
   const displayProducts = loading ? [] : (ads.length > 0 ? ads : demoBrowseProducts);
 
+  const switchTab = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'ads') {
+      setSearchParams({});
+    } else {
+      setSearchParams({ tab });
+    }
+  };
+
+  const categoryIcons = {
+    1: 'devices', 2: 'home', 3: 'checkroom', 4: 'sports_esports',
+    5: 'directions_car', 6: 'fitness_center', 7: 'build', 8: 'category',
+  };
+
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
+      {/* Tab Navigation */}
+      <div className="flex items-center gap-1 mb-8 bg-surface-container-low rounded-xl p-1 border border-outline-variant/40 w-fit">
+        {[
+          { key: 'ads', label: t('nav_browse'), icon: 'storefront' },
+          { key: 'categories', label: t('nav_categories'), icon: 'category' },
+          { key: 'sellers', label: t('nav_sellers'), icon: 'group' },
+        ].map(tab => (
+          <button
+            key={tab.key}
+            onClick={() => switchTab(tab.key)}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-label-md text-label-md transition-all border-none cursor-pointer ${
+              activeTab === tab.key
+                ? 'bg-secondary text-on-secondary shadow-sm'
+                : 'bg-transparent text-on-surface-variant hover:bg-surface-container-high'
+            }`}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>{tab.icon}</span>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Categories Tab */}
+      {activeTab === 'categories' && (
+        <div>
+          <h2 className="font-headline-lg text-headline-lg text-primary mb-8">{t('nav_categories')}</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            {categories.map(c => (
+              <Link
+                key={c.id}
+                to={`/browse?category=${c.id}`}
+                className="group bg-white border border-outline-variant rounded-2xl p-8 flex flex-col items-center gap-4 hover:shadow-lg hover:-translate-y-1 hover:border-secondary/40 transition-all duration-300 no-underline text-center"
+              >
+                <div className="w-16 h-16 rounded-2xl bg-secondary-fixed flex items-center justify-center group-hover:bg-secondary group-hover:text-on-secondary transition-all">
+                  <span className="material-symbols-outlined text-3xl text-on-secondary-fixed group-hover:text-on-secondary transition-colors">
+                    {categoryIcons[c.id] || 'category'}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">{c.name}</h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+          {categories.length === 0 && !loading && (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <span className="material-symbols-outlined text-6xl text-outline mb-4">category</span>
+              <p className="font-headline-sm text-headline-sm text-primary mb-2">{t('browse_no_results')}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Sellers Tab */}
+      {activeTab === 'sellers' && (
+        <div>
+          <h2 className="font-headline-lg text-headline-lg text-primary mb-8">{t('nav_sellers')}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sellers.map(s => (
+              <Link
+                key={s.id}
+                to={`/user/${s.id}`}
+                className="group bg-white border border-outline-variant rounded-2xl p-6 flex gap-5 items-start hover:shadow-lg hover:-translate-y-1 hover:border-secondary/40 transition-all duration-300 no-underline"
+              >
+                <div className="w-14 h-14 rounded-full bg-surface-container-high flex-shrink-0 overflow-hidden border-2 border-outline-variant group-hover:border-secondary transition-colors">
+                  {s.avatar_url ? (
+                    <img src={s.avatar_url} alt={s.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="material-symbols-outlined text-2xl text-on-surface-variant flex items-center justify-center w-full h-full">person</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors truncate">{s.name}</h3>
+                  {s.headline && <p className="text-body-sm text-on-surface-variant mt-1 truncate">{s.headline}</p>}
+                  <div className="flex items-center gap-3 mt-2">
+                    {s.city && (
+                      <span className="flex items-center gap-1 text-label-sm text-on-surface-variant">
+                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>location_on</span>
+                        {s.city}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1 text-label-sm text-secondary font-bold">
+                      <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>storefront</span>
+                      {s.ad_count || 0} {t('nav_browse').toLowerCase()}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+          {sellers.length === 0 && !loading && (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <span className="material-symbols-outlined text-6xl text-outline mb-4">group</span>
+              <p className="font-headline-sm text-headline-sm text-primary mb-2">{t('browse_no_results')}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Ads Tab (default) */}
+      {activeTab === 'ads' && (
+      <>
       {/* Inline Search Bar */}
       <div className="mb-8">
         <div className="flex items-center bg-white border border-outline-variant rounded-xl px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-secondary/20 transition-all h-14">
@@ -75,7 +206,7 @@ const Browse = () => {
             type="text"
             value={searchInput}
             onChange={e => setSearchInput(e.target.value)}
-            placeholder="Search for professional gear..."
+            placeholder={t('browse_search')}
             className="bg-transparent border-none focus:ring-0 text-body-md font-body-md w-full outline-none"
           />
           {searchInput && (
@@ -87,15 +218,15 @@ const Browse = () => {
         {/* Sidebar Filters */}
         <aside className="w-full md:w-64 flex-shrink-0 space-y-stack-lg">
           <div className="flex items-center justify-between">
-            <h2 className="font-headline-sm text-headline-sm text-primary">Filters</h2>
+            <h2 className="font-headline-sm text-headline-sm text-primary">{t('browse_filters')}</h2>
             {hasActiveFilters && (
-              <button onClick={clearFilters} className="text-label-sm text-secondary hover:underline border-none bg-transparent cursor-pointer">Reset</button>
+              <button onClick={clearFilters} className="text-label-sm text-secondary hover:underline border-none bg-transparent cursor-pointer">{t('browse_reset')}</button>
             )}
           </div>
 
           {/* Category */}
           <section>
-            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Category</h3>
+            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">{t('browse_category')}</h3>
             <div className="space-y-2">
               <label className="flex items-center gap-3 cursor-pointer group">
                 <input
@@ -105,7 +236,7 @@ const Browse = () => {
                   onChange={() => handleFilter('category', '')}
                   className="w-5 h-5 border-outline-variant rounded text-secondary focus:ring-secondary/20"
                 />
-                <span className="font-body-sm text-on-surface group-hover:text-secondary transition-colors">All</span>
+                <span className="font-body-sm text-on-surface group-hover:text-secondary transition-colors">{t('browse_all')}</span>
               </label>
               {categories.map(c => (
                 <label key={c.id} className="flex items-center gap-3 cursor-pointer group">
@@ -126,20 +257,20 @@ const Browse = () => {
 
           {/* Price Range */}
           <section>
-            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Price range</h3>
+            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">{t('browse_price_range')}</h3>
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  placeholder="Min"
+                  placeholder={t('browse_min')}
                   value={filters.minPrice}
                   onChange={e => handleFilter('minPrice', e.target.value)}
                   className="w-full h-10 px-3 border border-outline-variant rounded-lg font-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none"
                 />
-                <span className="text-outline">to</span>
+                <span className="text-outline">{t('browse_to')}</span>
                 <input
                   type="number"
-                  placeholder="Max"
+                  placeholder={t('browse_max')}
                   value={filters.maxPrice}
                   onChange={e => handleFilter('maxPrice', e.target.value)}
                   className="w-full h-10 px-3 border border-outline-variant rounded-lg font-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none"
@@ -157,19 +288,23 @@ const Browse = () => {
 
           {/* Condition */}
           <section>
-            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">État</h3>
+            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">{t('browse_condition')}</h3>
             <div className="flex flex-wrap gap-2">
-              {['New', 'Refurbished', 'Used'].map(c => (
+              {[
+                { key: 'New', label: t('browse_new') },
+                { key: 'Refurbished', label: t('browse_refurbished') },
+                { key: 'Used', label: t('browse_used') },
+              ].map(c => (
                 <button
-                  key={c}
-                  onClick={() => setConditionFilter(c)}
+                  key={c.key}
+                  onClick={() => setConditionFilter(c.key)}
                   className={`px-3 py-1.5 rounded-full text-label-sm border transition-all cursor-pointer ${
-                    conditionFilter === c
+                    conditionFilter === c.key
                       ? 'bg-secondary text-white border-secondary'
                       : 'border-outline-variant hover:border-secondary bg-transparent text-on-surface'
                   }`}
                 >
-                  {c}
+                  {c.label}
                 </button>
               ))}
             </div>
@@ -179,7 +314,7 @@ const Browse = () => {
 
           {/* Rating */}
           <section>
-            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">Seller rating</h3>
+            <h3 className="font-label-md text-label-md text-on-surface-variant mb-stack-md uppercase tracking-wider">{t('browse_seller_rating')}</h3>
             <div className="space-y-2">
               <button className="flex items-center gap-2 group w-full text-left bg-transparent border-none cursor-pointer">
                 <div className="flex text-amber-500">
@@ -188,7 +323,7 @@ const Browse = () => {
                   ))}
                   <span className="material-symbols-outlined text-[18px]">star</span>
                 </div>
-                <span className="font-body-sm text-on-surface-variant group-hover:text-primary">& Up</span>
+                <span className="font-body-sm text-on-surface-variant group-hover:text-primary">{t('browse_up')}</span>
               </button>
             </div>
           </section>
@@ -199,21 +334,21 @@ const Browse = () => {
           {/* Sorting & Top Bar */}
           <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 border border-outline-variant rounded-xl gap-4">
             <p className="text-on-surface-variant font-body-sm">
-              {loading ? 'Loading...' : (
-                <>Showing <span className="font-bold text-primary">1-{Math.min(12, pagination.total || displayProducts.length)}</span> of {pagination.total || displayProducts.length} products</>
+              {loading ? t('loading') : (
+                <>{t('browse_showing')} <span className="font-bold text-primary">1-{Math.min(12, pagination.total || displayProducts.length)}</span> {t('browse_of')} {pagination.total || displayProducts.length} {t('browse_products')}</>
               )}
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-label-md text-on-surface-variant">Sort by:</span>
+              <span className="text-label-md text-on-surface-variant">{t('browse_sort')}</span>
               <select
                 value={filters.sort}
                 onChange={e => handleFilter('sort', e.target.value)}
                 className="bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 font-label-md text-label-md outline-none focus:border-secondary transition-all cursor-pointer"
               >
-                <option value="date_desc">Featured</option>
-                <option value="price_asc">Price: low to high</option>
-                <option value="price_desc">Price: high to low</option>
-                <option value="date_asc">Newest first</option>
+                <option value="date_desc">{t('browse_featured')}</option>
+                <option value="price_asc">{t('browse_price_low_high')}</option>
+                <option value="price_desc">{t('browse_price_high_low')}</option>
+                <option value="date_asc">{t('browse_newest')}</option>
               </select>
             </div>
           </div>
@@ -226,8 +361,8 @@ const Browse = () => {
           ) : displayProducts.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <span className="material-symbols-outlined text-6xl text-outline mb-4">search_off</span>
-              <p className="font-headline-sm text-headline-sm text-primary mb-2">No listings found</p>
-              <p className="font-body-md text-on-surface-variant">Try adjusting your filters or broadening your search.</p>
+              <p className="font-headline-sm text-headline-sm text-primary mb-2">{t('browse_no_results')}</p>
+              <p className="font-body-md text-on-surface-variant">{t('browse_no_results_desc')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -252,7 +387,7 @@ const Browse = () => {
                       }`}>{ad.badge}</div>
                     )}
                     {ad.status === 'sold' && (
-                      <div className="absolute top-3 left-3 bg-error text-white px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Sold</div>
+                      <div className="absolute top-3 left-3 bg-error text-white px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">{t('browse_sold')}</div>
                     )}
                     <button className="absolute top-3 right-3 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors border-none cursor-pointer">
                       <span className="material-symbols-outlined">favorite</span>
@@ -265,7 +400,7 @@ const Browse = () => {
                         <p className="text-label-sm text-on-surface-variant">{ad.category_name || ''}{ad.subcategory ? ` • ${ad.subcategory}` : ''}{ad.location ? ` • ${ad.location}` : ''}</p>
                       </div>
                       <span className="font-headline-sm text-headline-sm text-primary ml-3 whitespace-nowrap">
-                        {ad.price ? (typeof ad.price === 'number' ? '$' + ad.price.toLocaleString() : ad.price) : 'Price N/A'}
+                        {ad.price ? (typeof ad.price === 'number' ? formatPrice(ad.price, currency) : ad.price) : t('price_na')}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -279,7 +414,7 @@ const Browse = () => {
                       <span className="text-label-sm text-secondary font-bold">{ad.sellerBadge || ''}</span>
                     </div>
                     <button className="w-full bg-primary text-white py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-primary/90 transition-all active:scale-95 border-none cursor-pointer">
-                      <span className="material-symbols-outlined text-[20px]">chat</span> Send message
+                      <span className="material-symbols-outlined text-[20px]">chat</span> {t('browse_send_message')}
                     </button>
                   </div>
                 </Link>
@@ -339,6 +474,8 @@ const Browse = () => {
           )}
         </div>
       </div>
+      </>
+      )}
     </main>
   );
 };

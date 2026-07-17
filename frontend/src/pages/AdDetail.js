@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
 
@@ -8,6 +9,7 @@ const AdDetail = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t, formatPrice, currency } = useLanguage();
   const [ad, setAd] = useState(null);
   const [msg, setMsg] = useState('');
   const [currentImage, setCurrentImage] = useState(0);
@@ -39,7 +41,7 @@ const AdDetail = () => {
       await api.post('/messages', { receiver_id: ad.user_id, content: msg, ad_id: ad.id });
       setMsg('');
       navigate('/messages');
-    } catch { alert('Error sending message'); }
+    } catch { alert(t('detail_err_send')); }
   };
 
   const toggleFavorite = async () => {
@@ -56,7 +58,7 @@ const AdDetail = () => {
   };
 
   const deleteAd = async () => {
-    if (!window.confirm('Delete this listing?')) return;
+    if (!window.confirm(t('detail_confirm_delete'))) return;
     try {
       await api.delete('/ads/' + id);
       navigate('/my-ads');
@@ -64,24 +66,24 @@ const AdDetail = () => {
   };
 
   const reportAd = async () => {
-    const reason = prompt('Report reason:');
+    const reason = prompt(t('detail_report_reason'));
     if (!reason) return;
     try {
       await api.post('/ads/' + id + '/report', { reason });
-      alert('Listing reported');
+      alert(t('detail_reported'));
     } catch { alert('Error'); }
   };
 
   const timeAgo = (date) => {
     const diff = Date.now() - new Date(date).getTime();
     const mins = Math.floor(diff / 60000);
-    if (mins < 60) return mins + ' min ago';
+    if (mins < 60) return mins + t('detail_min_ago');
     const hours = Math.floor(mins / 60);
-    if (hours < 24) return hours + 'h ago';
+    if (hours < 24) return hours + t('detail_h_ago');
     const days = Math.floor(hours / 24);
-    if (days < 30) return days + 'd ago';
+    if (days < 30) return days + t('detail_d_ago');
     const months = Math.floor(days / 30);
-    return months + ' month' + (months > 1 ? 's' : '') + ' ago';
+    return months + (months > 1 ? t('detail_months_ago') : t('detail_month_ago'));
   };
 
   if (!ad) return (
@@ -93,21 +95,21 @@ const AdDetail = () => {
 
   const images = ad.images && ad.images.length > 0 ? ad.images : [];
   const specs = [
-    { label: 'Category', value: ad.category_name || 'N/A', icon: 'category' },
-    { label: 'Condition', value: ad.status === 'active' ? 'Available' : ad.status === 'sold' ? 'Sold' : 'Archived', icon: 'check_circle' },
-    { label: 'Location', value: ad.location || 'N/A', icon: 'location_on' },
-    { label: 'Posted', value: timeAgo(ad.created_at), icon: 'schedule' },
-    { label: 'Updated', value: timeAgo(ad.updated_at), icon: 'update' },
-    { label: 'Seller', value: ad.user_name || 'Unknown', icon: 'person' },
+    { label: t('detail_category'), value: ad.category_name || 'N/A', icon: 'category' },
+    { label: t('detail_condition'), value: ad.status === 'active' ? t('detail_available') : ad.status === 'sold' ? t('detail_sold') : t('detail_archived'), icon: 'check_circle' },
+    { label: t('detail_location'), value: ad.location || 'N/A', icon: 'location_on' },
+    { label: t('detail_posted'), value: timeAgo(ad.created_at), icon: 'schedule' },
+    { label: t('detail_updated'), value: timeAgo(ad.updated_at), icon: 'update' },
+    { label: t('detail_seller'), value: ad.user_name || t('detail_unknown'), icon: 'person' },
   ];
 
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-on-surface-variant mb-8">
-        <Link to="/" className="hover:text-primary no-underline text-on-surface-variant">Home</Link>
+        <Link to="/" className="hover:text-primary no-underline text-on-surface-variant">{t('detail_home')}</Link>
         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-        <Link to="/browse" className="hover:text-primary no-underline text-on-surface-variant">Browse</Link>
+        <Link to="/browse" className="hover:text-primary no-underline text-on-surface-variant">{t('detail_browse')}</Link>
         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
         {ad.category_name && (
           <>
@@ -158,14 +160,14 @@ const AdDetail = () => {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <span className="bg-surface-container px-3 py-1 rounded-full text-label-sm font-label-sm text-on-surface-variant border border-outline-variant">
-                {ad.category_name || 'Listing'}
+                {ad.category_name || t('detail_listing')}
               </span>
               <span className={`px-3 py-1 rounded-full text-label-sm font-label-sm font-bold ${
                 ad.status === 'active' ? 'bg-green-50 text-green-700 border border-green-200' :
                 ad.status === 'sold' ? 'bg-red-50 text-red-700 border border-red-200' :
                 'bg-gray-50 text-gray-700 border border-gray-200'
               }`}>
-                {ad.status === 'active' ? 'Available' : ad.status === 'sold' ? 'Sold' : 'Archived'}
+                {ad.status === 'active' ? t('detail_available') : ad.status === 'sold' ? t('detail_sold') : t('detail_archived')}
               </span>
             </div>
             <h1 className="font-headline-lg text-headline-lg text-primary mb-3">{ad.title}</h1>
@@ -176,7 +178,7 @@ const AdDetail = () => {
               </span>
               <span className="flex items-center gap-1">
                 <span className="material-symbols-outlined text-[16px]">location_on</span>
-                {ad.location || 'Morocco'}
+                {ad.location || t('detail_location_fallback')}
               </span>
             </div>
           </div>
@@ -185,7 +187,7 @@ const AdDetail = () => {
           <div className="bg-white p-6 rounded-xl border border-outline-variant shadow-sm">
             <div className="flex items-baseline gap-2 mb-6">
               <span className="text-display-lg font-display-lg text-primary">
-                {ad.price ? (typeof ad.price === 'number' ? ad.price.toLocaleString('en-US') + ' $' : ad.price) : 'Price N/A'}
+                {ad.price ? formatPrice(ad.price, currency) : t('price_na')}
               </span>
             </div>
 
@@ -196,12 +198,12 @@ const AdDetail = () => {
                     onClick={sendMessage}
                     className="w-full bg-secondary text-white py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer border-none"
                   >
-                    <span className="material-symbols-outlined text-[20px]">chat</span> Send message
+                    <span className="material-symbols-outlined text-[20px]">chat</span> {t('detail_send_message')}
                   </button>
                   <textarea
                     value={msg}
                     onChange={e => setMsg(e.target.value)}
-                    placeholder="Write your message to the seller..."
+                    placeholder={t('detail_message_placeholder')}
                     rows="3"
                     className="w-full px-4 py-3 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none resize-none"
                   />
@@ -211,7 +213,7 @@ const AdDetail = () => {
                   to="/login"
                   className="w-full bg-secondary text-white py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 no-underline text-center"
                 >
-                  <span className="material-symbols-outlined text-[20px]">login</span> Log in to contact
+                  <span className="material-symbols-outlined text-[20px]">login</span> {t('detail_login_contact')}
                 </Link>
               ) : null}
             </div>
@@ -224,7 +226,7 @@ const AdDetail = () => {
                     <span className="material-symbols-outlined">location_on</span>
                   </div>
                   <div>
-                    <p className="text-label-sm font-bold">Location</p>
+                    <p className="text-label-sm font-bold">{t('detail_location')}</p>
                     <p className="text-xs text-on-surface-variant">{ad.location}</p>
                   </div>
                 </div>
@@ -234,26 +236,30 @@ const AdDetail = () => {
                   <span className="material-symbols-outlined">calendar_today</span>
                 </div>
                 <div>
-                  <p className="text-label-sm font-bold">Posted on</p>
+                  <p className="text-label-sm font-bold">{t('detail_posted_on')}</p>
                   <p className="text-xs text-on-surface-variant">{new Date(ad.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
-                  <span className="material-symbols-outlined">person</span>
+              <Link to={`/user/${ad.user_id}`} className="flex items-center gap-3 no-underline">
+                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary overflow-hidden">
+                  {ad.user_avatar_url ? (
+                    <img src={ad.user_avatar_url} alt={ad.user_name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="material-symbols-outlined">person</span>
+                  )}
                 </div>
                 <div>
-                  <p className="text-label-sm font-bold">Seller</p>
+                  <p className="text-label-sm font-bold">{t('detail_seller')}</p>
                   <p className="text-xs text-on-surface-variant">{ad.user_name}</p>
                 </div>
-              </div>
+              </Link>
               {ad.user_phone && (
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
                     <span className="material-symbols-outlined">phone</span>
                   </div>
                   <div>
-                    <p className="text-label-sm font-bold">Phone</p>
+                    <p className="text-label-sm font-bold">{t('detail_phone')}</p>
                     <p className="text-xs text-on-surface-variant">{ad.user_phone}</p>
                   </div>
                 </div>
@@ -267,13 +273,13 @@ const AdDetail = () => {
                   to={'/ads/' + ad.id + '/edit'}
                   className="flex-1 bg-surface-container border border-outline-variant text-primary py-3 rounded-lg font-label-md text-label-md font-bold hover:bg-surface-container-high transition-all flex items-center justify-center gap-2 no-underline text-center"
                 >
-                  <span className="material-symbols-outlined text-[18px]">edit</span> Edit
+                  <span className="material-symbols-outlined text-[18px]">edit</span> {t('detail_edit')}
                 </Link>
                 <button
                   onClick={deleteAd}
                   className="flex-1 bg-error-container border border-error-container text-on-error-container py-3 rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer border-none"
                 >
-                  <span className="material-symbols-outlined text-[18px]">delete</span> Delete
+                  <span className="material-symbols-outlined text-[18px]">delete</span> {t('detail_delete')}
                 </button>
               </div>
             )}
@@ -292,7 +298,7 @@ const AdDetail = () => {
                   <span className="material-symbols-outlined text-[18px]" style={favorited ? { fontVariationSettings: "'FILL' 1" } : {}}>
                     {favorited ? 'favorite' : 'favorite_border'}
                   </span>
-                  {favorited ? 'Favorited' : 'Add to favorites'}
+                  {favorited ? t('detail_favorited') : t('detail_add_fav')}
                 </button>
               )}
               {user && user.id !== ad.user_id && (
@@ -321,9 +327,9 @@ const AdDetail = () => {
                   : 'border-transparent text-on-surface-variant hover:text-primary'
               }`}
             >
-              {tab === 'description' && 'Description'}
-              {tab === 'specifications' && 'Specifications'}
-              {tab === 'seller' && 'About the Seller'}
+              {tab === 'description' && t('detail_description')}
+              {tab === 'specifications' && t('detail_specs')}
+              {tab === 'seller' && t('detail_about_seller')}
             </button>
           ))}
         </div>
@@ -333,7 +339,7 @@ const AdDetail = () => {
             {/* Description Tab */}
             {activeTab === 'description' && (
               <div className="text-on-surface-variant font-body-md text-body-md leading-relaxed whitespace-pre-wrap">
-                {ad.description || 'No description provided.'}
+                {ad.description || t('detail_no_desc')}
               </div>
             )}
 
@@ -352,16 +358,16 @@ const AdDetail = () => {
                 <div className="p-4 bg-surface-container-low rounded-xl border border-outline-variant/50">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="material-symbols-outlined text-[18px] text-secondary">tag</span>
-                    <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">Listing ID</p>
+                    <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">{t('detail_listing_id')}</p>
                   </div>
                   <p className="font-bold text-primary">#{ad.id}</p>
                 </div>
                 <div className="p-4 bg-surface-container-low rounded-xl border border-outline-variant/50">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="material-symbols-outlined text-[18px] text-secondary">sell</span>
-                    <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">Price</p>
+                    <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">{t('detail_price')}</p>
                   </div>
-                  <p className="font-bold text-primary">{ad.price ? ad.price.toLocaleString('en-US') + ' $' : 'N/A'}</p>
+                  <p className="font-bold text-primary">{ad.price ? formatPrice(ad.price, currency) : t('price_na')}</p>
                 </div>
               </div>
             )}
@@ -370,12 +376,16 @@ const AdDetail = () => {
             {activeTab === 'seller' && (
               <div className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant">
                 <div className="flex items-center gap-6 mb-6">
-                  <div className="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center border-2 border-secondary">
-                    <span className="material-symbols-outlined text-4xl text-on-surface-variant">person</span>
-                  </div>
+                  <Link to={`/user/${ad.user_id}`} className="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center border-2 border-secondary overflow-hidden no-underline">
+                    {ad.user_avatar_url ? (
+                      <img src={ad.user_avatar_url} alt={ad.user_name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="material-symbols-outlined text-4xl text-on-surface-variant">person</span>
+                    )}
+                  </Link>
                   <div>
-                    <h3 className="font-headline-md text-headline-md text-primary">{ad.user_name}</h3>
-                    <p className="text-sm text-on-surface-variant">Member since {new Date(ad.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
+                    <Link to={`/user/${ad.user_id}`} className="font-headline-md text-headline-md text-primary no-underline hover:underline">{ad.user_name}</Link>
+                    <p className="text-sm text-on-surface-variant">{t('detail_member_since')} {new Date(ad.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
                     {ad.user_city && (
                       <p className="text-sm text-on-surface-variant flex items-center gap-1 mt-1">
                         <span className="material-symbols-outlined text-[14px]">location_on</span>
@@ -385,14 +395,14 @@ const AdDetail = () => {
                   </div>
                 </div>
                 <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
-                  Verified seller on ProMarket. All listings are genuine and as described.
+                  {t('detail_verified_text')}
                 </p>
                 {user && user.id !== ad.user_id && (
                   <Link
                     to={`/messages?user=${ad.user_id}`}
                     className="inline-flex items-center gap-2 px-6 py-3 border border-secondary text-secondary rounded-lg font-bold text-sm hover:bg-secondary hover:text-white transition-all no-underline"
                   >
-                    <span className="material-symbols-outlined text-[16px]">chat</span> Contact Seller
+                    <span className="material-symbols-outlined text-[16px]">chat</span> {t('detail_contact_seller')}
                   </Link>
                 )}
               </div>
@@ -406,11 +416,11 @@ const AdDetail = () => {
         <div className="mt-24">
           <div className="flex justify-between items-end mb-8">
             <div>
-              <h2 className="font-headline-lg text-headline-lg text-primary mb-2">Related Products</h2>
-              <p className="text-on-surface-variant font-body-md">More from {ad.category_name || 'this category'}</p>
+              <h2 className="font-headline-lg text-headline-lg text-primary mb-2">{t('detail_related')}</h2>
+              <p className="text-on-surface-variant font-body-md">{t('detail_more_from')} {ad.category_name || t('detail_this_category')}</p>
             </div>
             <Link to={'/browse?category=' + ad.category_id} className="text-secondary font-bold hover:underline flex items-center gap-1 no-underline">
-              View all <span className="material-symbols-outlined">chevron_right</span>
+              {t('detail_view_all')} <span className="material-symbols-outlined">chevron_right</span>
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -431,7 +441,7 @@ const AdDetail = () => {
                   <p className="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-1">{item.category_name}</p>
                   <h4 className="font-bold text-primary mb-2 truncate">{item.title}</h4>
                   <span className="text-lg font-bold text-primary">
-                    {item.price ? item.price.toLocaleString('en-US') + ' $' : 'N/A'}
+                    {item.price ? formatPrice(item.price, currency) : t('price_na')}
                   </span>
                 </div>
               </Link>

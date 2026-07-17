@@ -1,9 +1,10 @@
 const pool = require('../config/db');
+const { createNotification } = require('./notificationController');
 
 exports.getConversations = async (req, res) => {
   try {
     const [rows] = await pool.query(
-      `SELECT DISTINCT u.id, u.name, u.email,
+      `SELECT DISTINCT u.id, u.name, u.email, u.avatar_url,
         (SELECT m2.content FROM messages m2 
          WHERE (m2.sender_id = LEAST(m.sender_id, m.receiver_id) AND m2.receiver_id = GREATEST(m.sender_id, m.receiver_id))
             OR (m2.sender_id = GREATEST(m.sender_id, m.receiver_id) AND m2.receiver_id = LEAST(m.sender_id, m.receiver_id))
@@ -33,7 +34,7 @@ exports.getConversations = async (req, res) => {
         [row.id, req.user.id]
       );
       return {
-        user: { id: row.id, name: row.name, email: row.email },
+        user: { id: row.id, name: row.name, email: row.email, avatar_url: row.avatar_url || null },
         lastMessage: row.last_content ? { content: row.last_content, created_at: row.last_time } : null,
         ad_id: row.ad_id,
         ad_title: row.ad_title,
@@ -81,6 +82,22 @@ exports.sendMessage = async (req, res) => {
       [ad_id || null, req.user.id, receiver_id, content || '', file_url || null]
     );
     const [msg] = await pool.query('SELECT * FROM messages WHERE id = ?', [result.insertId]);
+
+    // Create notification for receiver
+    const [[sender]] = await pool.query('SELECT name FROM users WHERE id = ?', [req.user.id]);
+    const senderName = sender ? sender.name : 'Un utilisateur';
+    let notifTitle = 'Nouveau message';
+    let notifMessage = `${senderName} vous a envoyé un message`;
+    let notifLink = '/messages';
+    if (ad_id) {
+      const [[ad]] = await pool.query('SELECT title FROM ads WHERE id = ?', [ad_id]);
+      if (ad) {
+        notifTitle = 'Nouveau message concernant "' + ad.title + '"';
+        notifLink = '/messages';
+      }
+    }
+    await createNotification(receiver_id, 'message', notifTitle, notifMessage, notifLink);
+
     res.status(201).json(msg[0]);
   } catch {
     res.status(500).json({ error: 'Erreur serveur' });

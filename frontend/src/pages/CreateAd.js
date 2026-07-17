@@ -1,12 +1,14 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
 
 const CreateAd = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [categories, setCategories] = useState([]);
   const [form, setForm] = useState({ title: '', description: '', price: '', category_id: '', location: '' });
   const [files, setFiles] = useState([]);
@@ -51,16 +53,16 @@ const CreateAd = () => {
   return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
       <div className="max-w-2xl mx-auto">
-        <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Post a listing</h1>
-        <p className="font-body-md text-on-surface-variant mb-8">Post your listing in just a few clicks.</p>
+        <h1 className="font-headline-lg text-headline-lg text-primary mb-2">{t('create_title')}</h1>
+        <p className="font-body-md text-on-surface-variant mb-8">{t('create_subtitle')}</p>
 
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl border border-outline-variant space-y-6">
           {/* Title */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Listing title *</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('create_label_title')}</label>
             <input
               name="title"
-              placeholder="e.g. iPhone 14 Pro Max 256GB"
+              placeholder={t('create_title_ph')}
               value={form.title}
               onChange={handleChange}
               required
@@ -70,10 +72,10 @@ const CreateAd = () => {
 
           {/* Description */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Description</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('create_label_desc')}</label>
             <textarea
               name="description"
-              placeholder="Describe your item in detail..."
+              placeholder={t('create_desc_ph')}
               value={form.description}
               onChange={handleChange}
               rows="5"
@@ -84,26 +86,26 @@ const CreateAd = () => {
           {/* Price & Category */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Price ($)</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('create_label_price')}</label>
               <input
                 name="price"
                 type="number"
                 step="0.01"
-                placeholder="0.00"
+                placeholder={t('create_price_ph')}
                 value={form.price}
                 onChange={handleChange}
                 className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
               />
             </div>
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Category</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('create_label_category')}</label>
               <select
                 name="category_id"
                 value={form.category_id}
                 onChange={handleChange}
                 className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none bg-white cursor-pointer"
               >
-                <option value="">Select</option>
+                <option value="">{t('create_category_ph')}</option>
                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
@@ -111,10 +113,10 @@ const CreateAd = () => {
 
           {/* Location */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Location</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('create_label_location')}</label>
             <input
               name="location"
-              placeholder="e.g. New York, NY"
+              placeholder={t('create_location_ph')}
               value={form.location}
               onChange={handleChange}
               className="w-full h-12 px-4 border border-outline-variant rounded-lg font-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none"
@@ -123,14 +125,14 @@ const CreateAd = () => {
 
           {/* Images */}
           <div>
-            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Images (max 10, 5MB each)</label>
+            <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('create_label_images')}</label>
             <div
               onClick={() => document.getElementById('file-input-create').click()}
               className="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center cursor-pointer hover:border-secondary transition-colors bg-surface-container-low"
             >
               <span className="material-symbols-outlined text-5xl text-outline mb-2 block">add_a_photo</span>
-              <p className="font-body-md font-semibold text-on-surface mb-1">Click to add images</p>
-              <p className="font-body-sm text-on-surface-variant">JPG, PNG, GIF, WebP — up to 10 files</p>
+              <p className="font-body-md font-semibold text-on-surface mb-1">{t('create_images_cta')}</p>
+              <p className="font-body-sm text-on-surface-variant">{t('create_images_hint')}</p>
             </div>
             <input id="file-input-create" type="file" accept="image/*" multiple onChange={handleFiles} style={{ display: 'none' }} />
             {previews.length > 0 && (
@@ -151,11 +153,11 @@ const CreateAd = () => {
             {uploading ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Publishing...
+                {t('create_publishing')}
               </>
             ) : (
               <>
-                <span className="material-symbols-outlined text-[20px]">publish</span> Publish listing
+                <span className="material-symbols-outlined text-[20px]">publish</span> {t('create_publish')}
               </>
             )}
           </button>

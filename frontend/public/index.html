@@ -17,53 +17,53 @@
         theme: {
           extend: {
             "colors": {
-              "surface-dim": "#d8dadc",
-              "primary": "#000000",
-              "secondary-fixed-dim": "#b4c5ff",
-              "tertiary": "#000000",
-              "on-surface": "#191c1e",
-              "on-background": "#191c1e",
-              "tertiary-fixed-dim": "#dec29a",
-              "surface-container": "#eceef0",
-              "tertiary-container": "#271901",
-              "surface-tint": "#565e74",
-              "surface-variant": "#e0e3e5",
-              "error-container": "#ffdad6",
-              "outline-variant": "#c6c6cd",
-              "on-tertiary": "#ffffff",
-              "on-secondary-fixed": "#00174b",
-              "on-tertiary-fixed": "#271901",
-              "inverse-on-surface": "#eff1f3",
-              "on-error": "#ffffff",
-              "on-tertiary-container": "#98805d",
-              "outline": "#76777d",
-              "on-surface-variant": "#45464d",
-              "on-tertiary-fixed-variant": "#574425",
-              "on-error-container": "#93000a",
-              "secondary": "#0051d5",
-              "primary-fixed": "#dae2fd",
-              "on-primary": "#ffffff",
-              "surface-container-highest": "#e0e3e5",
-              "surface-container-lowest": "#ffffff",
-              "background": "#f7f9fb",
-              "error": "#ba1a1a",
-              "surface-container-low": "#f2f4f6",
-              "surface-container-high": "#e6e8ea",
-              "surface": "#f7f9fb",
-              "secondary-fixed": "#dbe1ff",
-              "primary-fixed-dim": "#bec6e0",
-              "on-secondary-fixed-variant": "#003ea8",
-              "surface-bright": "#f7f9fb",
-              "secondary-container": "#316bf3",
-              "inverse-surface": "#2d3133",
-              "on-primary-fixed": "#131b2e",
-              "tertiary-fixed": "#fcdeb5",
-              "inverse-primary": "#bec6e0",
-              "on-primary-fixed-variant": "#3f465c",
-              "primary-container": "#131b2e",
-              "on-secondary": "#ffffff",
-              "on-secondary-container": "#fefcff",
-              "on-primary-container": "#7c839b"
+              "surface-dim": "var(--c-surface-dim)",
+              "primary": "var(--c-primary)",
+              "secondary-fixed-dim": "var(--c-secondary-fixed-dim)",
+              "tertiary": "var(--c-tertiary)",
+              "on-surface": "var(--c-on-surface)",
+              "on-background": "var(--c-on-background)",
+              "tertiary-fixed-dim": "var(--c-tertiary-fixed-dim)",
+              "surface-container": "var(--c-surface-container)",
+              "tertiary-container": "var(--c-tertiary-container)",
+              "surface-tint": "var(--c-surface-tint)",
+              "surface-variant": "var(--c-surface-variant)",
+              "error-container": "var(--c-error-container)",
+              "outline-variant": "var(--c-outline-variant)",
+              "on-tertiary": "var(--c-on-tertiary)",
+              "on-secondary-fixed": "var(--c-on-secondary-fixed)",
+              "on-tertiary-fixed": "var(--c-on-tertiary-fixed)",
+              "inverse-on-surface": "var(--c-inverse-on-surface)",
+              "on-error": "var(--c-on-error)",
+              "on-tertiary-container": "var(--c-on-tertiary-container)",
+              "outline": "var(--c-outline)",
+              "on-surface-variant": "var(--c-on-surface-variant)",
+              "on-tertiary-fixed-variant": "var(--c-on-tertiary-fixed-variant)",
+              "on-error-container": "var(--c-on-error-container)",
+              "secondary": "var(--c-secondary)",
+              "primary-fixed": "var(--c-primary-fixed)",
+              "on-primary": "var(--c-on-primary)",
+              "surface-container-highest": "var(--c-surface-container-highest)",
+              "surface-container-lowest": "var(--c-surface-container-lowest)",
+              "background": "var(--c-background)",
+              "error": "var(--c-error)",
+              "surface-container-low": "var(--c-surface-container-low)",
+              "surface-container-high": "var(--c-surface-container-high)",
+              "surface": "var(--c-surface)",
+              "secondary-fixed": "var(--c-secondary-fixed)",
+              "primary-fixed-dim": "var(--c-primary-fixed-dim)",
+              "on-secondary-fixed-variant": "var(--c-on-secondary-fixed-variant)",
+              "surface-bright": "var(--c-surface-bright)",
+              "secondary-container": "var(--c-secondary-container)",
+              "inverse-surface": "var(--c-inverse-surface)",
+              "on-primary-fixed": "var(--c-on-primary-fixed)",
+              "tertiary-fixed": "var(--c-tertiary-fixed)",
+              "inverse-primary": "var(--c-inverse-primary)",
+              "on-primary-fixed-variant": "var(--c-on-primary-fixed-variant)",
+              "primary-container": "var(--c-primary-container)",
+              "on-secondary": "var(--c-on-secondary)",
+              "on-secondary-container": "var(--c-on-secondary-container)",
+              "on-primary-container": "var(--c-on-primary-container)"
             },
             "borderRadius": {
               "DEFAULT": "0.125rem",
@@ -96,13 +96,13 @@
             "fontSize": {
               "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
               "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-              "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
-              "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+              "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+              "headline-sm": ["20px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
               "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
               "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
               "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
               "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
-              "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+              "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "0", "fontWeight": "600"}],
               "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
             }
           },
@@ -114,6 +114,115 @@
     <meta http-equiv="Expires" content="0" />
     <title>ProMarket</title>
     <style>
+      :root {
+        --c-surface-dim: #d8dadc;
+        --c-primary: #000000;
+        --c-secondary-fixed-dim: #b4c5ff;
+        --c-tertiary: #000000;
+        --c-on-surface: #191c1e;
+        --c-on-background: #191c1e;
+        --c-tertiary-fixed-dim: #dec29a;
+        --c-surface-container: #eceef0;
+        --c-tertiary-container: #271901;
+        --c-surface-tint: #565e74;
+        --c-surface-variant: #e0e3e5;
+        --c-error-container: #ffdad6;
+        --c-outline-variant: #c6c6cd;
+        --c-on-tertiary: #ffffff;
+        --c-on-secondary-fixed: #00174b;
+        --c-on-tertiary-fixed: #271901;
+        --c-inverse-on-surface: #eff1f3;
+        --c-on-error: #ffffff;
+        --c-on-tertiary-container: #98805d;
+        --c-outline: #76777d;
+        --c-on-surface-variant: #45464d;
+        --c-on-tertiary-fixed-variant: #574425;
+        --c-on-error-container: #93000a;
+        --c-secondary: #0051d5;
+        --c-primary-fixed: #dae2fd;
+        --c-on-primary: #ffffff;
+        --c-surface-container-highest: #e0e3e5;
+        --c-surface-container-lowest: #ffffff;
+        --c-background: #f7f9fb;
+        --c-error: #ba1a1a;
+        --c-surface-container-low: #f2f4f6;
+        --c-surface-container-high: #e6e8ea;
+        --c-surface: #f7f9fb;
+        --c-secondary-fixed: #dbe1ff;
+        --c-primary-fixed-dim: #bec6e0;
+        --c-on-secondary-fixed-variant: #003ea8;
+        --c-surface-bright: #f7f9fb;
+        --c-secondary-container: #316bf3;
+        --c-inverse-surface: #2d3133;
+        --c-on-primary-fixed: #131b2e;
+        --c-tertiary-fixed: #fcdeb5;
+        --c-inverse-primary: #bec6e0;
+        --c-on-primary-fixed-variant: #3f465c;
+        --c-primary-container: #131b2e;
+        --c-on-secondary: #ffffff;
+        --c-on-secondary-container: #fefcff;
+        --c-on-primary-container: #7c839b;
+      }
+      html.dark {
+        --c-surface-dim: #111318;
+        --c-primary: #c7c5e0;
+        --c-secondary-fixed-dim: #5b6da9;
+        --c-tertiary: #e0c3a0;
+        --c-on-surface: #e1e3e5;
+        --c-on-background: #e1e3e5;
+        --c-tertiary-fixed-dim: #b49b74;
+        --c-surface-container: #1e2025;
+        --c-tertiary-container: #ffd9b8;
+        --c-surface-tint: #bec6e0;
+        --c-surface-variant: #43474e;
+        --c-error-container: #93000a;
+        --c-outline-variant: #43474e;
+        --c-on-tertiary: #3e2e14;
+        --c-on-secondary-fixed: #dbe1ff;
+        --c-on-tertiary-fixed: #ffd9b8;
+        --c-inverse-on-surface: #191c1e;
+        --c-on-error: #601410;
+        --c-on-tertiary-container: #ffd9b8;
+        --c-outline: #8d9199;
+        --c-on-surface-variant: #c3c6cf;
+        --c-on-tertiary-fixed-variant: #d7b98e;
+        --c-on-error-container: #ffdad6;
+        --c-secondary: #a9c7ff;
+        --c-primary-fixed: #131b2e;
+        --c-on-primary: #2e3044;
+        --c-surface-container-highest: #292c2e;
+        --c-surface-container-lowest: #0e1113;
+        --c-background: #111318;
+        --c-error: #ffb4ab;
+        --c-surface-container-low: #191c1e;
+        --c-surface-container-high: #232628;
+        --c-surface: #111318;
+        --c-secondary-fixed: #1a3060;
+        --c-primary-fixed-dim: #99a3c4;
+        --c-on-secondary-fixed-variant: #a9c7ff;
+        --c-surface-bright: #373a3f;
+        --c-secondary-container: #003ea8;
+        --c-inverse-surface: #e1e3e5;
+        --c-on-primary-fixed: #dae2fd;
+        --c-tertiary-fixed: #574425;
+        --c-inverse-primary: #0051d5;
+        --c-on-primary-fixed-variant: #c7c5e0;
+        --c-primary-container: #3f465c;
+        --c-on-secondary: #002f7a;
+        --c-on-secondary-container: #dbe1ff;
+        --c-on-primary-container: #dae2fd;
+      }
+      html.dark .glass-effect {
+        background: rgba(17, 19, 24, 0.8);
+      }
+      html.dark .chat-scroll::-webkit-scrollbar-thumb { background: #43474e; }
+      html.dark .chat-scroll::-webkit-scrollbar-thumb:hover { background: #8d9199; }
+      html.dark .premium-card-hover:hover {
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+      }
+      html.dark input, html.dark select, html.dark textarea {
+        color-scheme: dark;
+      }
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         vertical-align: middle;

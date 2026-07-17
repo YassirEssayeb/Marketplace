@@ -1,10 +1,12 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 
 const Messaging = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [conversations, setConversations] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -13,10 +15,12 @@ const Messaging = () => {
   const [filter, setFilter] = useState('all');
   const [uploading, setUploading] = useState(false);
   const messagesEndRef = useRef(null);
+  const chatScrollRef = useRef(null);
   const fileInputRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const el = chatScrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   };
 
   useEffect(() => { scrollToBottom(); }, [messages]);
@@ -28,6 +32,7 @@ const Messaging = () => {
 
   const loadMessages = async (userId) => {
     setSelectedUser(userId);
+    setMessages([]);
     const res = await api.get('/messages/' + userId);
     setMessages(res.data);
   };
@@ -41,7 +46,7 @@ const Messaging = () => {
       setNewMsg('');
       const convRes = await api.get('/messages');
       setConversations(convRes.data);
-    } catch { alert('Error sending message'); }
+    } catch { alert(t('messaging_err_send')); }
   };
 
   const handleFileUpload = async (e) => {
@@ -64,7 +69,7 @@ const Messaging = () => {
       setMessages([...messages, res.data]);
       const convRes = await api.get('/messages');
       setConversations(convRes.data);
-    } catch { alert('Error uploading file'); }
+    } catch { alert(t('messaging_err_upload')); }
     setUploading(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -87,16 +92,16 @@ const Messaging = () => {
   const otherUser = conversations.find(c => c.user.id === selectedUser);
 
   return (
-    <div className="flex flex-1 pt-20 overflow-hidden max-w-container-max mx-auto w-full bg-surface-container-lowest shadow-lg min-h-screen">
+    <div className="flex h-screen pt-20 overflow-hidden max-w-container-max mx-auto w-full bg-surface-container-lowest shadow-lg">
       {/* Left Sidebar */}
       <aside className="w-full md:w-80 lg:w-96 border-r border-outline-variant flex flex-col bg-surface-container-lowest">
         <div className="p-6 border-b border-outline-variant">
-          <h1 className="font-headline-sm text-headline-sm text-primary mb-4">Messages</h1>
+          <h1 className="font-headline-sm text-headline-sm text-primary mb-4">{t('messaging_title')}</h1>
           <div className="flex gap-2">
             {[
-              { key: 'all', label: 'All' },
-              { key: 'buying', label: 'Buying' },
-              { key: 'selling', label: 'Selling' },
+              { key: 'all', label: t('messaging_all') },
+              { key: 'buying', label: t('messaging_buying') },
+              { key: 'selling', label: t('messaging_selling') },
             ].map(f => (
               <button
                 key={f.key}
@@ -117,8 +122,8 @@ const Messaging = () => {
           {conversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 text-center px-6">
               <span className="material-symbols-outlined text-5xl text-outline mb-4">chat</span>
-              <p className="font-body-md text-on-surface-variant">No conversations yet</p>
-              <p className="text-sm text-on-surface-variant mt-1">Send a message from a listing to start chatting</p>
+              <p className="font-body-md text-on-surface-variant">{t('messaging_no_conversations')}</p>
+              <p className="text-sm text-on-surface-variant mt-1">{t('messaging_start_chat')}</p>
             </div>
           ) : (
             conversations.map(c => (
@@ -131,25 +136,29 @@ const Messaging = () => {
                     : 'hover:bg-surface-bright'
                 }`}
               >
-                <div className="relative flex-shrink-0">
+                <Link to={`/user/${c.user.id}`} onClick={e => e.stopPropagation()} className="relative flex-shrink-0">
                   <div className="w-12 h-12 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center font-bold text-primary">
-                    {c.user.name?.charAt(0) || 'U'}
+                    {c.user.avatar_url ? (
+                      <img src={c.user.avatar_url} alt={c.user.name} className="w-full h-full object-cover" />
+                    ) : (
+                      c.user.name?.charAt(0) || 'U'
+                    )}
                   </div>
-                </div>
+                </Link>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-baseline mb-1">
-                    <h3 className="font-label-md text-label-md text-primary truncate">{c.user.name}</h3>
+                    <Link to={`/user/${c.user.id}`} onClick={e => e.stopPropagation()} className="font-label-md text-label-md text-primary truncate no-underline hover:underline">{c.user.name}</Link>
                     <span className="text-[11px] text-on-surface-variant font-medium">
                       {c.lastMessage ? new Date(c.lastMessage.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : ''}
                     </span>
                   </div>
                   {c.unread > 0 ? (
                     <p className="text-body-sm font-medium text-secondary truncate">
-                      {c.lastMessage?.content ? c.lastMessage.content.substring(0, 50) : '📎 File'}
+                      {c.lastMessage?.content ? c.lastMessage.content.substring(0, 50) : t('messaging_file')}
                     </p>
                   ) : (
                     <p className="text-body-sm text-on-surface-variant truncate">
-                      {c.lastMessage?.content ? c.lastMessage.content.substring(0, 50) : 'No messages'}
+                      {c.lastMessage?.content ? c.lastMessage.content.substring(0, 50) : t('messaging_no_messages')}
                     </p>
                   )}
                   {c.ad_title && (
@@ -175,34 +184,48 @@ const Messaging = () => {
             {/* Header */}
             <header className="h-20 bg-surface-container-lowest border-b border-outline-variant px-6 flex justify-between items-center flex-shrink-0">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary">
-                  {otherUser?.user.name?.charAt(0) || 'U'}
-                </div>
+                <Link to={`/user/${otherUser?.user.id}`} className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary overflow-hidden no-underline">
+                  {otherUser?.user.avatar_url ? (
+                    <img src={otherUser.user.avatar_url} alt={otherUser.user.name} className="w-full h-full object-cover" />
+                  ) : (
+                    otherUser?.user.name?.charAt(0) || 'U'
+                  )}
+                </Link>
                 <div>
-                  <h2 className="font-headline-sm text-headline-sm leading-none text-primary">{otherUser?.user.name || 'Loading...'}</h2>
+                  <Link to={`/user/${otherUser?.user.id}`} className="font-headline-sm text-headline-sm leading-none text-primary no-underline hover:underline">{otherUser?.user.name || t('loading')}</Link>
                   {otherUser?.ad_title && (
-                    <p className="text-label-sm text-on-surface-variant mt-0.5">Re: {otherUser.ad_title}</p>
+                    <p className="text-label-sm text-on-surface-variant mt-0.5">{t('messaging_re')} {otherUser.ad_title}</p>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <button className="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors border-none cursor-pointer bg-transparent" title="Call">
+                <button className="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors border-none cursor-pointer bg-transparent" title={t('messaging_call')}>
                   <span className="material-symbols-outlined">call</span>
                 </button>
-                <button className="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors border-none cursor-pointer bg-transparent" title="Video call">
+                <button className="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors border-none cursor-pointer bg-transparent" title={t('messaging_video')}>
                   <span className="material-symbols-outlined">videocam</span>
                 </button>
               </div>
             </header>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 chat-scroll">
+            <div ref={chatScrollRef} className="flex-1 overflow-y-auto p-6 space-y-4">
               {messages.map(m => (
                 <div key={m.id} className={`flex gap-3 max-w-[70%] ${m.sender_id === user.id ? 'ml-auto flex-row-reverse' : ''}`}>
-                  <div className="w-8 h-8 rounded-full bg-surface-container-high flex-shrink-0 mt-1 flex items-center justify-center">
-                    <span className="text-xs font-bold text-primary">
-                      {m.sender_id === user.id ? user.name?.charAt(0) : otherUser?.user.name?.charAt(0) || 'U'}
-                    </span>
+                  <div className="w-8 h-8 rounded-full bg-surface-container-high flex-shrink-0 mt-1 flex items-center justify-center overflow-hidden">
+                    {m.sender_id === user.id ? (
+                      user?.avatar_url ? (
+                        <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-xs font-bold text-primary">{user.name?.charAt(0) || 'U'}</span>
+                      )
+                    ) : (
+                      otherUser?.user.avatar_url ? (
+                        <img src={otherUser.user.avatar_url} alt={otherUser.user.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-xs font-bold text-primary">{otherUser?.user.name?.charAt(0) || 'U'}</span>
+                      )
+                    )}
                   </div>
                   <div className={m.sender_id === user.id ? 'flex flex-col items-end' : ''}>
                     <div className={`rounded-xl overflow-hidden ${
@@ -214,7 +237,7 @@ const Messaging = () => {
                         <div>
                           {isImage(m.file_url) ? (
                             <a href={m.file_url} target="_blank" rel="noopener noreferrer">
-                              <img src={m.file_url} alt="shared file" className="max-w-[280px] max-h-[200px] object-cover block hover:opacity-90 transition-opacity" />
+                              <img src={m.file_url} alt={t('messaging_shared_file')} className="max-w-[280px] max-h-[200px] object-cover block hover:opacity-90 transition-opacity" />
                             </a>
                           ) : (
                             <a href={m.file_url} target="_blank" rel="noopener noreferrer"
@@ -222,7 +245,7 @@ const Messaging = () => {
                               <span className="material-symbols-outlined text-[28px]">{getFileIcon(m.file_url)}</span>
                               <div className="min-w-0">
                                 <p className="text-sm font-medium truncate max-w-[180px]">{m.file_url.split('/').pop()}</p>
-                                <p className="text-[10px] opacity-70">Click to open</p>
+                                <p className="text-[10px] opacity-70">{t('messaging_click_open')}</p>
                               </div>
                             </a>
                           )}
@@ -262,7 +285,7 @@ const Messaging = () => {
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
                   className="p-3 rounded-xl hover:bg-surface-container-high transition-colors text-on-surface-variant border-none cursor-pointer bg-transparent flex-shrink-0"
-                  title="Share a file"
+                  title={t('messaging_share_file')}
                 >
                   {uploading ? (
                     <div className="w-5 h-5 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
@@ -281,7 +304,7 @@ const Messaging = () => {
                       }
                     }}
                     className="w-full bg-transparent border-none focus:ring-0 p-4 text-body-md resize-none min-h-[48px] max-h-[120px] outline-none"
-                    placeholder="Type a message..."
+                    placeholder={t('messaging_type')}
                     rows="1"
                   />
                 </div>
@@ -302,8 +325,8 @@ const Messaging = () => {
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-on-surface-variant">
             <span className="material-symbols-outlined text-6xl mb-4 opacity-30">chat</span>
-            <p className="font-headline-sm text-headline-sm">Select a conversation</p>
-            <p className="font-body-md text-on-surface-variant mt-2">Choose a conversation from the sidebar</p>
+            <p className="font-headline-sm text-headline-sm">{t('messaging_select')}</p>
+            <p className="font-body-md text-on-surface-variant mt-2">{t('messaging_choose')}</p>
           </div>
         )}
       </section>

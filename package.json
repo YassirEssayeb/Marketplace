@@ -1,0 +1,24 @@
+{
+  "name": "marketplace-de-petites-annonces",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syntaxerror789/Marketplace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/syntaxerror789/Marketplace/issues"
+  },
+  "homepage": "https://github.com/syntaxerror789/Marketplace#readme",
+  "dependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}

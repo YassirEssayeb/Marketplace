@@ -4,4 +4,6 @@ build/
 uploads/*
 !uploads/.gitkeep
 .playwright-mcp/
+stitch_extracted_2/
+test-results/
 *.log

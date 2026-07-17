@@ -2,6 +2,8 @@
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { getImageUrl } from '../utils/imageUrl';
+import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 const demoProducts = [
   { title: 'Aura NC Headphones', price: '499.00', category: 'Tech & Audio', rating: 5, reviews: '2.4k', badge: 'Trending', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBriRFWh07SKUuBVDznHwL4d2flGKma4hHj3NquvY6i_Xiq6rZnINfLKg_jUGWhoLB1JcGVd-SlUwr00-imR-3hQgQQxw5eJjUUEA7Wb43TVmK4KdAK2PMme18lec0bGrXCLAz9B43ugrgiNnaZVseT_CXSmtYvJ2WaAmv0Oh6WMeIu3aM4rmERw9fV_au6fSAoxoFrqbLRG1cdbu4xgFKd2gMJa5jyZx_Lca6HtEno2YTf2E9M' },
@@ -11,6 +13,8 @@ const demoProducts = [
 ];
 
 const Landing = () => {
+  const { t, formatPrice, currency } = useLanguage();
+  const { user } = useAuth();
   const [ads, setAds] = useState([]);
   const [email, setEmail] = useState('');
 
@@ -21,7 +25,7 @@ const Landing = () => {
   const displayProducts = ads.length > 0 ? ads.map(ad => ({
     id: ad.id,
     title: ad.title,
-    price: ad.price ? ad.price.toLocaleString('en-US') : 'N/A',
+    price: ad.price ? ad.price : null,
     category: ad.category_name || '',
     img: ad.images && ad.images.length > 0 ? getImageUrl(ad.images[0]) : null,
     rating: 4 + Math.floor(Math.random() * 2),
@@ -34,32 +38,32 @@ const Landing = () => {
       <section className="relative h-[720px] flex items-center overflow-hidden bg-surface">
         <div className="max-w-container-max mx-auto px-margin-desktop w-full relative z-10">
           <div className="max-w-2xl">
-            <span className="inline-block bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm mb-6 tracking-wider uppercase">Enterprise Grade Marketplace</span>
-            <h1 className="font-display-lg text-display-lg text-primary mb-6">Source the Extraordinary. Build the Future.</h1>
-            <p className="font-body-lg text-body-lg text-on-surface-variant mb-10 leading-relaxed">Connect with thousands of verified professional sellers. From industrial machinery to bespoke fashion, discover quality that defines your standard.</p>
+            <span className="inline-block bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm mb-6 tracking-wider uppercase">{t('home_hero_badge')}</span>
+            <h1 className="font-display-lg text-display-lg text-primary mb-6">{t('home_hero_title')}</h1>
+            <p className="font-body-lg text-body-lg text-on-surface-variant mb-10 leading-relaxed">{t('home_hero_desc')}</p>
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <Link to="/browse" className="bg-secondary text-on-secondary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-secondary/20 active:scale-95 transition-all no-underline">
-                Start Browsing
+                {t('home_hero_cta')}
                 <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
-              <Link to="/register" className="bg-white border border-outline-variant text-primary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:bg-surface-container-low transition-all no-underline">
-                Partner With Us
+              <Link to={user ? '/join-as-seller' : '/register'} className="bg-white border border-outline-variant text-primary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:bg-surface-container-low transition-all no-underline">
+                {t('home_hero_partner')}
               </Link>
             </div>
             <div className="flex items-center gap-8">
               <div>
                 <p className="font-headline-md text-headline-md text-primary">500k+</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">Products</p>
+                <p className="font-label-sm text-label-sm text-on-surface-variant">{t('home_stat_products')}</p>
               </div>
               <div className="w-px h-10 bg-outline-variant"></div>
               <div>
                 <p className="font-headline-md text-headline-md text-primary">12k+</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">Verified Sellers</p>
+                <p className="font-label-sm text-label-sm text-on-surface-variant">{t('home_stat_sellers')}</p>
               </div>
               <div className="w-px h-10 bg-outline-variant"></div>
               <div>
                 <p className="font-headline-md text-headline-md text-primary">24/7</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">Expert Support</p>
+                <p className="font-label-sm text-label-sm text-on-surface-variant">{t('home_stat_support')}</p>
               </div>
             </div>
           </div>
@@ -78,7 +82,7 @@ const Landing = () => {
                 <h3 className="font-headline-sm text-headline-sm text-primary">Optic-X Pro Series 5</h3>
                 <p className="font-body-sm text-body-sm text-on-surface-variant">High-Performance Imaging</p>
               </div>
-              <span className="font-headline-sm text-headline-sm text-secondary">$3,499</span>
+              <span className="font-headline-sm text-headline-sm text-secondary">{formatPrice(3499, currency)}</span>
             </div>
             <div className="flex items-center gap-2 mb-6">
               <div className="flex text-amber-400">
@@ -89,7 +93,7 @@ const Landing = () => {
               </div>
               <span className="font-label-sm text-label-sm text-on-surface-variant">(128 reviews)</span>
             </div>
-            <Link to="/browse" className="block w-full py-4 rounded-lg bg-surface-container-high text-primary font-label-md text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all text-center no-underline">View specifications</Link>
+            <Link to="/browse" className="block w-full py-4 rounded-lg bg-surface-container-high text-primary font-label-md text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all text-center no-underline">{t('home_floating_specs')}</Link>
           </div>
         </div>
       </section>
@@ -99,11 +103,11 @@ const Landing = () => {
         <div className="max-w-container-max mx-auto px-margin-desktop">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div>
-              <h2 className="font-headline-lg text-headline-lg text-primary mb-2">Curated Categories</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant">Explore thousands of products across our main sectors.</p>
+              <h2 className="font-headline-lg text-headline-lg text-primary mb-2">{t('home_categories_title')}</h2>
+              <p className="font-body-md text-body-md text-on-surface-variant">{t('home_categories_desc')}</p>
             </div>
             <Link to="/browse" className="font-label-md text-label-md text-secondary font-bold flex items-center gap-2 hover:gap-3 transition-all no-underline">
-              View all categories <span className="material-symbols-outlined">arrow_right_alt</span>
+              {t('home_categories_view_all')} <span className="material-symbols-outlined">arrow_right_alt</span>
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-gutter h-[600px]">
@@ -114,9 +118,9 @@ const Landing = () => {
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-10">
-                <h3 className="text-white font-display-lg text-3xl mb-2">Tech & Innovation</h3>
-                <p className="text-white/80 font-body-md text-body-md mb-6 max-w-sm">Next-gen hardware, enterprise servers, and premium electronics for professionals.</p>
-                <span className="bg-white text-primary px-6 py-3 rounded-lg font-label-md text-label-md font-bold inline-block">Browse Tech</span>
+                <h3 className="text-white font-display-lg text-3xl mb-2">{t('home_cat_tech_title')}</h3>
+                <p className="text-white/80 font-body-md text-body-md mb-6 max-w-sm">{t('home_cat_tech_desc')}</p>
+                <span className="bg-white text-primary px-6 py-3 rounded-lg font-label-md text-label-md font-bold inline-block">{t('home_cat_tech_cta')}</span>
               </div>
             </Link>
             {/* Home */}
@@ -126,9 +130,9 @@ const Landing = () => {
               </div>
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all"></div>
               <div className="absolute bottom-0 left-0 p-8">
-                <h3 className="text-white font-headline-md text-headline-md mb-1 drop-shadow-md">Home & Living</h3>
-                <p className="text-white/90 font-label-sm text-label-sm mb-4 drop-shadow-md">Professional appliances and designer furniture.</p>
-                <span className="text-white font-bold font-label-md flex items-center gap-1">Explore <span className="material-symbols-outlined">chevron_right</span></span>
+                <h3 className="text-white font-headline-md text-headline-md mb-1 drop-shadow-md">{t('home_cat_home_title')}</h3>
+                <p className="text-white/90 font-label-sm text-label-sm mb-4 drop-shadow-md">{t('home_cat_home_desc')}</p>
+                <span className="text-white font-bold font-label-md flex items-center gap-1">{t('home_cat_home_cta')} <span className="material-symbols-outlined">chevron_right</span></span>
               </div>
             </Link>
             {/* Fashion */}
@@ -138,8 +142,8 @@ const Landing = () => {
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-white font-headline-sm text-headline-sm">Fashion</h3>
-                <span className="text-white/80 font-label-sm text-label-sm">Bespoke & Industrial</span>
+                <h3 className="text-white font-headline-sm text-headline-sm">{t('home_cat_fashion_title')}</h3>
+                <span className="text-white/80 font-label-sm text-label-sm">{t('home_cat_fashion_sub')}</span>
               </div>
             </Link>
             {/* Accessories */}
@@ -149,8 +153,8 @@ const Landing = () => {
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-white font-headline-sm text-headline-sm">Accessories</h3>
-                <span className="text-white/80 font-label-sm text-label-sm">Essential accessories</span>
+                <h3 className="text-white font-headline-sm text-headline-sm">{t('home_cat_access_title')}</h3>
+                <span className="text-white/80 font-label-sm text-label-sm">{t('home_cat_access_sub')}</span>
               </div>
             </Link>
           </div>
@@ -161,8 +165,8 @@ const Landing = () => {
       <section className="py-24 bg-background">
         <div className="max-w-container-max mx-auto px-margin-desktop">
           <div className="text-center mb-16">
-            <h2 className="font-headline-lg text-headline-lg text-primary mb-4">Trending now</h2>
-            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Discover the products currently setting the market standard across our global ecosystem.</p>
+            <h2 className="font-headline-lg text-headline-lg text-primary mb-4">{t('home_trending_title')}</h2>
+            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">{t('home_trending_desc')}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
             {displayProducts.map((ad, i) => (
@@ -194,7 +198,7 @@ const Landing = () => {
                     <span className="font-label-sm text-label-sm text-on-surface-variant">({ad.reviews})</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-headline-md text-headline-md text-primary">{ad.price} €</span>
+                    <span className="font-headline-md text-headline-md text-primary">{ad.price ? formatPrice(Number(String(ad.price).replace(/\s/g, '')), currency) : t('price_na')}</span>
                     <Link to="/messages" className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-secondary hover:text-on-secondary transition-all no-underline">
                       <span className="material-symbols-outlined">chat</span>
                     </Link>
@@ -211,15 +215,15 @@ const Landing = () => {
         <div className="max-w-container-max mx-auto px-margin-desktop relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div>
-              <h2 className="font-headline-lg text-headline-lg text-primary mb-8">Why Shop With Us</h2>
+              <h2 className="font-headline-lg text-headline-lg text-primary mb-8">{t('home_why_title')}</h2>
               <div className="space-y-8">
                 <div className="flex gap-6">
                   <div className="flex-shrink-0 w-14 h-14 bg-secondary-fixed rounded-xl flex items-center justify-center">
                     <span className="material-symbols-outlined text-on-secondary-fixed text-3xl">verified</span>
                   </div>
                   <div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">Verified sellers only</h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant">Every merchant on ProMarket goes through a rigorous 5-step certification process before their first listing.</p>
+                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">{t('home_why_verified_title')}</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant">{t('home_why_verified_desc')}</p>
                   </div>
                 </div>
                 <div className="flex gap-6">
@@ -227,8 +231,8 @@ const Landing = () => {
                     <span className="material-symbols-outlined text-on-secondary-fixed text-3xl">shield_with_heart</span>
                   </div>
                   <div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">Secure transactions</h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant">Multi-layer encryption and built-in escrow services protect your capital until goods are received.</p>
+                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">{t('home_why_secure_title')}</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant">{t('home_why_secure_desc')}</p>
                   </div>
                 </div>
                 <div className="flex gap-6">
@@ -236,13 +240,13 @@ const Landing = () => {
                     <span className="material-symbols-outlined text-on-secondary-fixed text-3xl">public</span>
                   </div>
                   <div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">Global logistics network</h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant">Free shipping to 180+ countries with real-time tracking and premium insurance on every high-value order.</p>
+                    <h4 className="font-headline-sm text-headline-sm text-primary mb-2">{t('home_why_logistics_title')}</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant">{t('home_why_logistics_desc')}</p>
                   </div>
                 </div>
               </div>
               <Link to="/about" className="mt-12 inline-block bg-primary text-on-primary px-8 py-4 rounded-lg font-label-md text-label-md font-bold hover:shadow-xl transition-all no-underline">
-                Learn More About Our Safety Standard
+                {t('home_why_cta')}
               </Link>
             </div>
             <div className="relative">
@@ -273,21 +277,21 @@ const Landing = () => {
       {/* Newsletter / CTA Section */}
       <section className="py-24 bg-primary text-on-primary">
         <div className="max-w-container-max mx-auto px-margin-desktop text-center">
-          <h2 className="font-display-lg text-display-lg mb-6">Ready to elevate your standards?</h2>
-          <p className="font-body-lg text-body-lg text-on-primary-container max-w-2xl mx-auto mb-10">Join 50,000 professional buyers who receive weekly marketplace insights and early access to premium listings.</p>
+          <h2 className="font-display-lg text-display-lg mb-6">{t('home_newsletter_title')}</h2>
+          <p className="font-body-lg text-body-lg text-on-primary-container max-w-2xl mx-auto mb-10">{t('home_newsletter_desc')}</p>
           <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-4" onSubmit={(e) => e.preventDefault()}>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-grow bg-white/10 border border-white/20 rounded-lg px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-white/50 transition-all placeholder:text-white/40"
-              placeholder="Enter your professional email"
+              placeholder={t('home_newsletter_placeholder')}
             />
             <button type="submit" className="bg-white text-primary px-8 py-4 rounded-lg font-label-md text-label-md font-bold hover:bg-secondary-fixed transition-all whitespace-nowrap border-none cursor-pointer">
-              Subscribe
+              {t('home_newsletter_btn')}
             </button>
           </form>
-          <p className="mt-6 text-on-primary-container font-label-sm text-label-sm opacity-60">No spam. Only high-impact updates. Unsubscribe anytime.</p>
+          <p className="mt-6 text-on-primary-container font-label-sm text-label-sm opacity-60">{t('home_newsletter_disclaimer')}</p>
         </div>
       </section>
     </div>

@@ -2,19 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 
 const demoListings = [
-  { id: 1, title: 'Skyscraper Modular System', category: 'Architecture', price: '12 450 €', type: 'commercial', badge: 'Premium Asset', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA1hx7jF0QQHTBTZzb-4Yva4YabpGqh06xqjuDTy743zPXR6z5USZqiHYlA9Rea_Ahp3secgiP2rNvX7pO30i2_f57cPEDwihwHjXdWFugdH75ewfu39OM6WQ8gA9w7RAkTph-jU6hZ6-Egz1VwEw8q2M8lVw5XzyWiCJF-ccuT_et3kGjvZCl67PFZAWEiPMnsYGjZ6u4p6h38ZH1fbX7pcUUSffFaRX4KqaoDhfLj9gF_kIQR' },
-  { id: 2, title: 'Suite Analytics Entreprise v4', category: 'Software', price: '890 €', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFW3SFNTPcFWBN5V00Y1aU5nTp3e9QyIyTCJLexYYqzsSSvoHxzzEm0y6Xidh3SPjoK8Z8MtnQAz9gg2elf9CXMcQLUB8xC4-r74_62A_FQWLMBayrggCG_yZO_EZOvGGjYXXfzC00_9bS1TGwenb9vLjKoxMYDRCsu7KBf2N9LS0xuMHWlq2XQxDEAXx91U6v3O-eKIhFpABl4Q37cqa9Fs1Vq_fnrWlE_EPbPCO5_12pdoLf' },
-  { id: 3, title: 'Brand Integrity Audit', category: 'Consulting', price: '$2,100', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuATiusfzL8dwSyifBEe3Fy7Z8-VZEVhKFqqvCW6uoebOi1QPppBM70WmOn9QdH9pu4RDdOi3UGvkhdeVLuE8PN7uNY35aALUwWxPMOh5j6e_hbtV21G3OaklWZn5IxB47QT3-ZqU4HNrXg-0q__EndQJ65-6oJ8tI937QeX6CQHw14fYcnkUW8S0IOB0MPLUNOzQRRkinl9yZPoWw8YFFti1jgomtJI0KjDAntCIRah798HUihb' },
-  { id: 4, title: 'Secure Cloud Node v2', category: 'Infrastructure', price: '$450/mo', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBbyIivFFWRs2xaTwuAXHcKKQrV451nOMV8DVSjbyzgmKySmbJJkgmcy-0O8Jt_UYfOStzSIDCa0lQ9rbcc3t9Ytu3CetL_ZvC_D8BTFoCfSSDmvjzSiL7xL5WEVrwi918XZ9IjJcYjsFfMiS18a6cpM_WO37HWhwIe-z1nf49vyfnSJ5UNJTigA8r63EqZgN5z0viXeSJVHJKS-IbXSOXVnnl4yhvujdCZ8tjk-J0fhyzcVs0x' },
-  { id: 5, title: 'Precision Workflow Pack', category: 'Office', price: '$1,200', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA09sou6l4HlDdZqZHQgFug2N4zKR8UhBZWBJcSIJuKM75dBuFUtEOxwAeu2jgWFecfhmFLGP2yiy1sD3sfBoCUpyDOkkKbWnh-lxP-iErlv8qaSEEg0qQl3jyovm5rc3jfsEafbrSfpGuctyJCUER60ICKOaVmdLJnVyi8R-MUv56gYXn49efCupJIMc92F0VKuHYzidk7ZmQ9rJkyFxAGsRn0DbF92iFcJHSaoLNEK-T6OBag' },
+  { id: 1, title: 'Skyscraper Modular System', category: 'Architecture', price: 12450, type: 'commercial', badge: 'Premium Asset', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA1hx7jF0QQHTBTZzb-4Yva4YabpGqh06xqjuDTy743zPXR6z5USZqiHYlA9Rea_Ahp3secgiP2rNvX7pO30i2_f57cPEDwihwHjXdWFugdH75ewfu39OM6WQ8gA9w7RAkTph-jU6hZ6-Egz1VwEw8q2M8lVw5XzyWiCJF-ccuT_et3kGjvZCl67PFZAWEiPMnsYGjZ6u4p6h38ZH1fbX7pcUUSffFaRX4KqaoDhfLj9gF_kIQR' },
+  { id: 2, title: 'Suite Analytics Entreprise v4', category: 'Software', price: 890, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFW3SFNTPcFWBN5V00Y1aU5nTp3e9QyIyTCJLexYYqzsSSvoHxzzEm0y6Xidh3SPjoK8Z8MtnQAz9gg2elf9CXMcQLUB8xC4-r74_62A_FQWLMBayrggCG_yZO_EZOvGGjYXXfzC00_9bS1TGwenb9vLjKoxMYDRCsu7KBf2N9LS0xuMHWlq2XQxDEAXx91U6v3O-eKIhFpABl4Q37cqa9Fs1Vq_fnrWlE_EPbPCO5_12pdoLf' },
+  { id: 3, title: 'Brand Integrity Audit', category: 'Consulting', price: 2100, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuATiusfzL8dwSyifBEe3Fy7Z8-VZEVhKFqqvCW6uoebOi1QPppBM70WmOn9QdH9pu4RDdOi3UGvkhdeVLuE8PN7uNY35aALUwWxPMOh5j6e_hbtV21G3OaklWZn5IxB47QT3-ZqU4HNrXg-0q__EndQJ65-6oJ8tI937QeX6CQHw14fYcnkUW8S0IOB0MPLUNOzQRRkinl9yZPoWw8YFFti1jgomtJI0KjDAntCIRah798HUihb' },
+  { id: 4, title: 'Secure Cloud Node v2', category: 'Infrastructure', price: 450, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBbyIivFFWRs2xaTwuAXHcKKQrV451nOMV8DVSjbyzgmKySmbJJkgmcy-0O8Jt_UYfOStzSIDCa0lQ9rbcc3t9Ytu3CetL_ZvC_D8BTFoCfSSDmvjzSiL7xL5WEVrwi918XZ9IjJcYjsFfMiS18a6cpM_WO37HWhwIe-z1nf49vyfnSJ5UNJTigA8r63EqZgN5z0viXeSJVHJKS-IbXSOXVnnl4yhvujdCZ8tjk-J0fhyzcVs0x' },
+  { id: 5, title: 'Precision Workflow Pack', category: 'Office', price: 1200, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA09sou6l4HlDdZqZHQgFug2N4zKR8UhBZWBJcSIJuKM75dBuFUtEOxwAeu2jgWFecfhmFLGP2yiy1sD3sfBoCUpyDOkkKbWnh-lxP-iErlv8qaSEEg0qQl3jyovm5rc3jfsEafbrSfpGuctyJCUER60ICKOaVmdLJnVyi8R-MUv56gYXn49efCupJIMc92F0VKuHYzidk7ZmQ9rJkyFxAGsRn0DbF92iFcJHSaoLNEK-T6OBag' },
 ];
 
 const Profile = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t, formatPrice, currency } = useLanguage();
   const [profile, setProfile] = useState(null);
   const [listings, setListings] = useState([]);
   const [activeTab, setActiveTab] = useState('active');
@@ -33,7 +35,7 @@ const Profile = () => {
   if (!profile) return (
     <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen flex flex-col items-center justify-center">
       <div className="w-10 h-10 border-4 border-surface-container-high border-t-secondary rounded-full animate-spin mb-4"></div>
-      <p className="text-on-surface-variant font-body-md">Loading...</p>
+      <p className="text-on-surface-variant font-body-md">{t('profile_loading')}</p>
     </main>
   );
 
@@ -46,7 +48,11 @@ const Profile = () => {
             {/* Profile Picture */}
             <div className="relative group">
               <div className="w-40 h-40 rounded-full border-4 border-surface-container-high overflow-hidden bg-surface-container-high flex items-center justify-center ambient-shadow">
-                <span className="text-5xl font-bold text-on-surface-variant">{profile.name?.charAt(0) || 'U'}</span>
+                {profile.avatar_url ? (
+                  <img src={profile.avatar_url} alt={profile.name} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-5xl font-bold text-on-surface-variant">{profile.name?.charAt(0) || 'U'}</span>
+                )}
               </div>
               <div className="absolute bottom-2 right-2 bg-secondary text-on-secondary rounded-full p-1.5 border-4 border-surface-container-lowest flex items-center justify-center">
                 <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
@@ -57,8 +63,8 @@ const Profile = () => {
             <div className="flex-1 space-y-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                  <h1 className="font-headline-lg text-headline-lg text-primary">{profile.name || 'User'}</h1>
-                  <p className="text-on-surface-variant font-label-md text-label-md uppercase tracking-wider mt-1">Verified Seller & Consultant</p>
+                  <h1 className="font-headline-lg text-headline-lg text-primary">{profile.name || t('profile_user')}</h1>
+                  <p className="text-on-surface-variant font-label-md text-label-md uppercase tracking-wider mt-1">{t('profile_verified')}</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <button
@@ -70,7 +76,7 @@ const Profile = () => {
                     }`}
                   >
                     <span className="material-symbols-outlined text-[20px]">{isFollowing ? 'person_check' : 'person_add'}</span>
-                    <span>{isFollowing ? 'Following' : 'Follow'}</span>
+                    <span>{isFollowing ? t('profile_following') : t('profile_follow')}</span>
                   </button>
                   <Link to="/messages" className="p-3 border border-outline-variant rounded-lg hover:bg-surface-variant transition-colors group no-underline">
                     <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary">mail</span>
@@ -94,7 +100,7 @@ const Profile = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-secondary text-[20px]">calendar_today</span>
-                  <span className="font-label-md text-label-md text-primary">Joined {new Date(profile.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</span>
+                  <span className="font-label-md text-label-md text-primary">{t('profile_joined')} {new Date(profile.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</span>
                 </div>
               </div>
             </div>
@@ -106,9 +112,9 @@ const Profile = () => {
           <div className="flex items-center justify-between mb-10">
             <div className="flex gap-8">
               {[
-                { key: 'active', label: `Active listings (${listings.length})` },
-                { key: 'past', label: 'Past activity' },
-                { key: 'about', label: 'About' },
+                { key: 'active', label: `${t('profile_active_listings')} (${listings.length})` },
+                { key: 'past', label: t('profile_past_activity') },
+                { key: 'about', label: t('profile_about') },
               ].map(tab => (
                 <button
                   key={tab.key}
@@ -125,7 +131,7 @@ const Profile = () => {
             </div>
             <button className="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-lg border border-outline-variant bg-transparent cursor-pointer">
               <span className="material-symbols-outlined text-[18px] text-on-surface-variant">filter_list</span>
-              <span className="font-label-md text-label-md text-on-surface-variant">Filter by category</span>
+              <span className="font-label-md text-label-md text-on-surface-variant">{t('profile_filter_category')}</span>
             </button>
           </div>
 
@@ -145,7 +151,7 @@ const Profile = () => {
                 </div>
                 <div className="text-right">
                   <span className="block font-label-sm text-label-sm text-on-surface-variant mb-1">Commercial license</span>
-                  <span className="font-headline-sm text-headline-sm text-primary">{listings[0]?.price}</span>
+                  <span className="font-headline-sm text-headline-sm text-primary">{formatPrice(listings[0]?.price, currency)}</span>
                 </div>
               </div>
             </div>
@@ -160,7 +166,7 @@ const Profile = () => {
                   <span className="font-label-sm text-label-sm text-secondary uppercase mb-1 block">{listing.category}</span>
                   <h3 className="font-headline-sm text-headline-sm text-primary mb-4">{listing.title}</h3>
                   <div className="flex items-center justify-between border-t border-outline-variant pt-4">
-                    <span className="font-headline-sm text-headline-sm text-primary">{listing.price}</span>
+                    <span className="font-headline-sm text-headline-sm text-primary">{formatPrice(listing.price, currency)}</span>
                     <button className="bg-surface-container-high p-2 rounded-lg hover:bg-secondary-fixed transition-colors border-none cursor-pointer">
                       <span className="material-symbols-outlined">add_shopping_cart</span>
                     </button>

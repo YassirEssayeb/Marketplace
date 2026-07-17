@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
 
 const imageUpload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 15 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowed = /jpeg|jpg|png|gif|webp|avif|heic|heif|jfif/;
     const ext = allowed.test(path.extname(file.originalname).toLowerCase());
@@ -34,7 +34,7 @@ const fileUpload = multer({
 router.post('/', auth, (req, res) => {
   imageUpload.array('images', 10)(req, res, (err) => {
     if (err) {
-      if (err.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ error: 'Fichier trop volumineux (max 5Mo)' });
+      if (err.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ error: 'Fichier trop volumineux (max 15Mo)' });
       if (err.code === 'LIMIT_UNEXPECTED_FILE') return res.status(400).json({ error: 'Trop de fichiers (max 10)' });
       return res.status(400).json({ error: err.message || 'Erreur upload' });
     }

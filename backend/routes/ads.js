@@ -5,7 +5,8 @@ const ctrl = require('../controllers/adController');
 
 router.get('/', ctrl.getAds);
 router.get('/categories', ctrl.getCategories);
-router.get('/my', auth, ctrl.getMyAds);
+router.get('/my', auth, ctrl.getMyAds);
+router.get('/seller/stats', auth, ctrl.getSellerStats);
 router.get('/:id', ctrl.getAd);
 router.post('/', auth, ctrl.createAd);
 router.put('/:id', auth, ctrl.updateAd);

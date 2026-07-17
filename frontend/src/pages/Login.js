@@ -1,6 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,6 +9,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +17,7 @@ const Login = () => {
       await login(email, password);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error || 'Login error');
+      setError(err.response?.data?.error || t('login_error'));
     }
   };
 
@@ -24,8 +26,8 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-xl border border-outline-variant">
           <div className="text-center mb-8">
-            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">Log In</h1>
-            <p className="font-body-md text-on-surface-variant">Sign in to your account.</p>
+            <h1 className="font-headline-lg text-headline-lg text-primary mb-2">{t('login_title')}</h1>
+            <p className="font-body-md text-on-surface-variant">{t('login_subtitle')}</p>
           </div>
 
           {error && (
@@ -36,10 +38,10 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Email</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('login_email')}</label>
               <input
                 type="email"
-                placeholder="you@example.com"
+                placeholder={t('login_email_ph')}
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
@@ -47,7 +49,7 @@ const Login = () => {
               />
             </div>
             <div>
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">Password</label>
+              <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('login_password')}</label>
               <input
                 type="password"
                 placeholder="••••••••"
@@ -58,18 +60,18 @@ const Login = () => {
               />
             </div>
             <div className="text-right">
-              <Link to="/forgot-password" className="text-body-sm text-secondary font-medium hover:underline no-underline">Forgot password?</Link>
+              <Link to="/forgot-password" className="text-body-sm text-secondary font-medium hover:underline no-underline">{t('login_forgot')}</Link>
             </div>
             <button
               type="submit"
               className="w-full bg-secondary text-on-secondary py-4 rounded-lg font-headline-sm text-headline-sm font-bold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 border-none cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[20px]">login</span> Log in
+              <span className="material-symbols-outlined text-[20px]">login</span> {t('login_btn')}
             </button>
           </form>
 
           <p className="mt-6 text-center text-body-sm text-on-surface-variant">
-            Don't have an account? <Link to="/register" className="font-semibold text-secondary hover:underline no-underline">Sign up</Link>
+            {t('login_no_account')} <Link to="/register" className="font-semibold text-secondary hover:underline no-underline">{t('login_signup')}</Link>
           </p>
         </div>
       </div>
