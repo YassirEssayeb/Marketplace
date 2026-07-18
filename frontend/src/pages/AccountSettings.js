@@ -2,13 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 
 const AccountSettings = () => {
   const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
-  const { setTheme } = useTheme();
   const { t, lang, setLang, setCurrency } = useLanguage();
   const [activeNav, setActiveNav] = useState('profile');
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', headline: '', bio: '' });
@@ -136,7 +134,6 @@ const AccountSettings = () => {
 
   const handlePrefSave = async () => {
     localStorage.setItem('user_preferences', JSON.stringify(prefPrefs));
-    setTheme(prefPrefs.theme);
     setLang(prefPrefs.language);
     setCurrency(prefPrefs.currency);
     setPrefSaved(true);
@@ -459,30 +456,6 @@ const AccountSettings = () => {
                       <option value="USD">{t('currency_usd')}</option>
                     </select>
                   </div>
-                </div>
-              </div>
-
-              <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm">
-                <h3 className="font-headline-sm text-headline-sm text-primary mb-stack-md">{t('settings_appearance')}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {[
-                    { key: 'light', icon: 'light_mode', label: t('settings_light') },
-                    { key: 'system', icon: 'settings_brightness', label: t('settings_system') },
-                    { key: 'dark', icon: 'dark_mode', label: t('settings_dark') },
-                  ].map(item => (
-                    <button
-                      key={item.key}
-                      onClick={() => setPrefPrefs({...prefPrefs, theme: item.key})}
-                      className={`flex flex-col items-center gap-2 p-6 rounded-xl border-2 transition-all cursor-pointer ${
-                        prefPrefs.theme === item.key
-                          ? 'border-secondary bg-secondary-fixed/30'
-                          : 'border-outline-variant bg-surface hover:bg-surface-variant'
-                      }`}
-                    >
-                      <span className="material-symbols-outlined text-[32px]" style={prefPrefs.theme === item.key ? { color: 'var(--color-secondary)' } : {}}>{item.icon}</span>
-                      <span className="font-label-md text-label-md">{item.label}</span>
-                    </button>
-                  ))}
                 </div>
               </div>
 

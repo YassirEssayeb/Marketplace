@@ -18,10 +18,28 @@ const Landing = () => {
   const navigate = useNavigate();
   const [ads, setAds] = useState([]);
   const [email, setEmail] = useState('');
+  const [newsletterMsg, setNewsletterMsg] = useState('');
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
 
   useEffect(() => {
     api.get('/ads?limit=4&sort=date_desc').then(r => setAds(r.data.ads)).catch(() => {});
   }, []);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    setNewsletterLoading(true);
+    setNewsletterMsg('');
+    try {
+      const res = await api.post('/newsletter/subscribe', { email });
+      setNewsletterMsg(res.data.message);
+      setEmail('');
+    } catch (err) {
+      setNewsletterMsg(err.response?.data?.error || 'Erreur');
+    } finally {
+      setNewsletterLoading(false);
+    }
+  };
 
   const displayProducts = ads.length > 0 ? ads.map(ad => ({
     id: ad.id,
@@ -37,7 +55,7 @@ const Landing = () => {
     id: 44,
     title: 'Louis Vuitton Keepall 55',
     price: 3200,
-    category: 'Mode & Accessoires',
+    category: 'Fashion & Accessories',
     img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80',
   };
 
@@ -102,15 +120,6 @@ const Landing = () => {
               </div>
               <span className="font-headline-sm text-headline-sm text-secondary">{featuredAd.price ? formatPrice(featuredAd.price, currency) : 'Prix à définir'}</span>
             </div>
-            <div className="flex items-center gap-2 mb-6">
-              <div className="flex text-amber-400">
-                {[1,2,3,4].map(s => (
-                  <span key={s} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                ))}
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star_half</span>
-              </div>
-              <span className="font-label-sm text-label-sm text-on-surface-variant">(128 reviews)</span>
-            </div>
             <span className="block w-full py-4 rounded-lg bg-surface-container-high text-primary font-label-md text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all text-center">{t('home_floating_specs')}</span>
           </div>
         </div>
@@ -130,7 +139,7 @@ const Landing = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-gutter h-[600px]">
             {/* Tech (Large) */}
-            <Link to="/browse?category=Multimedia" className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-2xl bg-primary border border-outline-variant no-underline">
+            <Link to="/browse?category=6" className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-2xl bg-primary border border-outline-variant no-underline">
               <div className="absolute inset-0 opacity-60 group-hover:scale-110 transition-transform duration-700">
                 <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZsNozmhzCP5__PoMcczSf7VgHO4Mz46tOa68ciPcBTxrxRepYv5eTLKj204uOWaU7af6wU_c_8eHzZ7GgOgk4VVP3QQaiaLVt4aOvgZsHIG-wRTN2KPU4aVhSPEtHHgApKHq9HRAFRU_sMyhftEwIf-4DKTeEjpAeO-q_q_k1OwyyqB8ki3h4kK4ZceiTcbhfXKUj3e7sXOY4ni1I3b6VGeVF9cGEjvBYLwePu8tQoWFn57tI" alt="Tech & Innovation" />
               </div>
@@ -142,7 +151,7 @@ const Landing = () => {
               </div>
             </Link>
             {/* Home */}
-            <Link to="/browse?category=Maison" className="md:col-span-2 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container border border-outline-variant no-underline">
+            <Link to="/browse?category=5" className="md:col-span-2 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container border border-outline-variant no-underline">
               <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
                 <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG0QNdry9llwx_zEl3W-hYHH6fKMM9vsCsmCteEBo5WabvmYocO-OC09pooLE8we1Mhwmf7apwyZFY1Plm-JRX4-N_g_R9ZWh9xm692hBN4ERtIwwVnhHcXNiDroq_5dgUJbdYPM9qFfUjMnZEOWRFnBnX66DcY1lCncEn2L8Rkav1sxYkf2S-Wm6zvt-OQeKKPSZlpHV8rbAfKHtCpzBHjcF9oJW_VsdR_zWTPkAVHerLJoWK" alt="Home & Living" />
               </div>
@@ -154,7 +163,7 @@ const Landing = () => {
               </div>
             </Link>
             {/* Fashion */}
-            <Link to="/browse?category=Mode" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline">
+            <Link to="/browse?category=4" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline">
               <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
                 <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxJI2YYuFV9aMiHwSeZaW0gPTy9P57B796u8DeEYU0ezhowq6mIxnIRVkA-u5Yd_uawCO49LFkgBQkOapPI_xELMCbnLc3-CVhAmIkpNO02I17OAKDISn9leen91zevUmKKnS8FpHILubPMN9QGGHocBR0QciSQrgR0x-DxTVqcW-gv5RLT4VIw6nYtLDn9nnKFH_GIbAdx1WwWcygD1lI8qlUHlKIFCXA2uhxgyDzo8Q0eJPw" alt="Fashion" />
               </div>
@@ -165,7 +174,7 @@ const Landing = () => {
               </div>
             </Link>
             {/* Accessories */}
-            <Link to="/browse?category=Accessoires" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline">
+            <Link to="/browse?category=6" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline">
               <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
                 <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdo90J4xn8AZh9ppnVUW3ADB4PYgPit3ws4Eg7HYs3iVp5cXy6yyxMfWiSF_6TcT0V0S1SX6o3SJn0pJdgvTJNzTtP_yRtQwcSW2pvv-Ezjnxj2PpycINcTPNalgg5g55b1IFSAhgfx78eY0_08c6bxleHBi8e64vMZx-29pOOyWUEZ1FbpzrjpIdf91KPynNpZwT91NR5ESiFGEIwIjWI6qD7Nlv0JqNrLC1h8ispjLcJFzXc" alt="Accessories" />
               </div>
@@ -207,14 +216,6 @@ const Landing = () => {
                 <div className="p-5">
                   <p className="font-label-sm text-label-sm text-secondary mb-1">{ad.category}</p>
                   <h4 className="font-headline-sm text-headline-sm text-primary mb-1 truncate">{ad.title}</h4>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex text-amber-400 text-sm">
-                      {[1,2,3,4,5].map(s => (
-                        <span key={s} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: s <= ad.rating ? "'FILL' 1" : "'FILL' 0" }}>star</span>
-                      ))}
-                    </div>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant">({ad.reviews})</span>
-                  </div>
                   <div className="flex justify-between items-center">
                     <span className="font-headline-md text-headline-md text-primary">{ad.price ? formatPrice(Number(String(ad.price).replace(/\s/g, '')), currency) : t('price_na')}</span>
                     <Link to="/messages" className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-secondary hover:text-on-secondary transition-all no-underline">
@@ -297,18 +298,20 @@ const Landing = () => {
         <div className="max-w-container-max mx-auto px-margin-desktop text-center">
           <h2 className="font-display-lg text-display-lg mb-6">{t('home_newsletter_title')}</h2>
           <p className="font-body-lg text-body-lg text-on-primary-container max-w-2xl mx-auto mb-10">{t('home_newsletter_desc')}</p>
-          <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-4" onSubmit={handleSubscribe}>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-grow bg-white/10 border border-white/20 rounded-lg px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-white/50 transition-all placeholder:text-white/40"
               placeholder={t('home_newsletter_placeholder')}
+              required
             />
-            <button type="submit" className="bg-white text-primary px-8 py-4 rounded-lg font-label-md text-label-md font-bold hover:bg-secondary-fixed transition-all whitespace-nowrap border-none cursor-pointer">
-              {t('home_newsletter_btn')}
+            <button type="submit" disabled={newsletterLoading} className="bg-white text-primary px-8 py-4 rounded-lg font-label-md text-label-md font-bold hover:bg-secondary-fixed transition-all whitespace-nowrap border-none cursor-pointer disabled:opacity-50">
+              {newsletterLoading ? '...' : t('home_newsletter_btn')}
             </button>
           </form>
+          {newsletterMsg && <p className="mt-4 text-white font-label-sm text-label-sm">{newsletterMsg}</p>}
           <p className="mt-6 text-on-primary-container font-label-sm text-label-sm opacity-60">{t('home_newsletter_disclaimer')}</p>
         </div>
       </section>

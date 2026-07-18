@@ -1,7 +1,6 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 
@@ -14,7 +13,6 @@ const TYPE_ICONS = {
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const { dark, toggle } = useTheme();
   const { t, lang, setLang } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
@@ -198,9 +196,6 @@ const Navbar = () => {
                 <Link to="/favorites" className={`material-symbols-outlined transition-colors no-underline ${isActive('/favorites') ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
                   favorite
                 </Link>
-                <button onClick={toggle} className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors bg-transparent border-none cursor-pointer" title={dark ? t('nav_light_mode') : t('nav_dark_mode')}>
-                  {dark ? 'light_mode' : 'dark_mode'}
-                </button>
                 <div className="h-10 w-px bg-outline-variant mx-1"></div>
                 <div className="relative profile-dropdown">
                   <button
@@ -259,9 +254,6 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <button onClick={toggle} className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors bg-transparent border-none cursor-pointer" title={dark ? t('nav_light_mode') : t('nav_dark_mode')}>
-                  {dark ? 'light_mode' : 'dark_mode'}
-                </button>
                 <div className="h-10 w-px bg-outline-variant mx-1"></div>
                 <Link to="/login" className="text-on-surface font-label-md text-label-md font-semibold hover:text-secondary transition-colors no-underline hidden lg:block">{t('nav_sign_in')}</Link>
                 <Link to="/ads/new" className="bg-secondary text-on-secondary px-5 py-2.5 rounded-2xl font-label-lg text-label-lg font-bold hover:shadow-lg hover:shadow-secondary/20 hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all no-underline inline-flex items-center gap-2">

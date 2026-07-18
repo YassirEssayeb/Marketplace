@@ -13,6 +13,7 @@ const contactRoutes = require('./routes/contact');
 const notificationRoutes = require('./routes/notifications');
 const sellerRoutes = require('./routes/sellers');
 const commentRoutes = require('./routes/comments');
+const newsletterRoutes = require('./routes/newsletter');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,6 +32,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/sellers', sellerRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/newsletter', newsletterRoutes);
 
 app.get('/api', (req, res) => {
   res.json({ message: 'API Marketplace de petites annonces' });

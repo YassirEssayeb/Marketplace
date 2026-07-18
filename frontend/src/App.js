@@ -1,7 +1,6 @@
 ﻿import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { ToastProvider } from './components/Toast';
 import Navbar from './components/Navbar';
@@ -83,13 +82,11 @@ function App() {
     <Router>
       <ScrollToTop />
       <AuthProvider>
-        <ThemeProvider>
         <LanguageProvider>
         <ToastProvider>
         <Layout />
         </ToastProvider>
         </LanguageProvider>
-        </ThemeProvider>
       </AuthProvider>
     </Router>
   );

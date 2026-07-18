@@ -28,7 +28,13 @@ const Browse = () => {
 
   useEffect(() => {
     const tab = searchParams.get('tab') || 'ads';
-    setActiveTab(tab);
+    const cat = searchParams.get('category') || '';
+    if (cat) {
+      setActiveTab('ads');
+      setFilters(prev => ({ ...prev, category: cat }));
+    } else {
+      setActiveTab(tab);
+    }
   }, [searchParams]);
 
   useEffect(() => {
@@ -404,13 +410,6 @@ const Browse = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex text-amber-500">
-                        {[1,2,3,4,5].map(s => (
-                          <span key={s} className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: s <= (ad.rating || 4) ? "'FILL' 1" : "'FILL' 0" }}>star</span>
-                        ))}
-                      </div>
-                      <span className="text-label-sm text-on-surface-variant">({ad.reviews || 0})</span>
-                      <span className="h-1 w-1 bg-outline-variant rounded-full mx-1"></span>
                       <span className="text-label-sm text-secondary font-bold">{ad.sellerBadge || ''}</span>
                     </div>
                     <button className="w-full bg-primary text-white py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-primary/90 transition-all active:scale-95 border-none cursor-pointer">
