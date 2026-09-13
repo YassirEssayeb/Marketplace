@@ -101,9 +101,9 @@ const Browse = () => {
   };
 
   return (
-    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
+    <main className="pt-24 sm:pt-32 pb-10 sm:pb-20 max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop min-h-screen">
       {/* Tab Navigation */}
-      <div className="flex items-center gap-1 mb-8 bg-surface-container-low rounded-xl p-1 border border-outline-variant/40 w-fit">
+      <div className="flex items-center gap-1 mb-6 sm:mb-8 bg-surface-container-low rounded-xl p-1 border border-outline-variant/40 w-full sm:w-fit overflow-x-auto">
         {[
           { key: 'ads', label: t('nav_browse'), icon: 'storefront' },
           { key: 'categories', label: t('nav_categories'), icon: 'category' },
@@ -112,7 +112,7 @@ const Browse = () => {
           <button
             key={tab.key}
             onClick={() => switchTab(tab.key)}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-label-md text-label-md transition-all border-none cursor-pointer ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg font-label-md text-[12px] sm:text-label-md transition-all border-none cursor-pointer whitespace-nowrap ${
               activeTab === tab.key
                 ? 'bg-secondary text-on-secondary shadow-sm'
                 : 'bg-transparent text-on-surface-variant hover:bg-surface-container-high'
@@ -205,8 +205,8 @@ const Browse = () => {
       {activeTab === 'ads' && (
       <>
       {/* Inline Search Bar */}
-      <div className="mb-8">
-        <div className="flex items-center bg-white border border-outline-variant rounded-xl px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-secondary/20 transition-all h-14">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center bg-white border border-outline-variant rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm focus-within:ring-2 focus-within:ring-secondary/20 transition-all h-12 sm:h-14">
           <span className="material-symbols-outlined text-outline mr-3">search</span>
           <input
             type="text"
@@ -220,9 +220,9 @@ const Browse = () => {
           )}
         </div>
       </div>
-      <div className="flex flex-col md:flex-row gap-gutter">
+      <div className="flex flex-col md:flex-row gap-4 sm:gap-gutter">
         {/* Sidebar Filters */}
-        <aside className="w-full md:w-64 flex-shrink-0 space-y-stack-lg">
+        <aside className="w-full md:w-60 lg:w-64 flex-shrink-0 space-y-4 sm:space-y-stack-lg">
           <div className="flex items-center justify-between">
             <h2 className="font-headline-sm text-headline-sm text-primary">{t('browse_filters')}</h2>
             {hasActiveFilters && (
@@ -338,7 +338,7 @@ const Browse = () => {
         {/* Main Listing Area */}
         <div className="flex-1 space-y-stack-lg">
           {/* Sorting & Top Bar */}
-          <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 border border-outline-variant rounded-xl gap-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-3 sm:p-4 border border-outline-variant rounded-xl gap-3 sm:gap-4">
             <p className="text-on-surface-variant font-body-sm">
               {loading ? t('loading') : (
                 <>{t('browse_showing')} <span className="font-bold text-primary">1-{Math.min(12, pagination.total || displayProducts.length)}</span> {t('browse_of')} {pagination.total || displayProducts.length} {t('browse_products')}</>
@@ -371,7 +371,7 @@ const Browse = () => {
               <p className="font-body-md text-on-surface-variant">{t('browse_no_results_desc')}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
               {displayProducts.map((ad, i) => (
                 <Link key={ad.id || i} to={`/ads/${ad.id}`} className="group bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 no-underline text-left block">
                   <div className="relative aspect-[4/3] overflow-hidden bg-surface-container">

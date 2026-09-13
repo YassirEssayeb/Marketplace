@@ -148,10 +148,17 @@ const AccountSettings = () => {
     { key: 'billing', icon: 'payments', label: t('settings_billing_title') },
   ];
 
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+
   return (
-    <div className="flex pt-20 min-h-screen">
+    <div className="flex pt-24 sm:pt-32 min-h-screen">
+      {/* Mobile Menu Toggle */}
+      <button onClick={() => setShowMobileSidebar(!showMobileSidebar)} className="md:hidden fixed top-20 left-2 z-50 bg-surface-container-low p-2 rounded-lg shadow-md border border-outline-variant cursor-pointer">
+        <span className="material-symbols-outlined">{showMobileSidebar ? 'close' : 'menu'}</span>
+      </button>
+
       {/* SideNavBar */}
-      <aside className="h-screen w-64 fixed left-0 top-20 bg-surface-container-low border-r border-outline-variant hidden md:flex flex-col p-4 gap-2">
+      <aside className={`${showMobileSidebar ? 'flex' : 'hidden'} md:flex h-screen w-full md:w-64 fixed left-0 top-20 bg-surface-container-low border-r border-outline-variant z-40 flex-col p-4 gap-2`}>
         <div className="mb-6 px-2">
           <h2 className="font-headline-sm text-headline-sm font-bold text-primary">{t('settings_title')}</h2>
           <p className="text-on-surface-variant font-body-sm text-body-sm">{t('settings_subtitle')}</p>
@@ -160,7 +167,7 @@ const AccountSettings = () => {
           {navItems.map(item => (
             <button
               key={item.key}
-              onClick={() => setActiveNav(item.key)}
+              onClick={() => { setActiveNav(item.key); setShowMobileSidebar(false); }}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left border-none cursor-pointer ${
                 activeNav === item.key
                   ? 'bg-secondary-fixed text-on-secondary-fixed font-bold'
@@ -185,7 +192,7 @@ const AccountSettings = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop bg-surface">
+      <main className="flex-1 md:ml-64 px-4 sm:px-6 lg:px-margin-desktop bg-surface">
         <div className="max-w-4xl mx-auto">
 
           {/* ============ PROFILE TAB ============ */}

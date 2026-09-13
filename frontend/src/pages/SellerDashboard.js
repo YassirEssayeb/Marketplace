@@ -21,6 +21,7 @@ const SellerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [updatingAd, setUpdatingAd] = useState(null);
   const [listingsFilter, setListingsFilter] = useState('all');
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const statusLabels = { active: t('seller_dashboard_active'), sold: t('seller_dashboard_sold'), archived: t('seller_dashboard_archived') };
 
@@ -71,20 +72,25 @@ const SellerDashboard = () => {
 
   if (loading) return (
     <div className="flex min-h-screen">
-      <aside className="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-50 flex flex-col p-4">
+      <aside className="h-screen w-64 hidden md:flex fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-50 flex flex-col p-4">
         <div className="px-2 py-6 mb-4">
           <h1 className="font-headline-sm text-headline-sm font-bold text-primary">{t('seller_dashboard_studio')}</h1>
         </div>
       </aside>
-      <main className="ml-64 flex-1 flex items-center justify-center">
+      <main className="md:ml-64 flex-1 flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-surface-container-high border-t-secondary rounded-full animate-spin"></div>
       </main>
     </div>
   );
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-50 flex flex-col p-4 gap-2">
+    <div className="flex pt-24 sm:pt-32 md:pt-0 min-h-screen">
+      {/* Mobile Menu Toggle */}
+      <button onClick={() => setShowMobileSidebar(!showMobileSidebar)} className="md:hidden fixed top-20 left-2 z-50 bg-surface-container-low p-2 rounded-lg shadow-md border border-outline-variant cursor-pointer">
+        <span className="material-symbols-outlined">{showMobileSidebar ? 'close' : 'menu'}</span>
+      </button>
+
+      <aside className={`${showMobileSidebar ? 'flex' : 'hidden'} md:flex h-screen w-full md:w-64 fixed left-0 top-20 md:top-0 bg-surface-container-low border-r border-outline-variant z-40 flex-col p-4 gap-2`}>
         <div className="px-2 py-6 mb-4">
           <h1 className="font-headline-sm text-headline-sm font-bold text-primary">{t('seller_dashboard_studio')}</h1>
           <p className="text-on-surface-variant font-label-md text-label-md mt-1">{t('seller_dashboard_portal')}</p>
@@ -93,7 +99,7 @@ const SellerDashboard = () => {
           {navItems.map(item => (
             <button
               key={item.key}
-              onClick={() => setActiveNav(item.key)}
+              onClick={() => { setActiveNav(item.key); setShowMobileSidebar(false); }}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left border-none cursor-pointer ${
                 activeNav === item.key
                   ? 'bg-secondary-fixed text-on-secondary-fixed font-bold'
@@ -121,8 +127,8 @@ const SellerDashboard = () => {
         </div>
       </aside>
 
-      <main className="ml-64 min-h-screen">
-        <header className="h-20 bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-12 sticky top-0 z-40 shadow-sm">
+      <main className="flex-1 md:ml-64 min-h-screen">
+        <header className="h-20 bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-4 sm:px-6 lg:px-12 sticky top-0 z-30 shadow-sm">
           <div className="flex items-center gap-4">
             <h2 className="font-headline-md text-headline-md font-bold text-primary">{headers[activeNav]}</h2>
           </div>
@@ -146,7 +152,7 @@ const SellerDashboard = () => {
           </div>
         </header>
 
-        <div className="p-12 max-w-[1400px] mx-auto">
+        <div className="p-4 sm:p-6 lg:p-12 max-w-[1400px] mx-auto">
           {activeNav === 'dashboard' && stats && (
             <>
               <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -227,10 +233,10 @@ const SellerDashboard = () => {
           {activeNav === 'listings' && (
             <section>
               <div className="flex justify-between items-center mb-8">
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3 flex-wrap">
                   {['all', 'active', 'sold', 'archived'].map(f => (
                     <button key={f} onClick={() => setListingsFilter(f)}
-                      className={`px-4 py-1.5 rounded-full text-label-sm font-label-sm transition-colors border-none cursor-pointer capitalize ${listingsFilter === f ? 'bg-secondary-fixed text-on-secondary-fixed' : 'hover:bg-surface-container-high text-on-surface-variant bg-transparent'}`}>
+                      className={`px-3 sm:px-4 py-1.5 rounded-full text-label-sm font-label-sm transition-colors border-none cursor-pointer capitalize ${listingsFilter === f ? 'bg-secondary-fixed text-on-secondary-fixed' : 'hover:bg-surface-container-high text-on-surface-variant bg-transparent'}`}>
                       {f === 'all' ? t('messaging_all') : statusLabels[f]}
                     </button>
                   ))}
@@ -239,7 +245,7 @@ const SellerDashboard = () => {
                   <span className="material-symbols-outlined text-[18px]">add</span> {t('seller_dashboard_new')}
                 </Link>
               </div>
-              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-surface-container-low border-b border-outline-variant">
@@ -334,7 +340,7 @@ const SellerDashboard = () => {
         </div>
 
         <footer className="w-full bg-surface-container-highest border-t border-outline-variant mt-20">
-          <div className="max-w-[1400px] mx-auto px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex flex-col gap-2">
               <h3 className="font-headline-sm text-headline-sm font-bold text-primary">ProMarket</h3>
               <p className="text-on-surface-variant font-label-sm text-label-sm">{t('footer_copyright', { year: 2024 })}</p>

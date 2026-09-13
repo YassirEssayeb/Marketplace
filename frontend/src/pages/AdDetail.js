@@ -124,9 +124,9 @@ const AdDetail = () => {
   ];
 
   return (
-    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop">
+    <main className="pt-24 sm:pt-32 pb-10 sm:pb-20 max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-sm text-on-surface-variant mb-8">
+      <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-on-surface-variant mb-6 sm:mb-8 overflow-x-auto">
         <Link to="/" className="hover:text-primary no-underline text-on-surface-variant">{t('detail_home')}</Link>
         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
         <Link to="/browse" className="hover:text-primary no-underline text-on-surface-variant">{t('detail_browse')}</Link>
@@ -141,10 +141,10 @@ const AdDetail = () => {
       </nav>
 
       {/* Product Hero Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-start">
         {/* Left: Image Gallery */}
         <div className="lg:col-span-7">
-          <div className="rounded-2xl overflow-hidden border border-outline-variant bg-white group cursor-zoom-in h-[500px]">
+          <div className="rounded-2xl overflow-hidden border border-outline-variant bg-white group cursor-zoom-in h-[300px] sm:h-[400px] lg:h-[500px]">
             {images.length > 0 ? (
               <img
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -336,12 +336,12 @@ const AdDetail = () => {
 
       {/* Tabs Section */}
       <div className="mt-20">
-        <div className="flex gap-10 border-b border-outline-variant mb-8">
+        <div className="flex gap-4 sm:gap-6 lg:gap-10 border-b border-outline-variant mb-6 sm:mb-8 overflow-x-auto">
           {['description', 'specifications', 'seller', 'comments'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 border-b-2 font-headline-sm transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer ${
+              className={`pb-3 sm:pb-4 border-b-2 font-headline-sm text-[14px] sm:text-[16px] transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer whitespace-nowrap ${
                 activeTab === tab
                   ? 'border-secondary text-primary font-bold'
                   : 'border-transparent text-on-surface-variant hover:text-primary'
@@ -439,7 +439,7 @@ const AdDetail = () => {
 
       {/* Related Products */}
       {relatedAds.length > 0 && (
-        <div className="mt-24">
+        <div className="mt-12 sm:mt-16 lg:mt-24">
           <div className="flex justify-between items-end mb-8">
             <div>
               <h2 className="font-headline-lg text-headline-lg text-primary mb-2">{t('detail_related')}</h2>
@@ -449,14 +449,14 @@ const AdDetail = () => {
               {t('detail_view_all')} <span className="material-symbols-outlined">chevron_right</span>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {relatedAds.map((item) => (
               <Link
                 key={item.id}
                 to={'/ads/' + item.id}
                 className="group bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 no-underline"
               >
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-32 sm:h-40 lg:h-48 overflow-hidden">
                   <img
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     src={item.images && item.images[0] ? getImageUrl(item.images[0]) : ''}

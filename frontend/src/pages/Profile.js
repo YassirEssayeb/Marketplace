@@ -33,21 +33,21 @@ const Profile = () => {
   const toggleFollow = () => setIsFollowing(!isFollowing);
 
   if (!profile) return (
-    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen flex flex-col items-center justify-center">
+    <main className="pt-24 sm:pt-32 pb-10 sm:pb-20 max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop min-h-screen flex flex-col items-center justify-center">
       <div className="w-10 h-10 border-4 border-surface-container-high border-t-secondary rounded-full animate-spin mb-4"></div>
       <p className="text-on-surface-variant font-body-md">{t('profile_loading')}</p>
     </main>
   );
 
   return (
-    <main className="mt-20">
+    <main className="pt-20 sm:mt-20">
       {/* Hero Profile Section */}
       <section className="bg-surface-container-lowest border-b border-outline-variant">
-        <div className="max-w-container-max mx-auto px-margin-desktop py-stack-lg">
-          <div className="flex flex-col md:flex-row gap-10 items-start">
+        <div className="max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop py-stack-lg">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-start">
             {/* Profile Picture */}
             <div className="relative group">
-              <div className="w-40 h-40 rounded-full border-4 border-surface-container-high overflow-hidden bg-surface-container-high flex items-center justify-center ambient-shadow">
+              <div className="w-24 h-24 sm:w-40 sm:h-40 rounded-full border-4 border-surface-container-high overflow-hidden bg-surface-container-high flex items-center justify-center ambient-shadow">
                 {profile.avatar_url ? (
                   <img src={profile.avatar_url} alt={profile.name} className="w-full h-full object-cover" />
                 ) : (
@@ -61,12 +61,12 @@ const Profile = () => {
 
             {/* Profile Info */}
             <div className="flex-1 space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
                 <div>
                   <h1 className="font-headline-lg text-headline-lg text-primary">{profile.name || t('profile_user')}</h1>
                   <p className="text-on-surface-variant font-label-md text-label-md uppercase tracking-wider mt-1">{t('profile_verified')}</p>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-4">
                   <button
                     onClick={toggleFollow}
                     className={`group flex items-center gap-2 px-8 py-3 font-label-md text-label-md rounded-lg shadow-sm hover:opacity-90 transition-all active:scale-95 border-none cursor-pointer ${
@@ -108,9 +108,9 @@ const Profile = () => {
         </div>
 
         {/* Listings Grid Section */}
-        <section className="max-w-container-max mx-auto px-margin-desktop py-16">
-          <div className="flex items-center justify-between mb-10">
-            <div className="flex gap-8">
+        <section className="max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop py-8 sm:py-16">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-10 gap-4">
+            <div className="flex gap-4 sm:gap-6 lg:gap-8 border-b border-outline-variant mb-8 sm:mb-10 overflow-x-auto">
               {[
                 { key: 'active', label: `${t('profile_active_listings')} (${listings.length})` },
                 { key: 'past', label: t('profile_past_activity') },
@@ -119,7 +119,7 @@ const Profile = () => {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`font-label-md text-label-md pb-2 border-b-2 transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer ${
+                  className={`font-label-md text-label-md pb-2 border-b-2 whitespace-nowrap transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer ${
                     activeTab === tab.key
                       ? 'text-primary border-primary font-bold'
                       : 'text-on-surface-variant hover:text-primary border-transparent'
@@ -136,14 +136,14 @@ const Profile = () => {
           </div>
 
           {/* Bento Grid of Listings */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-gutter">
             {/* Listing Card 1 (Large Feature) */}
             <div className="md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden ambient-shadow ambient-shadow-hover transition-all group">
-              <div className="relative h-[400px]">
+              <div className="relative h-48 sm:h-[400px]">
                 <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src={listings[0]?.img} alt={listings[0]?.title} />
                 <div className="absolute top-4 right-4 bg-primary/90 text-on-primary px-3 py-1 rounded font-label-sm text-label-sm uppercase tracking-widest">{listings[0]?.badge}</div>
               </div>
-              <div className="p-stack-lg flex justify-between items-end">
+              <div className="p-4 sm:p-stack-lg flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                 <div>
                   <span className="font-label-sm text-label-sm text-secondary uppercase mb-2 block">{listings[0]?.category}</span>
                   <h3 className="font-headline-md text-headline-md text-primary group-hover:text-secondary transition-colors">{listings[0]?.title}</h3>
@@ -159,7 +159,7 @@ const Profile = () => {
             {/* Listing Cards 2-5 (Smaller) */}
             {listings.slice(1).map(listing => (
               <div key={listing.id} className="md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden ambient-shadow ambient-shadow-hover transition-all group">
-                <div className="h-64 overflow-hidden">
+                <div className="h-40 sm:h-64 overflow-hidden">
                   <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={listing.img} alt={listing.title} />
                 </div>
                 <div className="p-stack-md">

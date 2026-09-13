@@ -51,7 +51,7 @@ const CreateAd = () => {
   };
 
   return (
-    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen">
+    <main className="pt-24 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 lg:pb-20 max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop min-h-screen">
       <div className="max-w-2xl mx-auto">
         <h1 className="font-headline-lg text-headline-lg text-primary mb-2">{t('create_title')}</h1>
         <p className="font-body-md text-on-surface-variant mb-8">{t('create_subtitle')}</p>
@@ -84,7 +84,7 @@ const CreateAd = () => {
           </div>
 
           {/* Price & Category */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('create_label_price')}</label>
               <input
@@ -128,7 +128,7 @@ const CreateAd = () => {
             <label className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 block">{t('create_label_images')}</label>
             <div
               onClick={() => document.getElementById('file-input-create').click()}
-              className="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center cursor-pointer hover:border-secondary transition-colors bg-surface-container-low"
+              className="border-2 border-dashed border-outline-variant rounded-xl p-4 sm:p-6 lg:p-8 text-center cursor-pointer hover:border-secondary transition-colors bg-surface-container-low"
             >
               <span className="material-symbols-outlined text-5xl text-outline mb-2 block">add_a_photo</span>
               <p className="font-body-md font-semibold text-on-surface mb-1">{t('create_images_cta')}</p>

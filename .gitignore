@@ -1,9 +1,42 @@
+# Dependencies
 node_modules/
+
+# Builds
 build/
+dist/
+
+# Environment files
 .env
-uploads/*
-!uploads/.gitkeep
-.playwright-mcp/
-stitch_extracted_2/
-test-results/
+.env.local
+.env.*.local
+
+# Uploaded user content
+**/uploads/*
+!**/uploads/.gitkeep
+
+# Logs
 *.log
+npm-debug.log*
+
+# Local development helpers
+start.bat
+start.vbs
+
+# Design tooling artefacts
+stitch_*/
+screenshots/
+*.zip
+
+# E2E tooling (local only)
+playwright.config.js
+tests/
+test-results/
+.playwright-mcp/
+
+# Documents kept local
+RAPPORT_PROJET.md
+*.pdf
+
+# Misc
+backend/backend.zip
+take-screenshots*.js

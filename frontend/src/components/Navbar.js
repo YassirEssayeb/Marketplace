@@ -92,41 +92,41 @@ const Navbar = () => {
 
   return (
     <nav className={`bg-surface-container-lowest fixed top-0 w-full z-50 border-b border-outline-variant transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'shadow-sm'}`}>
-      <div className="w-full pl-4 pr-6 flex justify-between items-center h-20">
-        <div className="flex items-center gap-12 h-full">
+      <div className="w-full px-3 sm:px-4 lg:px-6 flex justify-between items-center h-16 sm:h-20">
+        <div className="flex items-center gap-4 sm:gap-8 lg:gap-12 h-full">
           <Link to="/" className="flex items-center no-underline">
-            <img src="/logo.png" alt="ProMarket" className="h-12 w-auto" />
+            <img src="/logo.png" alt="ProMarket" className="h-8 sm:h-10 lg:h-12 w-auto" />
           </Link>
-          <div className="hidden md:flex items-center gap-stack-lg">
-            <Link to="/browse" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/browse') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>{t('nav_browse')}</Link>
-            <Link to="/browse?tab=categories" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/categories') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>{t('nav_categories')}</Link>
-            <Link to="/browse?tab=sellers" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/sellers') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>{t('nav_sellers')}</Link>
-            <Link to="/about" className={`font-label-md text-label-md transition-colors duration-200 no-underline ${isActive('/about') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>{t('nav_help')}</Link>
+          <div className="hidden md:flex items-center gap-4 lg:gap-stack-lg">
+            <Link to="/browse" className={`font-label-md text-label-md transition-colors duration-200 no-underline whitespace-nowrap ${isActive('/browse') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>{t('nav_browse')}</Link>
+            <Link to="/browse?tab=categories" className={`font-label-md text-label-md transition-colors duration-200 no-underline whitespace-nowrap ${isActive('/categories') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>{t('nav_categories')}</Link>
+            <Link to="/browse?tab=sellers" className={`font-label-md text-label-md transition-colors duration-200 no-underline whitespace-nowrap ${isActive('/sellers') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>{t('nav_sellers')}</Link>
+            <Link to="/about" className={`font-label-md text-label-md transition-colors duration-200 no-underline whitespace-nowrap ${isActive('/about') ? 'text-secondary font-bold border-b-2 border-secondary pb-1' : 'text-on-surface-variant font-medium hover:text-secondary'}`}>{t('nav_help')}</Link>
           </div>
         </div>
-        <div className="flex items-center gap-6">
-          <Link to="/browse" className="hidden lg:flex items-center bg-surface-container-high/60 hover:bg-surface-container-high rounded-2xl px-4 py-2.5 gap-3 border border-outline-variant/40 hover:border-outline-variant w-72 transition-all no-underline group">
+        <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+          <Link to="/browse" className="hidden lg:flex items-center bg-surface-container-high/60 hover:bg-surface-container-high rounded-2xl px-4 py-2.5 gap-3 border border-outline-variant/40 hover:border-outline-variant w-60 xl:w-72 transition-all no-underline group">
             <span className="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-colors" style={{ fontSize: '20px' }}>search</span>
             <span className="text-body-md text-outline font-body-md flex-1 text-left">{t('nav_search')}</span>
             <kbd className="hidden xl:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-surface-container-lowest border border-outline-variant/60 text-outline text-[11px] font-mono">/</kbd>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {user ? (
               <>
-                <Link to="/messages" className={`relative material-symbols-outlined transition-colors no-underline ${isActive('/messages') ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
+                <Link to="/messages" className={`relative material-symbols-outlined transition-colors no-underline text-[22px] sm:text-[24px] ${isActive('/messages') ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
                   chat
                   {unread > 0 && <span className="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>}
                 </Link>
                 <div className="relative" ref={notifRef}>
                   <button
                     onClick={toggleNotif}
-                    className={`relative material-symbols-outlined transition-colors bg-transparent border-none cursor-pointer ${notifOpen ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}
+                    className={`relative material-symbols-outlined transition-colors bg-transparent border-none cursor-pointer text-[22px] sm:text-[24px] ${notifOpen ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}
                   >
                     notifications
                     {notifUnread > 0 && <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-error text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">{notifUnread > 99 ? '99+' : notifUnread}</span>}
                   </button>
                   {notifOpen && (
-                    <div className="absolute right-0 top-12 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg w-80 z-50 max-h-[420px] overflow-hidden">
+                    <div className="absolute right-0 top-12 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg w-72 sm:w-80 z-50 max-h-[420px] overflow-hidden">
                       <div className="flex items-center justify-between px-4 py-3 border-b border-outline-variant">
                         <h3 className="font-label-md text-label-md text-on-surface font-bold">{t('notif_title')}</h3>
                         {notifUnread > 0 && (
@@ -193,16 +193,16 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-                <Link to="/favorites" className={`material-symbols-outlined transition-colors no-underline ${isActive('/favorites') ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
+                <Link to="/favorites" className={`hidden sm:inline-flex material-symbols-outlined transition-colors no-underline text-[22px] sm:text-[24px] ${isActive('/favorites') ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
                   favorite
                 </Link>
-                <div className="h-10 w-px bg-outline-variant mx-1"></div>
+                <div className="hidden sm:block h-10 w-px bg-outline-variant mx-1"></div>
                 <div className="relative profile-dropdown">
                   <button
                     onClick={() => setProfileOpen(!profileOpen)}
-                    className="hidden md:flex items-center gap-3 bg-transparent border-none cursor-pointer p-0"
+                    className="hidden md:flex items-center gap-2 lg:gap-3 bg-transparent border-none cursor-pointer p-0"
                   >
-                    <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center border border-outline-variant overflow-hidden">
+                    <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-surface-container-high flex items-center justify-center border border-outline-variant overflow-hidden">
                       {user?.avatar_url ? (
                         <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
                       ) : (
@@ -247,22 +247,22 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-                <Link to="/ads/new" className="bg-secondary text-on-secondary px-5 py-2.5 rounded-2xl font-label-lg text-label-lg font-bold hover:shadow-lg hover:shadow-secondary/20 hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all no-underline inline-flex items-center gap-2">
-                  <span className="material-symbols-outlined bg-on-secondary/20 rounded-full w-6 h-6 flex items-center justify-center" style={{ fontSize: '16px' }}>add</span>
-                  {t('nav_post_listing')}
+                <Link to="/ads/new" className="bg-secondary text-on-secondary px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl font-label-md sm:font-label-lg text-label-md sm:text-label-lg font-bold hover:shadow-lg hover:shadow-secondary/20 hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all no-underline inline-flex items-center gap-1.5 sm:gap-2">
+                  <span className="material-symbols-outlined bg-on-secondary/20 rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center" style={{ fontSize: '14px' }}>add</span>
+                  <span className="hidden sm:inline">{t('nav_post_listing')}</span>
                 </Link>
               </>
             ) : (
               <>
-                <div className="h-10 w-px bg-outline-variant mx-1"></div>
+                <div className="hidden sm:block h-10 w-px bg-outline-variant mx-1"></div>
                 <Link to="/login" className="text-on-surface font-label-md text-label-md font-semibold hover:text-secondary transition-colors no-underline hidden lg:block">{t('nav_sign_in')}</Link>
-                <Link to="/ads/new" className="bg-secondary text-on-secondary px-5 py-2.5 rounded-2xl font-label-lg text-label-lg font-bold hover:shadow-lg hover:shadow-secondary/20 hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all no-underline inline-flex items-center gap-2">
-                  <span className="material-symbols-outlined bg-on-secondary/20 rounded-full w-6 h-6 flex items-center justify-center" style={{ fontSize: '16px' }}>add</span>
-                  {t('nav_post_listing')}
+                <Link to="/ads/new" className="bg-secondary text-on-secondary px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl font-label-md sm:font-label-lg text-label-md sm:text-label-lg font-bold hover:shadow-lg hover:shadow-secondary/20 hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 transition-all no-underline inline-flex items-center gap-1.5 sm:gap-2">
+                  <span className="material-symbols-outlined bg-on-secondary/20 rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center" style={{ fontSize: '14px' }}>add</span>
+                  <span className="hidden sm:inline">{t('nav_post_listing')}</span>
                 </Link>
               </>
             )}
-            <button className="md:hidden material-symbols-outlined text-on-surface-variant bg-transparent border-none cursor-pointer" onClick={() => setMobileOpen(!mobileOpen)}>
+            <button className="md:hidden material-symbols-outlined text-on-surface-variant bg-transparent border-none cursor-pointer p-1" onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? 'close' : 'menu'}
             </button>
           </div>
@@ -270,31 +270,31 @@ const Navbar = () => {
       </div>
 
       {mobileOpen && (
-        <div ref={menuRef} className="md:hidden bg-surface-container-lowest border-t border-outline-variant p-4 space-y-2 shadow-lg">
-          <Link to="/browse" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_browse')}</Link>
-          <Link to="/browse?tab=categories" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_categories')}</Link>
-          <Link to="/browse?tab=sellers" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_sellers')}</Link>
-          <Link to="/about" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_help')}</Link>
+        <div ref={menuRef} className="md:hidden bg-surface-container-lowest border-t border-outline-variant px-4 py-3 space-y-1 shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto">
+          <Link to="/browse" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_browse')}</Link>
+          <Link to="/browse?tab=categories" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_categories')}</Link>
+          <Link to="/browse?tab=sellers" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_sellers')}</Link>
+          <Link to="/about" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_help')}</Link>
           <div className="border-t border-outline-variant my-2"></div>
           {user ? (
             <>
-              <Link to="/profile" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_my_profile')}</Link>
-              <Link to="/settings" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_settings')}</Link>
-              <Link to="/seller-dashboard" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_seller_dashboard')}</Link>
-              <Link to="/messages" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">
+              <Link to="/profile" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_my_profile')}</Link>
+              <Link to="/settings" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_settings')}</Link>
+              <Link to="/seller-dashboard" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_seller_dashboard')}</Link>
+              <Link to="/messages" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">
                 {t('nav_messages')} {unread > 0 && <span className="ml-2 bg-error text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{unread}</span>}
               </Link>
-              <Link to="/notifications" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">
+              <Link to="/notifications" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">
                 {t('notif_title')} {notifUnread > 0 && <span className="ml-2 bg-error text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{notifUnread}</span>}
               </Link>
-              <Link to="/favorites" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_favorites')}</Link>
-              {user.is_admin && <Link to="/admin" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_admin')}</Link>}
-              <button onClick={() => { logout(); navigate('/'); }} className="w-full text-left px-4 py-3 rounded-lg font-label-md text-label-md text-error hover:bg-error-container transition-colors bg-transparent border-none cursor-pointer">{t('nav_log_out')}</button>
+              <Link to="/favorites" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_favorites')}</Link>
+              {user.is_admin && <Link to="/admin" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_admin')}</Link>}
+              <button onClick={() => { logout(); navigate('/'); }} className="w-full text-left px-4 py-2.5 rounded-lg font-label-md text-label-md text-error hover:bg-error-container transition-colors bg-transparent border-none cursor-pointer">{t('nav_log_out')}</button>
             </>
           ) : (
             <>
-              <Link to="/login" className="block px-4 py-3 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_sign_in')}</Link>
-              <Link to="/register" className="block px-4 py-3 rounded-lg font-label-md text-label-md bg-primary text-on-primary text-center font-bold no-underline">{t('nav_sign_up')}</Link>
+              <Link to="/login" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors no-underline">{t('nav_sign_in')}</Link>
+              <Link to="/register" className="block px-4 py-2.5 rounded-lg font-label-md text-label-md bg-primary text-on-primary text-center font-bold no-underline">{t('nav_sign_up')}</Link>
             </>
           )}
         </div>

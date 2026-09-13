@@ -62,41 +62,41 @@ const Landing = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative h-[720px] flex items-center overflow-hidden bg-surface">
-        <div className="max-w-container-max mx-auto px-margin-desktop w-full relative z-10">
+      <section className="relative min-h-[500px] sm:min-h-[600px] lg:h-[720px] flex items-center overflow-hidden bg-surface pt-20 lg:pt-0">
+        <div className="max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop w-full relative z-10">
           <div className="max-w-2xl">
-            <span className="inline-block bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm mb-6 tracking-wider uppercase">{t('home_hero_badge')}</span>
-            <h1 className="font-display-lg text-display-lg text-primary mb-6">{t('home_hero_title')}</h1>
-            <p className="font-body-lg text-body-lg text-on-surface-variant mb-10 leading-relaxed">{t('home_hero_desc')}</p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Link to="/browse" className="bg-secondary text-on-secondary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-secondary/20 active:scale-95 transition-all no-underline">
+            <span className="inline-block bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm mb-4 sm:mb-6 tracking-wider uppercase">{t('home_hero_badge')}</span>
+            <h1 className="font-display-lg text-[28px] sm:text-[36px] lg:text-display-lg text-primary mb-4 sm:mb-6 leading-tight">{t('home_hero_title')}</h1>
+            <p className="font-body-lg text-[15px] sm:text-body-lg text-on-surface-variant mb-6 sm:mb-10 leading-relaxed">{t('home_hero_desc')}</p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12">
+              <Link to="/browse" className="bg-secondary text-on-secondary px-6 sm:px-10 py-4 sm:py-5 rounded-xl font-headline-sm text-[16px] sm:text-headline-sm flex items-center justify-center gap-2 sm:gap-3 hover:shadow-lg hover:shadow-secondary/20 active:scale-95 transition-all no-underline">
                 {t('home_hero_cta')}
                 <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
-              <Link to={user ? '/join-as-seller' : '/register'} className="bg-white border border-outline-variant text-primary px-10 py-5 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-3 hover:bg-surface-container-low transition-all no-underline">
+              <Link to={user ? '/join-as-seller' : '/register'} className="bg-white border border-outline-variant text-primary px-6 sm:px-10 py-4 sm:py-5 rounded-xl font-headline-sm text-[16px] sm:text-headline-sm flex items-center justify-center gap-2 sm:gap-3 hover:bg-surface-container-low transition-all no-underline">
                 {t('home_hero_partner')}
               </Link>
             </div>
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4 sm:gap-8">
               <div>
-                <p className="font-headline-md text-headline-md text-primary">500k+</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">{t('home_stat_products')}</p>
+                <p className="font-headline-md text-[18px] sm:text-headline-md text-primary">500k+</p>
+                <p className="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant">{t('home_stat_products')}</p>
               </div>
-              <div className="w-px h-10 bg-outline-variant"></div>
+              <div className="w-px h-8 sm:h-10 bg-outline-variant"></div>
               <div>
-                <p className="font-headline-md text-headline-md text-primary">12k+</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">{t('home_stat_sellers')}</p>
+                <p className="font-headline-md text-[18px] sm:text-headline-md text-primary">12k+</p>
+                <p className="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant">{t('home_stat_sellers')}</p>
               </div>
-              <div className="w-px h-10 bg-outline-variant"></div>
+              <div className="w-px h-8 sm:h-10 bg-outline-variant"></div>
               <div>
-                <p className="font-headline-md text-headline-md text-primary">24/7</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">{t('home_stat_support')}</p>
+                <p className="font-headline-md text-[18px] sm:text-headline-md text-primary">24/7</p>
+                <p className="font-label-sm text-[10px] sm:text-label-sm text-on-surface-variant">{t('home_stat_support')}</p>
               </div>
             </div>
           </div>
         </div>
         {/* Hero Floating Card */}
-        <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[480px] z-20">
+        <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[380px] xl:w-[480px] z-20">
           <div
             onClick={() => navigate(featuredAd.id ? `/ads/${featuredAd.id}` : '/ad/featured', { state: { ad: featuredAd } })}
             className="block bg-white p-6 rounded-2xl shadow-2xl border border-outline-variant relative no-underline cursor-pointer"
@@ -126,62 +126,62 @@ const Landing = () => {
       </section>
 
       {/* Categories Section (Bento Grid Style) */}
-      <section className="py-24 bg-white">
-        <div className="max-w-container-max mx-auto px-margin-desktop">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+      <section className="py-12 sm:py-16 lg:py-24 bg-white">
+        <div className="max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12 gap-4 sm:gap-6">
             <div>
-              <h2 className="font-headline-lg text-headline-lg text-primary mb-2">{t('home_categories_title')}</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant">{t('home_categories_desc')}</p>
+              <h2 className="font-headline-lg text-[22px] sm:text-headline-lg text-primary mb-2">{t('home_categories_title')}</h2>
+              <p className="font-body-md text-[14px] sm:text-body-md text-on-surface-variant">{t('home_categories_desc')}</p>
             </div>
             <Link to="/browse" className="font-label-md text-label-md text-secondary font-bold flex items-center gap-2 hover:gap-3 transition-all no-underline">
               {t('home_categories_view_all')} <span className="material-symbols-outlined">arrow_right_alt</span>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-gutter h-[600px]">
+          <div className="grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-3 sm:gap-gutter md:h-[600px]">
             {/* Tech (Large) */}
-            <Link to="/browse?category=6" className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-2xl bg-primary border border-outline-variant no-underline">
+            <Link to="/browse?category=6" className="col-span-2 md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-2xl bg-primary border border-outline-variant no-underline min-h-[200px] sm:min-h-0">
               <div className="absolute inset-0 opacity-60 group-hover:scale-110 transition-transform duration-700">
                 <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZsNozmhzCP5__PoMcczSf7VgHO4Mz46tOa68ciPcBTxrxRepYv5eTLKj204uOWaU7af6wU_c_8eHzZ7GgOgk4VVP3QQaiaLVt4aOvgZsHIG-wRTN2KPU4aVhSPEtHHgApKHq9HRAFRU_sMyhftEwIf-4DKTeEjpAeO-q_q_k1OwyyqB8ki3h4kK4ZceiTcbhfXKUj3e7sXOY4ni1I3b6VGeVF9cGEjvBYLwePu8tQoWFn57tI" alt="Tech & Innovation" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-10">
-                <h3 className="text-white font-display-lg text-3xl mb-2">{t('home_cat_tech_title')}</h3>
-                <p className="text-white/80 font-body-md text-body-md mb-6 max-w-sm">{t('home_cat_tech_desc')}</p>
-                <span className="bg-white text-primary px-6 py-3 rounded-lg font-label-md text-label-md font-bold inline-block">{t('home_cat_tech_cta')}</span>
+              <div className="absolute bottom-0 left-0 p-4 sm:p-6 lg:p-10">
+                <h3 className="text-white font-display-lg text-xl sm:text-2xl lg:text-3xl mb-1 sm:mb-2">{t('home_cat_tech_title')}</h3>
+                <p className="text-white/80 font-body-md text-[13px] sm:text-body-md mb-3 sm:mb-6 max-w-sm hidden sm:block">{t('home_cat_tech_desc')}</p>
+                <span className="bg-white text-primary px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-label-md text-[11px] sm:text-label-md font-bold inline-block">{t('home_cat_tech_cta')}</span>
               </div>
             </Link>
             {/* Home */}
-            <Link to="/browse?category=5" className="md:col-span-2 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container border border-outline-variant no-underline">
+            <Link to="/browse?category=5" className="md:col-span-2 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container border border-outline-variant no-underline min-h-[150px] sm:min-h-0">
               <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
                 <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG0QNdry9llwx_zEl3W-hYHH6fKMM9vsCsmCteEBo5WabvmYocO-OC09pooLE8we1Mhwmf7apwyZFY1Plm-JRX4-N_g_R9ZWh9xm692hBN4ERtIwwVnhHcXNiDroq_5dgUJbdYPM9qFfUjMnZEOWRFnBnX66DcY1lCncEn2L8Rkav1sxYkf2S-Wm6zvt-OQeKKPSZlpHV8rbAfKHtCpzBHjcF9oJW_VsdR_zWTPkAVHerLJoWK" alt="Home & Living" />
               </div>
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all"></div>
-              <div className="absolute bottom-0 left-0 p-8">
-                <h3 className="text-white font-headline-md text-headline-md mb-1 drop-shadow-md">{t('home_cat_home_title')}</h3>
-                <p className="text-white/90 font-label-sm text-label-sm mb-4 drop-shadow-md">{t('home_cat_home_desc')}</p>
+              <div className="absolute bottom-0 left-0 p-4 sm:p-6 lg:p-8">
+                <h3 className="text-white font-headline-md text-[16px] sm:text-headline-md mb-1 drop-shadow-md">{t('home_cat_home_title')}</h3>
+                <p className="text-white/90 font-label-sm text-[11px] sm:text-label-sm mb-2 sm:mb-4 drop-shadow-md">{t('home_cat_home_desc')}</p>
                 <span className="text-white font-bold font-label-md flex items-center gap-1">{t('home_cat_home_cta')} <span className="material-symbols-outlined">chevron_right</span></span>
               </div>
             </Link>
             {/* Fashion */}
-            <Link to="/browse?category=4" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline">
+            <Link to="/browse?category=4" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline min-h-[150px] sm:min-h-0">
               <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
                 <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxJI2YYuFV9aMiHwSeZaW0gPTy9P57B796u8DeEYU0ezhowq6mIxnIRVkA-u5Yd_uawCO49LFkgBQkOapPI_xELMCbnLc3-CVhAmIkpNO02I17OAKDISn9leen91zevUmKKnS8FpHILubPMN9QGGHocBR0QciSQrgR0x-DxTVqcW-gv5RLT4VIw6nYtLDn9nnKFH_GIbAdx1WwWcygD1lI8qlUHlKIFCXA2uhxgyDzo8Q0eJPw" alt="Fashion" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-white font-headline-sm text-headline-sm">{t('home_cat_fashion_title')}</h3>
-                <span className="text-white/80 font-label-sm text-label-sm">{t('home_cat_fashion_sub')}</span>
+              <div className="absolute bottom-0 left-0 p-3 sm:p-4 lg:p-6">
+                <h3 className="text-white font-headline-sm text-[14px] sm:text-headline-sm">{t('home_cat_fashion_title')}</h3>
+                <span className="text-white/80 font-label-sm text-[10px] sm:text-label-sm">{t('home_cat_fashion_sub')}</span>
               </div>
             </Link>
             {/* Accessories */}
-            <Link to="/browse?category=6" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline">
+            <Link to="/browse?category=6" className="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-2xl bg-surface-container-high border border-outline-variant no-underline min-h-[150px] sm:min-h-0">
               <div className="absolute inset-0 opacity-80 group-hover:scale-110 transition-transform duration-700">
                 <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdo90J4xn8AZh9ppnVUW3ADB4PYgPit3ws4Eg7HYs3iVp5cXy6yyxMfWiSF_6TcT0V0S1SX6o3SJn0pJdgvTJNzTtP_yRtQwcSW2pvv-Ezjnxj2PpycINcTPNalgg5g55b1IFSAhgfx78eY0_08c6bxleHBi8e64vMZx-29pOOyWUEZ1FbpzrjpIdf91KPynNpZwT91NR5ESiFGEIwIjWI6qD7Nlv0JqNrLC1h8ispjLcJFzXc" alt="Accessories" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-white font-headline-sm text-headline-sm">{t('home_cat_access_title')}</h3>
-                <span className="text-white/80 font-label-sm text-label-sm">{t('home_cat_access_sub')}</span>
+              <div className="absolute bottom-0 left-0 p-3 sm:p-4 lg:p-6">
+                <h3 className="text-white font-headline-sm text-[14px] sm:text-headline-sm">{t('home_cat_access_title')}</h3>
+                <span className="text-white/80 font-label-sm text-[10px] sm:text-label-sm">{t('home_cat_access_sub')}</span>
               </div>
             </Link>
           </div>
@@ -189,16 +189,16 @@ const Landing = () => {
       </section>
 
       {/* Trending Products Section */}
-      <section className="py-24 bg-background">
-        <div className="max-w-container-max mx-auto px-margin-desktop">
-          <div className="text-center mb-16">
-            <h2 className="font-headline-lg text-headline-lg text-primary mb-4">{t('home_trending_title')}</h2>
-            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">{t('home_trending_desc')}</p>
+      <section className="py-12 sm:py-16 lg:py-24 bg-background">
+        <div className="max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop">
+          <div className="text-center mb-8 sm:mb-16">
+            <h2 className="font-headline-lg text-[22px] sm:text-headline-lg text-primary mb-3 sm:mb-4">{t('home_trending_title')}</h2>
+            <p className="font-body-lg text-[15px] sm:text-body-lg text-on-surface-variant max-w-2xl mx-auto">{t('home_trending_desc')}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
             {displayProducts.map((ad, i) => (
               <Link to={`/ads/${ad.id}`} key={i} className="group bg-white rounded-xl border border-outline-variant premium-card-hover overflow-hidden block no-underline text-left">
-                <div className="relative h-64 overflow-hidden bg-surface-container">
+                <div className="relative h-48 sm:h-64 overflow-hidden bg-surface-container">
                   {ad.img ? (
                     <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={ad.img} alt={ad.title} loading="lazy" />
                   ) : (
@@ -230,11 +230,11 @@ const Landing = () => {
       </section>
 
       {/* Why Shop With Us Section */}
-      <section className="py-24 bg-surface-container-low relative overflow-hidden">
-        <div className="max-w-container-max mx-auto px-margin-desktop relative z-10">
+      <section className="py-12 sm:py-16 lg:py-24 bg-surface-container-low relative overflow-hidden">
+        <div className="max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div>
-              <h2 className="font-headline-lg text-headline-lg text-primary mb-8">{t('home_why_title')}</h2>
+              <h2 className="font-headline-lg text-[22px] sm:text-headline-lg text-primary mb-6 sm:mb-8">{t('home_why_title')}</h2>
               <div className="space-y-8">
                 <div className="flex gap-6">
                   <div className="flex-shrink-0 w-14 h-14 bg-secondary-fixed rounded-xl flex items-center justify-center">
@@ -294,10 +294,10 @@ const Landing = () => {
       </section>
 
       {/* Newsletter / CTA Section */}
-      <section className="py-24 bg-primary text-on-primary">
-        <div className="max-w-container-max mx-auto px-margin-desktop text-center">
-          <h2 className="font-display-lg text-display-lg mb-6">{t('home_newsletter_title')}</h2>
-          <p className="font-body-lg text-body-lg text-on-primary-container max-w-2xl mx-auto mb-10">{t('home_newsletter_desc')}</p>
+      <section className="py-12 sm:py-16 lg:py-24 bg-primary text-on-primary">
+        <div className="max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop text-center">
+          <h2 className="font-display-lg text-[28px] sm:text-[36px] lg:text-display-lg mb-4 sm:mb-6">{t('home_newsletter_title')}</h2>
+          <p className="font-body-lg text-[15px] sm:text-body-lg text-on-primary-container max-w-2xl mx-auto mb-6 sm:mb-10">{t('home_newsletter_desc')}</p>
           <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-4" onSubmit={handleSubscribe}>
             <input
               type="email"

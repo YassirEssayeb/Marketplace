@@ -22,9 +22,9 @@ const Login = () => {
   };
 
   return (
-    <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-desktop min-h-screen flex items-center justify-center">
+    <main className="pt-24 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 lg:pb-20 max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md">
-        <div className="bg-white p-8 rounded-xl border border-outline-variant">
+        <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-xl border border-outline-variant">
           <div className="text-center mb-8">
             <h1 className="font-headline-lg text-headline-lg text-primary mb-2">{t('login_title')}</h1>
             <p className="font-body-md text-on-surface-variant">{t('login_subtitle')}</p>

@@ -7,7 +7,7 @@ const Footer = () => {
 
   return (
   <footer className="bg-surface-container-highest border-t border-outline-variant">
-    <div className="max-w-container-max mx-auto px-margin-desktop py-stack-lg">
+    <div className="max-w-container-max mx-auto px-4 sm:px-6 lg:px-margin-desktop py-12 sm:py-16 lg:py-20">
       <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
         <div className="max-w-sm">
           <Link to="/" className="block mb-6 no-underline"><img src="/logo.png" alt="ProMarket" className="h-10 w-auto" /></Link>

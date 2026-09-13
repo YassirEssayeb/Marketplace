@@ -14,6 +14,7 @@ const Messaging = () => {
   const [newMsg, setNewMsg] = useState('');
   const [filter, setFilter] = useState('all');
   const [uploading, setUploading] = useState(false);
+  const [showMobileChat, setShowMobileChat] = useState(false);
   const messagesEndRef = useRef(null);
   const chatScrollRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -92,10 +93,10 @@ const Messaging = () => {
   const otherUser = conversations.find(c => c.user.id === selectedUser);
 
   return (
-    <div className="flex h-screen pt-20 overflow-hidden max-w-container-max mx-auto w-full bg-surface-container-lowest shadow-lg">
+    <div className="flex h-[calc(100vh-64px)] sm:h-screen pt-16 sm:pt-20 overflow-hidden max-w-container-max mx-auto w-full bg-surface-container-lowest shadow-lg px-2 sm:px-4 lg:px-0">
       {/* Left Sidebar */}
-      <aside className="w-full md:w-80 lg:w-96 border-r border-outline-variant flex flex-col bg-surface-container-lowest">
-        <div className="p-6 border-b border-outline-variant">
+      <aside className={`${showMobileChat ? 'hidden' : 'flex'} md:flex w-full md:w-80 lg:w-96 flex-col bg-surface-container-lowest border-r border-outline-variant h-full shadow-sm`}>
+        <div className="p-3 sm:p-4 lg:p-6 border-b border-outline-variant">
           <h1 className="font-headline-sm text-headline-sm text-primary mb-4">{t('messaging_title')}</h1>
           <div className="flex gap-2">
             {[
@@ -178,12 +179,18 @@ const Messaging = () => {
       </aside>
 
       {/* Chat Area */}
-      <section className="flex-1 flex flex-col bg-surface-bright">
+      <section className={`${!showMobileChat ? 'hidden' : 'flex'} md:flex flex-1 flex-col bg-surface-bright h-full md:ml-4 lg:ml-6 shadow-sm`}>
         {selectedUser ? (
           <>
             {/* Header */}
-            <header className="h-20 bg-surface-container-lowest border-b border-outline-variant px-6 flex justify-between items-center flex-shrink-0">
-              <div className="flex items-center gap-4">
+            <header className="h-16 sm:h-20 bg-surface-container-lowest border-b border-outline-variant px-3 sm:px-6 flex justify-between items-center flex-shrink-0">
+              <div className="flex items-center gap-2 sm:gap-4">
+                <button
+                  onClick={() => setShowMobileChat(false)}
+                  className="md:hidden p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant border-none cursor-pointer bg-transparent"
+                >
+                  <span className="material-symbols-outlined">arrow_back</span>
+                </button>
                 <Link to={`/user/${otherUser?.user.id}`} className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary overflow-hidden no-underline">
                   {otherUser?.user.avatar_url ? (
                     <img src={otherUser.user.avatar_url} alt={otherUser.user.name} className="w-full h-full object-cover" />
@@ -330,6 +337,15 @@ const Messaging = () => {
           </div>
         )}
       </section>
+      {/* Mobile toggle button */}
+      {!showMobileChat && (
+        <button
+          onClick={() => setShowMobileChat(true)}
+          className="md:hidden fixed bottom-4 right-4 w-12 h-12 bg-secondary text-on-secondary rounded-full shadow-lg flex items-center justify-center border-none cursor-pointer z-50"
+        >
+          <span className="material-symbols-outlined">chat</span>
+        </button>
+      )}
     </div>
   );
 };
